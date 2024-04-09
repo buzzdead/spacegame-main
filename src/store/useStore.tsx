@@ -43,11 +43,14 @@ interface SpaceGameState {
 }
 
 const celestialObjects = [
-  {id: "planet1", glbPath: '/assets/celestialobjects/planet1.glb', position: new Vector3(7,1,9), scale: 3},
+  {id: "planet1", glbPath: '/assets/celestialobjects/planet1.glb', position: new Vector3(7,1,9), scale: 111},
   {id: "planet2", glbPath: '/assets/celestialobjects/planet2.glb', position: new Vector3(0,0,0)},
   {id: "planet3", glbPath: '/assets/celestialobjects/planet3.glb', position: new Vector3(0,0,0)},
+  {id: "planet5", glbPath: '/assets/celestialobjects/planet5.glb', position: new Vector3(-55,0,-20), scale: 50},
+  {id: "planet6", glbPath: '/assets/celestialobjects/planet6.glb', position: new Vector3(0,0,0)},
   {id: "asteroid", glbPath: '/assets/celestialobjects/asteroid.glb', position: new Vector3(0,5,0), scale: 0.01},
-  {id: "asteroid-minerals", glbPath: '/assets/celestialobjects/asteroid-minerals.glb', position: new Vector3(34,5,3), scale: 2}
+  {id: "asteroid-minerals", glbPath: '/assets/celestialobjects/asteroid-minerals.glb', position: new Vector3(34,5,3), scale: 2},
+  {id: "blackhole", glbPath: '/assets/celestialobjects/blackhole.glb', position: new Vector3(-166,3,246), scale:9},
 ]
 
 const spaceShips = [
@@ -58,9 +61,9 @@ const spaceShips = [
 ]
 
 const constructions = [
-  {id: "spacestation1", glbPath: 'assets/constructions/spacestation1.glb', position: new Vector3(-6,6,24), scale: 0.5},
-  {id: "spacestation2", glbPath: 'assets/constructions/spacestation2.glb', position: new Vector3(14,6,24), scale: 0.5},
-  {id: "spacestation3", glbPath: 'assets/constructions/spacestation3.glb', position: new Vector3(14,0,34), scale: 0.025},
+  {id: "spacestation1", glbPath: 'assets/constructions/spacestation1.glb', position: new Vector3(-6,6,24),  },
+  {id: "spacestation2", glbPath: 'assets/constructions/spacestation2.glb', position: new Vector3(14,6,24), },
+  {id: "spacestation3", glbPath: 'assets/constructions/spacestation3.glb', position: new Vector3(14,0,34), scale: 0.055},
 ]
 
 const useStore = create<SpaceGameState>((set) => ({

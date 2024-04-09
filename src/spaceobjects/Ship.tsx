@@ -118,7 +118,7 @@ const Ship: FC<Props> = ({ ship }) => {
         ref={meshRef}
         position={position}
       >
-        <directionalLight position={[10, 15, 15]} castShadow intensity={15} />
+        <directionalLight position={[10, 15, 15]} castShadow intensity={.1} />
 
         <primitive object={scene} />
         {(isTraveling || isReturning) && (

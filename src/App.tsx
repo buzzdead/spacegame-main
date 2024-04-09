@@ -31,7 +31,7 @@ const App: React.FC = () => {
    return (
     <div className="App">
       <AudioPlayer src={menuMusic} autoPlay loop shouldPlay={!gameStarted}/> 
-      {gameStarted ? <SpaceGame startShip="cargo" startPlanet="planet1"/> 
+      {gameStarted ? <SpaceGame startShip="cargo" startPlanet="planet5"/> 
       : 
       <div>
       <Starfield />
