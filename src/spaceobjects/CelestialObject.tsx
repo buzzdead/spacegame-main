@@ -1,10 +1,10 @@
 import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
-import { Color, ShaderMaterial, AdditiveBlending, Mesh } from 'three'
+import { Color, ShaderMaterial, AdditiveBlending } from 'three'
 import { SGS } from '../store/useStore';
-import fragmentShader from './glowFragmentShader'
-import vertexShader from './glowVertexShader'
+import fragmentShader from './shaders/glowFragmentShader'
+import vertexShader from './shaders/glowVertexShader'
 
 interface CelestialObjectProps {
   celestialObject: SGS['CO'];
