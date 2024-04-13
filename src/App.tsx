@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom/client";
 import "./styles/theme.css";
 import { Form, Input, Select, Button } from "antd";
 import { UserOutlined, HomeOutlined, RocketOutlined } from "@ant-design/icons";

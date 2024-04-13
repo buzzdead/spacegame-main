@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useStore from "./store/useStore";
-import { Canvas } from "@react-three/fiber";
-import { Typography } from 'antd';
 import CelestialObject from "./spaceobjects/CelestialObject";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Ship from "./spaceobjects/Ship";
 import Construction from "./spaceobjects/Construction";
 

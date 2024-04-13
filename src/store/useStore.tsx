@@ -1,8 +1,6 @@
 import create from 'zustand';
 import { Vector3 } from 'three'
-import { Mesh } from 'three'
 import { CelestialObjectId, celestialObjects, ConstructionId, constructions, SpaceShipId, spaceShips } from './storeAssets';
-import { ElementRef } from 'react';
 
 interface CelestialObject { 
   assetId: CelestialObjectId
