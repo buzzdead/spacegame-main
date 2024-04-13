@@ -4,15 +4,21 @@ uniform float glowStrength;
 varying vec3 vNormal;
 
 void main() {
-    // Adjust this threshold for the glow extent
-    const float threshold = 0.8; 
+  // Adjust the glow extent
+  const float threshold = 0.8; 
 
-    float angleFactor = 1.0 - dot(vNormal, normalize(vec3(0, 0, 1))); 
-    float glow = clamp(glowStrength * angleFactor, 0.0, 1.0);
+  // Calculate how much the surface faces the view direction
+  float viewAlignment = dot(vNormal, normalize(vec3(0, 0, 1))); 
 
-    // Optional: Mix in a fraction of the original surface color
-    vec3 finalColor = mix(glowColor * glow, vec3(1.0, 0.8, 0.5), 0.3); // Example
+  // Control glow falloff with a smooth curve
+  float glow = smoothstep(threshold - 0.1, threshold + 0.1, viewAlignment) * glowStrength;
 
-    gl_FragColor = vec4(finalColor,  1.0); 
+  // Ensure glow stays within 0.0 to 1.0 range
+  glow = clamp(glow, 0.0, 1.0);
+
+  // Mix with optional base color (modify the mix factor if desired)
+  vec3 finalColor = mix(glowColor * glow, vec3(1.0, 0.8, 0.5), 0.3);
+
+  gl_FragColor = vec4(finalColor, 1.0); 
 }
 `;

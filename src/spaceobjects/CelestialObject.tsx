@@ -43,6 +43,7 @@ const handleSetDestination = () => {
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleSetDestination} ref={meshRef} position={position}>
+        {celestialObject.assetId.includes("planet") && <directionalLight position={[55, 185, 0]} intensity={1.5}/>}
         <primitive object={scene.clone()} />
       </mesh>
     </Suspense>

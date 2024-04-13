@@ -8,12 +8,16 @@ import {
   AudioLoader,
   Mesh,
   MeshPhongMaterial,
-  ConeGeometry
+  ConeGeometry,
+  ShaderMaterial,
+  Color
 } from "three";
 import { useGLTF } from "@react-three/drei";
 import useStore, { SGS } from "../store/useStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import RocketBooster from "./RocketBooster";
+import fragmentShader from './shaders/glowFragmentShader'
+import vertexShader from './shaders/glowVertexShader'
 interface Props {
   ship: SGS["Ship"];
 }
@@ -29,11 +33,20 @@ const Ship: FC<Props> = ({ ship }) => {
   const { scene } = useGLTF(glbPath);
   const theScene = scene.clone()
   const { camera } = useThree();
+  const glowMaterial = new ShaderMaterial({
+    uniforms: {
+        glowColor: { value: new Color(0x00FF80) }, // Neon green color
+        glowStrength: { value: 1.0 } 
+    },
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true // Important for blend effects like glows
+});
 
 const geometry = new ConeGeometry(0.25, 1, 4); // Radius, height, number of sides = 4
-const material = new MeshPhongMaterial({ color: 'green' });
+const material = new MeshPhongMaterial({ color: 0x00FF80 });
 const pyramidMesh = new Mesh(geometry, material);
-pyramidMesh.position.set(0, 1.5, 1)
+pyramidMesh.position.set(0, 1.5, 2)
 pyramidMesh.rotation.x = 3.22
 
   useEffect(() => {
@@ -93,7 +106,7 @@ pyramidMesh.rotation.x = 3.22
     if (!meshRef.current) return;
     const distance = meshRef.current.position.distanceTo(targetPosition);
 
-    if (distance < 3) {
+    if (distance < 5) {
       if (isTraveling) {
         setIsTraveling(false);
         setTimeout(() => setIsReturning(true), 3000);
@@ -159,7 +172,9 @@ pyramidMesh.rotation.x = 3.22
             <RocketBooster
               position={new Vector3(1.04 / 100, 0.75 / 100, -0.3)}
             />
-           
+           <RocketBooster
+              position={new Vector3(1.04 / 100, 0.75 / 100, -0)}
+            />
           </group>
         )}
       </mesh>

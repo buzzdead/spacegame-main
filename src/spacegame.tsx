@@ -60,7 +60,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
         />
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.5} />
-        <Stars radius={5000} count={1500} factor={4} saturation={1} />
+        <Stars radius={5000} count={250} factor={4} saturation={4} />
 
         <OrbitControls />
 
