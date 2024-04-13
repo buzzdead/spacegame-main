@@ -75,11 +75,11 @@ pyramidMesh.rotation.x = 3.22
   camera.add(listener);
   const audioLoader = new AudioLoader();
   const sound = new PositionalAudio(listener);
-  audioLoader.load("/assets/sounds/cargo-sound.mp3", (buffer) => {
+  audioLoader.load("/assets/sounds/sc.mp3", (buffer) => {
     sound.setBuffer(buffer);
     sound.setLoop(true); // Loop if you want the sound to continue
     sound.play();
-    sound.setVolume(0.01)
+    sound.setVolume(0.1)
   });
   theScene.add(sound);
   sound.setRefDistance(20); // Example ref distance
@@ -146,7 +146,7 @@ pyramidMesh.rotation.x = 3.22
   function calculateVolume(distance: number) {
     // Adjust these parameters based on your desired sound behavior
     const maxDistance = 75;
-    const minVolume = 0.05;
+    const minVolume = 0.1;
 
     let volume = 0.15 - Math.min(1, distance / maxDistance); // Linear decrease
     volume = Math.max(minVolume, volume); // Clamp to a minimum

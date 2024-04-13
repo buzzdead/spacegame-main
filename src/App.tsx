@@ -5,7 +5,8 @@ import { UserOutlined, HomeOutlined, RocketOutlined } from "@ant-design/icons";
 import Starfield from "./Starfield";
 import AudioPlayer from "./AudioPlayer";
 import SpaceGame from "./spacegame";
-const menuMusic = require('./assets/menu-song.mp3')
+const menuMusic = require('./assets/coddy.mp3')
+const gameMusic = require('./assets/sd.mp3')
 
 interface PlayerInfo {
   username: string;
@@ -28,7 +29,7 @@ const App: React.FC = () => {
 
    return (
     <div className="App">
-      <AudioPlayer src={menuMusic} autoPlay loop shouldPlay={!gameStarted}/> 
+      {!gameStarted ? <AudioPlayer src={menuMusic} autoPlay loop shouldPlay={!gameStarted}/> : <AudioPlayer src={gameMusic} autoPlay loop shouldPlay={gameStarted}/>} 
       {gameStarted ? <SpaceGame startShip="cargo" startPlanet="planet5"/> 
       : 
       <div>
