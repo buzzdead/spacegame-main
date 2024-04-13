@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
-import useStore from "./store/useStore";
+import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { Typography } from 'antd';
-import CelestialObject from "./spaceobjects/CelestialObject";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import {
@@ -12,8 +9,8 @@ import {
   Stars,
 } from "@react-three/drei";
 
-import Ship from "./spaceobjects/Ship";
-import Construction from "./spaceobjects/Construction";
+import Objects from "./objets";
+import UI from "./ui";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -21,22 +18,6 @@ interface Props {
 }
 
 const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
-  const store = useStore()
-  useEffect(() => {
-    store.addCelestialObject(startPlanet, [-55, 0, -20], 50)
-    store.addCelestialObject("asteroid", [0,5,0], 0.01)
-    store.addCelestialObject("asteroid-minerals", [34, 5, 3])
-    store.addCelestialObject("asteroid-minerals", [34, 5, 6])
-    store.addCelestialObject("asteroid-minerals", [34, 5, 9])
-    store.addCelestialObject("asteroid-minerals", [34, 5, 12])
-    store.addCelestialObject("blackhole", [-166, 3, 246], 9)
-    store.addShip(startShip, [8,1,0], 0.004)
-    store.addShip(startShip, [10,2,0], 0.004)
-    store.addShip(startShip, [12,3,0], 0.004)
-    store.addConstruction("spacestation3", [14, 0, 34], 0.055)
-    store.addConstruction("spacestation2", [24, 6, 64], 0.055)
-  }, [])
-
   const aspect = window.innerWidth / window.innerHeight;
   const zoom = 100; // Adjust as needed for starfield density
 
@@ -47,12 +28,10 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
   const right = frustumWidth;
   const top = frustumHeight;
   const bottom = -frustumHeight;
+  console.log("rendering")
   return (
     <div>
-      <div style={{position: 'absolute', zIndex: 8123781237812, bottom: 25, left: 25}}>
-        <Typography style={{color: 'green'}}>Selected: {store.destination}</Typography>
-        <Typography style={{color: 'green'}}>Origin: {store.origin}</Typography>
-      </div>
+      <UI />
     <Canvas
       camera={{
         left: left,
@@ -100,15 +79,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
         </AccumulativeShadows>
       </EffectComposer>
 
-      {store.celestialObjects.map((co) => (
-        <CelestialObject key={co.id} celestialObject={co} />
-      ))}
-      {store.ships.map((ship) => (
-        <Ship key={ship.id} ship={ship} />
-      ))}
-      {store.constructions.map((c) => (
-        <Construction key={c.id} construction={c} />
-      ))}
+     <Objects startPlanet={startPlanet} startShip={startShip}/>
     </Canvas>
     </div>
   );

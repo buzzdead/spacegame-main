@@ -1,4 +1,4 @@
-import { FC, ElementRef, useState } from "react";
+import { FC, ElementRef, useState, useEffect } from "react";
 import { Suspense, useRef } from "react";
 import {
   Vector3,
@@ -6,6 +6,9 @@ import {
   PositionalAudio,
   AudioListener,
   AudioLoader,
+  Mesh,
+  MeshPhongMaterial,
+  ConeGeometry
 } from "three";
 import { useGLTF } from "@react-three/drei";
 import useStore, { SGS } from "../store/useStore";
@@ -16,10 +19,9 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship }) => {
-  const { constructions, destination, origin, setOrigin } = useStore();
-  const constructionPos = constructions.find(p => p.assetId === "spacestation3")
-  const originPos = constructionPos?.position || new Vector3(0,0,0);
-
+  const { destination, origin, setOrigin, setSelected, selected, setResources } = useStore();
+  const [shipsOrigin, setShipsOrigin] = useState<Vector3>()
+  const [shipsDestination, setShipsDestination] = useState<Vector3>()
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
@@ -27,6 +29,28 @@ const Ship: FC<Props> = ({ ship }) => {
   const { scene } = useGLTF(glbPath);
   const theScene = scene.clone()
   const { camera } = useThree();
+
+const geometry = new ConeGeometry(0.25, 1, 4); // Radius, height, number of sides = 4
+const material = new MeshPhongMaterial({ color: 'green' });
+const pyramidMesh = new Mesh(geometry, material);
+pyramidMesh.position.set(0, 1.5, 1)
+pyramidMesh.rotation.x = 3.22
+
+  useEffect(() => {
+    if(!selected.includes(ship.id)) return
+        if(destination !== shipsDestination)
+          {
+            setShipsDestination(destination)
+          }
+        if(origin !== shipsOrigin) 
+          {
+            setShipsOrigin(origin)
+          }
+  }, [destination, origin])
+
+  useEffect(() => {
+    if(shipsOrigin && shipsDestination) setIsTraveling(true)
+  }, [shipsOrigin, shipsDestination])
 
   const listener = new AudioListener();
   camera.add(listener);
@@ -71,7 +95,7 @@ const Ship: FC<Props> = ({ ship }) => {
         setTimeout(() => setIsReturning(true), 3000);
       } else if (isReturning) {
         setIsReturning(false);
-        setTimeout(() => setIsTraveling(true), 3000);
+        setTimeout(() =>{ setIsTraveling(true); setResources(500) }, 3000);
       }
 
       // Reset position to new target
@@ -86,9 +110,9 @@ const Ship: FC<Props> = ({ ship }) => {
   };
 
   useFrame(() => {
-    if (meshRef.current && destination && (isTraveling || isReturning)) {
+    if (meshRef.current && shipsDestination && shipsOrigin && (isTraveling || isReturning)) {
       !sound.isPlaying && sound.play()
-      const targetPosition = isTraveling ? destination : originPos;
+      const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
       const { direction, targetQuaternion } =
         calculateDirectionAndRotation(targetPosition);
 
@@ -119,12 +143,12 @@ const Ship: FC<Props> = ({ ship }) => {
   return (
     <Suspense fallback={null}>
       <mesh
-        onClick={handleSetTravel}
+        onClick={() => setSelected(ship.id)}
         ref={meshRef}
         position={position}
       >
         <directionalLight position={[10, 15, 15]} castShadow intensity={.1} />
-
+       {selected.includes(ship.id) && <primitive object={pyramidMesh} />}
         <primitive object={theScene} />
         {(isTraveling || isReturning) && (
           <group>

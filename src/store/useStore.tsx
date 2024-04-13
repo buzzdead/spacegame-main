@@ -48,6 +48,10 @@ interface SpaceGameState {
   destination: Vector3 | undefined
   setOrigin: (pos: Vector3) => void
   setDestination: (pos: Vector3) => void
+  selected: string[],
+  setSelected: (id: string) => void
+  resources: number
+  setResources: (n: number) => void
 }
 
 const addShipToState = (ships: Ship[], shipId: string, nv: numberVector, scale = 1) => {
@@ -93,7 +97,11 @@ const useStore = create<SpaceGameState>((set) => ({
   origin: undefined,
   destination: undefined,
   setOrigin: (m: Vector3) => set((state) => ({origin: m})),
-  setDestination: (m: Vector3) => set((state) => ({destination: m}))
+  setDestination: (m: Vector3) => set((state) => ({destination: m})),
+  selected: [],
+  setSelected: (id: string) => set((state) => ({selected: state.selected.includes(id) ? [...state.selected.filter(s => s !== id)] : [...state.selected, id]})),
+  resources: 0,
+  setResources: (n: number) => set((state) => ({resources: state.resources + n}))
 }));
 
 export default useStore;

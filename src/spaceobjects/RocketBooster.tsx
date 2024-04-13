@@ -12,7 +12,7 @@ const RocketBooster = ({ position }: Props) => {
   const particleSystemRef = useRef<THREE.Points>(null);
 
   const [particlePositions, setParticlePositions] = useState<Float32Array>();
-  const texture = useTexture('/assets/fire.jpg')
+  const texture = useTexture('/assets/particle.png')
 
   useEffect(() => {
     const positions = new Float32Array(900 * 3);
