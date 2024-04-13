@@ -7,8 +7,10 @@ import { useGLTF } from '@react-three/drei';
 const Starfield: React.FC = () => {
   const starfieldRef = useRef<HTMLDivElement | null>(null);
   const scene = new THREE.Scene();
-  const { scene: planetScene } = useGLTF('/assets/celestialobjects/planet3.glb')
-  const { scene: blackHoleScene } = useGLTF('/assets/celestialobjects/blackhole.glb')
+  const { scene: pScene } = useGLTF('/assets/celestialobjects/planet3.glb')
+  const { scene: bScene } = useGLTF('/assets/celestialobjects/blackhole.glb')
+  const planetScene = pScene.clone()
+  const blackHoleScene = bScene.clone()
   planetScene.position.set( (Math.random() - 0.5) * 300,
   (Math.random() - 0.5) * 300,
   (Math.random()) * 150)
