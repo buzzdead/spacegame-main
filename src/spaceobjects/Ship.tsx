@@ -79,7 +79,7 @@ pyramidMesh.rotation.x = 3.22
     sound.setBuffer(buffer);
     sound.setLoop(true); // Loop if you want the sound to continue
     sound.play();
-    sound.setvolume(0.01)
+    sound.setVolume(0.01)
   });
   theScene.add(sound);
   sound.setRefDistance(20); // Example ref distance
