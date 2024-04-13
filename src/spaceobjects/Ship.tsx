@@ -65,6 +65,8 @@ pyramidMesh.rotation.x = 3.22
     if(shipsOrigin && shipsDestination) 
       {
       setIsTraveling(true)
+      sound.setLoop(true);
+      !sound.isPlaying && sound.play()
       setSelected(ship.id)
       }
   }, [shipsOrigin, shipsDestination])
@@ -77,7 +79,7 @@ pyramidMesh.rotation.x = 3.22
     sound.setBuffer(buffer);
     sound.setLoop(true); // Loop if you want the sound to continue
     sound.play();
-    sound.pause()
+    sound.setvolume(0.01)
   });
   theScene.add(sound);
   sound.setRefDistance(20); // Example ref distance
@@ -136,7 +138,7 @@ pyramidMesh.rotation.x = 3.22
       direction &&
         updateShipPosition(direction, targetQuaternion, targetPosition);
     }
-    if (meshRef.current) {
+    if (meshRef.current && (isTraveling || isReturning)) {
       const distance = camera.position.distanceTo(meshRef.current.position);
       sound.setVolume(calculateVolume(distance));
     }
