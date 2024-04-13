@@ -16,16 +16,16 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship }) => {
-  const store = useStore();
-  const destinationPos =
-    store.celestialObjects.find((co) => co.id === "asteroid")?.position ||
-    new Vector3(0, 0, 0);
-  const originPos = new Vector3(12.6, 1.8, 16.2);
+  const { constructions, destination, origin, setOrigin } = useStore();
+  const constructionPos = constructions.find(p => p.assetId === "spacestation3")
+  const originPos = constructionPos?.position || new Vector3(0,0,0);
+
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const { scene } = useGLTF(glbPath);
+  const theScene = scene.clone()
   const { camera } = useThree();
 
   const listener = new AudioListener();
@@ -38,11 +38,11 @@ const Ship: FC<Props> = ({ ship }) => {
     sound.play();
     sound.pause()
   });
-  scene.add(sound);
+  theScene.add(sound);
   sound.setRefDistance(20); // Example ref distance
   sound.setRolloffFactor(1); // Adjust for realistic attenuation
-  scene.rotation.set(0, -1.55, 0);
-  scale && scene.scale.set(scale, scale, scale);
+  theScene.rotation.set(0, -1.55, 0);
+  scale && theScene.scale.set(scale, scale, scale);
 
   const calculateDirectionAndRotation = (targetPosition: Vector3) => {
     if (!meshRef.current) return {};
@@ -86,9 +86,9 @@ const Ship: FC<Props> = ({ ship }) => {
   };
 
   useFrame(() => {
-    if (meshRef.current && (isTraveling || isReturning)) {
+    if (meshRef.current && destination && (isTraveling || isReturning)) {
       !sound.isPlaying && sound.play()
-      const targetPosition = isTraveling ? destinationPos : originPos;
+      const targetPosition = isTraveling ? destination : originPos;
       const { direction, targetQuaternion } =
         calculateDirectionAndRotation(targetPosition);
 
@@ -111,28 +111,27 @@ const Ship: FC<Props> = ({ ship }) => {
     return volume;
   }
 
+  const handleSetTravel = () => {
+    if(meshRef.current) setOrigin(position)
+      setIsTraveling(!isTraveling)
+  }
+
   return (
     <Suspense fallback={null}>
       <mesh
-        onClick={() => setIsTraveling(!isTraveling)}
+        onClick={handleSetTravel}
         ref={meshRef}
         position={position}
       >
         <directionalLight position={[10, 15, 15]} castShadow intensity={.1} />
 
-        <primitive object={scene} />
+        <primitive object={theScene} />
         {(isTraveling || isReturning) && (
           <group>
             <RocketBooster
               position={new Vector3(1.04 / 100, 0.75 / 100, -0.3)}
             />
-            <RocketBooster
-              position={new Vector3(1.04 / 100, 0.75 / 100, -0.15)}
-            />
-            <RocketBooster position={new Vector3(1.04 / 100, 0.75 / 100, 0)} />
-            <RocketBooster
-              position={new Vector3(1.04 / 100, 0.75 / 100, 0.15)}
-            />
+           
           </group>
         )}
       </mesh>

@@ -17,7 +17,6 @@ interface PlayerInfo {
 const App: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false)
   const onFinish = (values: PlayerInfo) => {
-    console.log("Success:", values);
     // Simulate starting the game (replace with your logic)
     setGameStarted(true)
   };

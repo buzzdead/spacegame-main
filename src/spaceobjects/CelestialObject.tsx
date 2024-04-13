@@ -2,7 +2,7 @@ import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { Color, ShaderMaterial, AdditiveBlending } from 'three'
-import { SGS } from '../store/useStore';
+import useStore, { SGS } from '../store/useStore';
 import fragmentShader from './shaders/glowFragmentShader'
 import vertexShader from './shaders/glowVertexShader'
 
@@ -12,6 +12,7 @@ interface CelestialObjectProps {
 
 const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => { 
   const { glbPath, position, scale } = celestialObject;
+  const { setDestination } = useStore()
   const meshRef = useRef<ElementRef<'mesh'>>(null);
   const { scene } = useGLTF(glbPath);
   scale && scene.scale.set(scale, scale, scale)
@@ -32,13 +33,17 @@ const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => {
   if ((child as Mesh).isMesh) { 
       const mesh = child as Mesh; // Assert the type as THREE.Mesh
       mesh.material = glowMaterial;  
-  }
+  } 
 });
  */
+const handleSetDestination = () => {
+  if(celestialObject.assetId.includes("planet")) return
+  setDestination(position)
+}
   return (
     <Suspense fallback={null}>
-      <mesh onClick={() => console.log(scene)} ref={meshRef} position={position}>
-        <primitive object={scene} />
+      <mesh onClick={handleSetDestination} ref={meshRef} position={position}>
+        <primitive object={scene.clone()} />
       </mesh>
     </Suspense>
   );
