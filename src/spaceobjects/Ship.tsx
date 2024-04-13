@@ -49,7 +49,11 @@ pyramidMesh.rotation.x = 3.22
   }, [destination, origin])
 
   useEffect(() => {
-    if(shipsOrigin && shipsDestination) setIsTraveling(true)
+    if(shipsOrigin && shipsDestination) 
+      {
+      setIsTraveling(true)
+      setSelected(ship.id)
+      }
   }, [shipsOrigin, shipsDestination])
 
   const listener = new AudioListener();

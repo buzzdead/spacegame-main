@@ -30,7 +30,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
   const bottom = -frustumHeight;
   console.log("rendering")
   return (
-    <div>
+    <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />
     <Canvas
       camera={{
