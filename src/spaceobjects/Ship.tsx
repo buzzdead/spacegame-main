@@ -130,7 +130,6 @@ pyramidMesh.rotation.x = 3.22
 
   useFrame(() => {
     if (meshRef.current && shipsDestination && shipsOrigin && (isTraveling || isReturning)) {
-      !sound.isPlaying && sound.play()
       const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
       const { direction, targetQuaternion } =
         calculateDirectionAndRotation(targetPosition);
