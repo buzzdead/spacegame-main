@@ -28,7 +28,6 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
   const right = frustumWidth;
   const top = frustumHeight;
   const bottom = -frustumHeight;
-  console.log("rendering")
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />
@@ -40,6 +39,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
         bottom: bottom,
         far: 40000,
         near: 0.1,
+        position: [35, 5, -15]
       }}
       style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}
     >

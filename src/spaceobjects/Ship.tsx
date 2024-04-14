@@ -6,9 +6,6 @@ import {
   PositionalAudio,
   AudioListener,
   AudioLoader,
-  Mesh,
-  MeshPhongMaterial,
-  ConeGeometry,
   ShaderMaterial,
   Color
 } from "three";
@@ -18,6 +15,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import RocketBooster from "./RocketBooster";
 import fragmentShader from './shaders/glowFragmentShader'
 import vertexShader from './shaders/glowVertexShader'
+import SelectedIcon from "./pyramidMesh";
 interface Props {
   ship: SGS["Ship"];
 }
@@ -29,6 +27,7 @@ const Ship: FC<Props> = ({ ship }) => {
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
+  const [isHarvesting, setIsHarvesting] = useState(false)
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const { scene } = useGLTF(glbPath);
   const theScene = scene.clone()
@@ -43,14 +42,8 @@ const Ship: FC<Props> = ({ ship }) => {
     transparent: true // Important for blend effects like glows
 });
 
-const geometry = new ConeGeometry(0.25, 1, 4); // Radius, height, number of sides = 4
-const material = new MeshPhongMaterial({ color: 0x00FF80 });
-const pyramidMesh = new Mesh(geometry, material);
-pyramidMesh.position.set(0, 1.5, 2)
-pyramidMesh.rotation.x = 3.22
-
   useEffect(() => {
-    if(!selected.includes(ship.id)) return
+    if(!selected.find(s => s.id === ship.id)) return
         if(destination !== shipsDestination)
           {
             setShipsDestination(destination)
@@ -108,10 +101,11 @@ pyramidMesh.rotation.x = 3.22
     if (!meshRef.current) return;
     const distance = meshRef.current.position.distanceTo(targetPosition);
 
-    if (distance < 5) {
+    if (distance < 6.5) {
       if (isTraveling) {
         setIsTraveling(false);
-        setTimeout(() => setIsReturning(true), 3000);
+        setIsHarvesting(true)
+        setTimeout(() => {setIsReturning(true); setIsHarvesting(false)}, 3000);
       } else if (isReturning) {
         setIsReturning(false);
         setTimeout(() =>{ setIsTraveling(true); setResources(500) }, 3000);
@@ -165,8 +159,7 @@ pyramidMesh.rotation.x = 3.22
         ref={meshRef}
         position={position}
       >
-        <directionalLight position={[10, 15, 15]} castShadow intensity={.1} />
-       {selected.includes(ship.id) && <primitive object={pyramidMesh} />}
+       {selected.find(s => s.id === ship.id) && <SelectedIcon color={0x00FF80} position={new Vector3(0, 1.5, 2)} /> }
         <primitive object={theScene} />
         {(isTraveling || isReturning) && (
           <group>
@@ -176,6 +169,13 @@ pyramidMesh.rotation.x = 3.22
            <RocketBooster
               position={new Vector3(1.04 / 100, 0.75 / 100, -0)}
             />
+          </group>
+        )}
+        {isHarvesting && (
+          <group>
+          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 5)} />
+          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 5.5)} />
+          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 6)} />
           </group>
         )}
       </mesh>

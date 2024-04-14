@@ -6,13 +6,14 @@ import { Vector3 } from 'three'
 
 interface Props {
   position: Vector3
+  isHarvesting?: boolean
 }
 
-const RocketBooster = ({ position }: Props) => {
+const RocketBooster = ({ position, isHarvesting = false }: Props) => {
   const particleSystemRef = useRef<THREE.Points>(null);
 
   const [particlePositions, setParticlePositions] = useState<Float32Array>();
-  const texture = useTexture('/assets/particle.png')
+  const texture = useTexture(isHarvesting ? '/assets/fire.jpg' : '/assets/particle.png')
 
   useEffect(() => {
     const positions = new Float32Array(900 * 3);
@@ -61,9 +62,9 @@ const RocketBooster = ({ position }: Props) => {
        
                 <pointsMaterial 
                 attach={'material'}
-            size={0.15} 
+            size={0.6} 
             clipShadows
-            opacity={0.05}
+            opacity={isHarvesting ? 0.025 : 0.05}
             map={texture}
             depthWrite={false}
             blending={THREE.AdditiveBlending}

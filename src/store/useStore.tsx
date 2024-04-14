@@ -33,7 +33,9 @@ export type SGS = {
   scale?: number
 }
 
-type numberVector = [number, number, number]
+type numberVector = [number, number, number] 
+
+type SelectedShip = Pick<Ship, 'assetId' | 'id' | 'position'>
 
 interface SpaceGameState {
   celestialObjects: CelestialObject[];
@@ -44,9 +46,9 @@ interface SpaceGameState {
   addConstruction: (coId: ConstructionId, position: numberVector, scale?: number) => void
   origin: Vector3 | undefined
   destination: Vector3 | undefined
-  setOrigin: (pos: Vector3) => void
+  setOrigin: (pos: Vector3 | undefined) => void
   setDestination: (pos: Vector3) => void
-  selected: string[],
+  selected: SelectedShip[],
   setSelected: (id: string) => void
   resources: number
   setResources: (n: number) => void
@@ -55,7 +57,7 @@ interface SpaceGameState {
 const addShipToState = (ships: Ship[], shipId: string, nv: numberVector, scale = 1) => {
   const position = new Vector3(nv[0], nv[1], nv[2])
   const spaceShip = spaceShips.find(ship => ship.id === shipId)
-  const newShipId = Math.random() * 100000
+  const newShipId = ships.length + 1
   if(spaceShip) {
     const newShip = { ...spaceShip, assetId: spaceShip.id, id: newShipId.toString(), position: position, scale: scale}
     return [...ships, newShip]
@@ -66,7 +68,7 @@ const addShipToState = (ships: Ship[], shipId: string, nv: numberVector, scale =
 const addConstructionToState = (currentConstructions: Construction[], constructionId: string, nv: numberVector, scale = 1) => {
   const position = new Vector3(nv[0], nv[1], nv[2])
   const construction = constructions.find(construction => construction.id === constructionId)
-  const newConstructionId = Math.random() * 100000
+  const newConstructionId = currentConstructions.length + 1
   if(construction) {
     const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale}
     return [...currentConstructions, newConstruction]
@@ -77,12 +79,17 @@ const addConstructionToState = (currentConstructions: Construction[], constructi
 const addCelestialObjectToState = (currentCelestialObjects: CelestialObject[], coId: string, nv: numberVector, scale = 1) => {
   const position = new Vector3(nv[0], nv[1], nv[2])
   const celestialObject = celestialObjects.find(co => co.id === coId)
-  const newCOId = Math.random() * 100000
+  const newCOId = currentCelestialObjects.length + 1
   if(celestialObject) {
     const newCO = { ...celestialObject, assetId: celestialObject.id, id: newCOId.toString(), position: position, scale: scale}
     return [...currentCelestialObjects, newCO]
   }
   return [...currentCelestialObjects]
+}
+
+const addToSelected = (ships: Ship[], selected: SelectedShip[], id: string) => {
+  const selectedShip = ships.find(e => e.id === id) as SelectedShip
+  return selectedShip ? selected.includes(selectedShip) ? [...selected.filter(e => e !== selectedShip)] : [...selected, selectedShip] : [...selected]
 }
 
 const useStore = create<SpaceGameState>((set) => ({
@@ -94,10 +101,10 @@ const useStore = create<SpaceGameState>((set) => ({
   addConstruction: (coId, position, scale) => set((state) => ({constructions: addConstructionToState(state.constructions, coId, position, scale)})),
   origin: undefined,
   destination: undefined,
-  setOrigin: (m: Vector3) => set((state) => ({origin: m})),
+  setOrigin: (m: Vector3 | undefined) => set((state) => ({origin: m})),
   setDestination: (m: Vector3) => set((state) => ({destination: m})),
   selected: [],
-  setSelected: (id: string) => set((state) => ({selected: state.selected.includes(id) ? [...state.selected.filter(s => s !== id)] : [...state.selected, id]})),
+  setSelected: (id: string) => set((state) => ({selected: addToSelected(state.ships, state.selected, id)})),
   resources: 0,
   setResources: (n: number) => set((state) => ({resources: state.resources + n}))
 }));

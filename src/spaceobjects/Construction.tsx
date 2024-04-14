@@ -1,15 +1,16 @@
 import { FC, ElementRef, useEffect } from 'react';
 import { Suspense, useRef } from 'react';
-import { LoopRepeat } from 'three'
+import { LoopRepeat, Vector3 } from 'three'
 import { useAnimations, useGLTF } from '@react-three/drei';
 import useStore, { SGS } from '../store/useStore';
+import SelectedIcon from './pyramidMesh';
 
 interface Props {
   construction: SGS['Construction'];
 }
 
 const Construction: FC<Props> = ({ construction }) => {
-  const { setOrigin } = useStore()
+  const { setOrigin, origin } = useStore()
   const { glbPath, position, scale } = construction;
   const meshRef = useRef<ElementRef<'mesh'>>(null);
   const { scene, animations } = useGLTF(glbPath);
@@ -28,7 +29,8 @@ const Construction: FC<Props> = ({ construction }) => {
 
   return (
     <Suspense fallback={null}>
-      <mesh onClick={() => setOrigin(position)} ref={meshRef} position={position}>
+      <mesh onClick={() => origin === position ? setOrigin(undefined) : setOrigin(position)} ref={meshRef} position={position}>
+      {origin === position && <SelectedIcon color={'yellow'} position={new Vector3(3, 18, -6)} /> }
         <primitive object={scene} />
       </mesh>
     </Suspense>
