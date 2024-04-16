@@ -35,7 +35,7 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
         
         const maxLimit = randomIntFromInterval(25, 100)
 
-        if (positions[i + 1] > maxLimit / 25) {
+        if (positions[i + 1] > maxLimit / (isHarvesting ? 40 : 25)) {
           positions[i] = (Math.random() - 0.5) * 0.3;
           positions[i + 1] = 0;
           positions[i + 2] = (Math.random() - 0.5) * 0.2;
@@ -49,7 +49,7 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
 
   return (
     <group position={position} rotation={[-1.55, 0, 0]}>
-      <points scale={0.5} ref={particleSystemRef}>
+      <points scale={0.6} ref={particleSystemRef}>
         <bufferGeometry attach="geometry">
           <bufferAttribute 
               attach="attributes-position"
@@ -62,9 +62,10 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
        
                 <pointsMaterial 
                 attach={'material'}
-            size={0.6} 
+                color={isHarvesting ? '#FF5F1F' : 'none'}
+            size={isHarvesting ? .2 : .8} 
             clipShadows
-            opacity={isHarvesting ? 0.025 : 0.05}
+            opacity={isHarvesting ? 0.25 : 0.05}
             map={texture}
             depthWrite={false}
             blending={THREE.AdditiveBlending}

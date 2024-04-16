@@ -45,9 +45,9 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
     >
       <EffectComposer>
         <Bloom
-          intensity={0.2}
-          luminanceThreshold={0.8}
-          luminanceSmoothing={0.5}
+          intensity={0.035}
+          luminanceThreshold={.98}
+          luminanceSmoothing={.85}
         />
 
         <spotLight

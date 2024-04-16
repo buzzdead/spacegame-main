@@ -25,7 +25,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoPlay = false, loop =
         if(src.includes("coddy"))
           audioRef.current.volume = 0.25
         else
-        audioRef.current.volume = 0.05; 
+        audioRef.current.volume = 0.025; 
       }
       audioRef.current?.play();
     }

@@ -16,6 +16,7 @@ interface Construction {
   glbPath: string
   position: Vector3
   scale?: number
+  type: "Refinary" | "Construction"
 }
 
 interface Ship {
@@ -43,7 +44,7 @@ interface SpaceGameState {
   ships: Ship[];
   addShip: (shipId: SpaceShipId, position: numberVector, scale?: number) => void;
   constructions: Construction[];
-  addConstruction: (coId: ConstructionId, position: numberVector, scale?: number) => void
+  addConstruction: (coId: ConstructionId, position: numberVector,  type: "Refinary" | "Construction", scale?: number) => void
   origin: Vector3 | undefined
   destination: Vector3 | undefined
   setOrigin: (pos: Vector3 | undefined) => void
@@ -65,12 +66,12 @@ const addShipToState = (ships: Ship[], shipId: string, nv: numberVector, scale =
   return [...ships]
 }
 
-const addConstructionToState = (currentConstructions: Construction[], constructionId: string, nv: numberVector, scale = 1) => {
+const addConstructionToState = (currentConstructions: Construction[], constructionId: string, nv: numberVector, type: "Refinary" | "Construction", scale = 1) => {
   const position = new Vector3(nv[0], nv[1], nv[2])
   const construction = constructions.find(construction => construction.id === constructionId)
   const newConstructionId = currentConstructions.length + 1
   if(construction) {
-    const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale}
+    const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale, type: type}
     return [...currentConstructions, newConstruction]
   }
   return [...currentConstructions]
@@ -98,7 +99,7 @@ const useStore = create<SpaceGameState>((set) => ({
   ships: [],
   addShip: (shipId, position, scale) => set((state) => ({ ships: addShipToState(state.ships, shipId, position, scale)})),
   constructions: [],
-  addConstruction: (coId, position, scale) => set((state) => ({constructions: addConstructionToState(state.constructions, coId, position, scale)})),
+  addConstruction: (coId, position, type = "Refinary", scale) => set((state) => ({constructions: addConstructionToState(state.constructions, coId, position, type, scale)})),
   origin: undefined,
   destination: undefined,
   setOrigin: (m: Vector3 | undefined) => set((state) => ({origin: m})),

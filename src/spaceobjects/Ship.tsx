@@ -1,82 +1,91 @@
 import { FC, ElementRef, useState, useEffect } from "react";
 import { Suspense, useRef } from "react";
-import {
-  Vector3,
-  Quaternion,
-  PositionalAudio,
-  AudioListener,
-  AudioLoader,
-  ShaderMaterial,
-  Color
-} from "three";
+import { Vector3, Quaternion, ShaderMaterial, Color, Mesh, MeshStandardMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import useStore, { SGS } from "../store/useStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import RocketBooster from "./RocketBooster";
-import fragmentShader from './shaders/glowFragmentShader'
-import vertexShader from './shaders/glowVertexShader'
+import fragmentShader from "./shaders/glowFragmentShader";
+import vertexShader from "./shaders/glowVertexShader";
 import SelectedIcon from "./pyramidMesh";
+import UseSoundEffect from "./SoundEffect";
 interface Props {
   ship: SGS["Ship"];
 }
 
 const Ship: FC<Props> = ({ ship }) => {
-  const { destination, origin, setOrigin, setSelected, selected, setResources } = useStore();
-  const [shipsOrigin, setShipsOrigin] = useState<Vector3>()
-  const [shipsDestination, setShipsDestination] = useState<Vector3>()
+  const {
+    destination,
+    origin,
+    setOrigin,
+    setSelected,
+    selected,
+    setResources,
+  } = useStore();
+  const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
+  const [shipsDestination, setShipsDestination] = useState<Vector3>();
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
-  const [isHarvesting, setIsHarvesting] = useState(false)
+  const [isHarvesting, setIsHarvesting] = useState(false);
   const meshRef = useRef<ElementRef<"mesh">>(null);
-  const { scene } = useGLTF(glbPath);
-  const theScene = scene.clone()
+  const { scene, materials } = useGLTF(glbPath);
+  const theScene = scene.clone();
+  if(ship.assetId === "fighter") {theScene.children[0].rotation.y = -55}
+  const meshes: Mesh[] = theScene.children as Mesh[]; 
+
+  // Assuming a MeshStandardMaterial:
+  for(let i = 0; i < meshes.length; i++){
+    const newMaterial = meshes[i].material as MeshStandardMaterial;
+    newMaterial.color.set(ship.assetId === "fighter" ? 'darkorange' : 'orange'); // Green
+    newMaterial.color.multiplyScalar(2.5)
+    meshes[i].material = newMaterial;
+  }
+  
+ 
   const { camera } = useThree();
+  const { sound: miningSound, calculateVolume: calculateMiningSound } =
+    UseSoundEffect({
+      sfxPath: "/assets/sounds/mining.mp3",
+      scene: theScene,
+      minVolume: 0.05,
+      camera: camera,
+    });
+  const { sound: motorSound, calculateVolume: calculateMotorSound } =
+    UseSoundEffect({
+      sfxPath: "/assets/sounds/sc.mp3",
+      scene: theScene,
+      camera: camera,
+    });
+
   const glowMaterial = new ShaderMaterial({
     uniforms: {
-        glowColor: { value: new Color(0x00FF80) }, // Neon green color
-        glowStrength: { value: 1.0 } 
+      glowColor: { value: new Color(0x00ff80) }, // Neon green color
+      glowStrength: { value: 1.0 },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
-    transparent: true // Important for blend effects like glows
-});
-
-  useEffect(() => {
-    if(!selected.find(s => s.id === ship.id)) return
-        if(destination !== shipsDestination)
-          {
-            setShipsDestination(destination)
-          }
-        if(origin !== shipsOrigin) 
-          {
-            setShipsOrigin(origin)
-          }
-  }, [destination, origin])
-
-  useEffect(() => {
-    if(shipsOrigin && shipsDestination) 
-      {
-      setIsTraveling(true)
-      sound.setLoop(true);
-      !sound.isPlaying && sound.play()
-      setSelected(ship.id)
-      }
-  }, [shipsOrigin, shipsDestination])
-
-  const listener = new AudioListener();
-  camera.add(listener);
-  const audioLoader = new AudioLoader();
-  const sound = new PositionalAudio(listener);
-  audioLoader.load("/assets/sounds/sc.mp3", (buffer) => {
-    sound.setBuffer(buffer);
-    sound.setLoop(true); // Loop if you want the sound to continue
-    sound.play();
-    sound.setVolume(0.1)
+    transparent: true, // Important for blend effects like glows
   });
-  theScene.add(sound);
-  sound.setRefDistance(20); // Example ref distance
-  sound.setRolloffFactor(1); // Adjust for realistic attenuation
+
+  useEffect(() => {
+    if (!selected.find((s) => s.id === ship.id)) return;
+    if (destination !== shipsDestination) {
+      setShipsDestination(destination);
+    }
+    if (origin !== shipsOrigin) {
+      setShipsOrigin(origin);
+    }
+  }, [destination, origin]);
+
+  useEffect(() => {
+    if (shipsOrigin && shipsDestination) {
+      setIsTraveling(true);
+      motorSound?.play();
+      setSelected(ship.id);
+    }
+  }, [shipsOrigin, shipsDestination]);
+
   theScene.rotation.set(0, -1.55, 0);
   scale && theScene.scale.set(scale, scale, scale);
 
@@ -102,13 +111,24 @@ const Ship: FC<Props> = ({ ship }) => {
     const distance = meshRef.current.position.distanceTo(targetPosition);
 
     if (distance < 6.5) {
+      motorSound?.pause();
       if (isTraveling) {
         setIsTraveling(false);
-        setIsHarvesting(true)
-        setTimeout(() => {setIsReturning(true); setIsHarvesting(false)}, 3000);
+        setIsHarvesting(true);
+        miningSound?.play();
+        setTimeout(() => {
+          setIsReturning(true);
+          setIsHarvesting(false);
+          motorSound?.play();
+          miningSound?.stop();
+        }, 5000);
       } else if (isReturning) {
         setIsReturning(false);
-        setTimeout(() =>{ setIsTraveling(true); setResources(500) }, 3000);
+        setTimeout(() => {
+          setIsTraveling(true);
+          setResources(500);
+          motorSound?.play();
+        }, 3000);
       }
 
       // Reset position to new target
@@ -123,7 +143,12 @@ const Ship: FC<Props> = ({ ship }) => {
   };
 
   useFrame(() => {
-    if (meshRef.current && shipsDestination && shipsOrigin && (isTraveling || isReturning)) {
+    if (
+      meshRef.current &&
+      shipsDestination &&
+      shipsOrigin &&
+      (isTraveling || isReturning)
+    ) {
       const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
       const { direction, targetQuaternion } =
         calculateDirectionAndRotation(targetPosition);
@@ -133,24 +158,10 @@ const Ship: FC<Props> = ({ ship }) => {
     }
     if (meshRef.current && (isTraveling || isReturning)) {
       const distance = camera.position.distanceTo(meshRef.current.position);
-      sound.setVolume(calculateVolume(distance));
+      calculateMiningSound(distance);
+      calculateMotorSound(distance);
     }
   });
-  function calculateVolume(distance: number) {
-    // Adjust these parameters based on your desired sound behavior
-    const maxDistance = 75;
-    const minVolume = 0.1;
-
-    let volume = 0.15 - Math.min(1, distance / maxDistance); // Linear decrease
-    volume = Math.max(minVolume, volume); // Clamp to a minimum
-
-    return volume;
-  }
-
-  const handleSetTravel = () => {
-    if(meshRef.current) setOrigin(position)
-      setIsTraveling(!isTraveling)
-  }
 
   return (
     <Suspense fallback={null}>
@@ -159,23 +170,32 @@ const Ship: FC<Props> = ({ ship }) => {
         ref={meshRef}
         position={position}
       >
-       {selected.find(s => s.id === ship.id) && <SelectedIcon color={0x00FF80} position={new Vector3(0, 1.5, 2)} /> }
+        {selected.find((s) => s.id === ship.id) && (
+          <SelectedIcon color={0x00ff80} position={new Vector3(0, 1.5, 2)} />
+        )}
         <primitive object={theScene} />
         {(isTraveling || isReturning) && (
           <group>
             <RocketBooster
-              position={new Vector3(1.04 / 100, 0.75 / 100, -0.3)}
+              position={new Vector3(ship.assetId === "fighter" ? -3.3 : 1.04 / 100, 0.75 / 100, ship.assetId === "fighter" ? -4.5 : -0.3)}
             />
-           <RocketBooster
-              position={new Vector3(1.04 / 100, 0.75 / 100, -0)}
-            />
+            <RocketBooster position={new Vector3(ship.assetId === "fighter" ? -5.3 : 1.04 / 100, 0.75 / 100, ship.assetId === "fighter" ? - 4.5 : -0)} />
           </group>
         )}
-        {isHarvesting && (
+        {isHarvesting && ship.assetId !== "fighter" && (
           <group>
-          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 5)} />
-          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 5.5)} />
-          <RocketBooster isHarvesting={isHarvesting} position={new Vector3(1.04 / 100, 0.75 / 100, 6)} />
+            <RocketBooster
+              isHarvesting={isHarvesting}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 4.75)}
+            />
+            <RocketBooster
+              isHarvesting={isHarvesting}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 5.25)}
+            />
+            <RocketBooster
+              isHarvesting={isHarvesting}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 5.75)}
+            />
           </group>
         )}
       </mesh>

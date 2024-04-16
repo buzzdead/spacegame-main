@@ -22,8 +22,8 @@ const Objects = ({startPlanet, startShip}: Props) => {
         store.addShip(startShip, [8,1,4], 0.008)
         store.addShip(startShip, [10,2,8], 0.008)
         store.addShip(startShip, [12,3,12], 0.008)
-        store.addConstruction("spacestation3", [14, 0, 64], 0.11)
-        store.addConstruction("spacestation2", [44, 6, 64], 0.055)
+        store.addConstruction("spacestation3", [14, 0, 64], "Construction", 0.11)
+        store.addConstruction("spacestation2", [44, 6, 64], "Refinary", 0.055)
       }, [])
     return (
         <group>
