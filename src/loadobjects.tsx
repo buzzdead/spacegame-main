@@ -9,7 +9,7 @@ interface Props {
     startShip: "hullspaceship" | "spaceship-evil" | "cargo";
 }
 
-const Objects = ({startPlanet, startShip}: Props) => {
+const LoadObjects = ({startPlanet, startShip}: Props) => {
     const store = useStore()
     useEffect(() => {
         store.addCelestialObject(startPlanet, [-55, 0, -20], 50)
@@ -40,4 +40,4 @@ const Objects = ({startPlanet, startShip}: Props) => {
     )
 }
 
-export default Objects
+export default LoadObjects

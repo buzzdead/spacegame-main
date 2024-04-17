@@ -3,7 +3,7 @@ import { Suspense, useRef } from 'react';
 import { LoopRepeat, Vector3 } from 'three'
 import { useAnimations, useGLTF } from '@react-three/drei';
 import useStore, { SGS } from '../store/useStore';
-import SelectedIcon from './pyramidMesh';
+import SelectedIcon from './tools/pyramidMesh';
 import ConstructionAsset from './ConstructionAsset';
 
 interface Props {

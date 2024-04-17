@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import useStore from './store/useStore';
+import useStore from '../store/useStore';
 import { useEffect, useState } from 'react';
 
 const UI = () => {
@@ -10,6 +10,9 @@ const UI = () => {
         setHelperUi("Great! Now left-click on one of the asteroids, and then on the debris-field behind them")
       else if(store.destination !== undefined && helperUi === "Great! Now left-click on one of the asteroids, and then on the debris-field behind them") setHelperUi("")
     }, [store.selected, store.destination])
+    useEffect(() => {
+      if(store.ships.find(ship => ship.assetId === "fighter") && helperUi === "") setHelperUi("hold ctrl and left click fighter ship to shoot laser")
+    }, [store.ships])
     
     return (
         <div style={{userSelect: 'none', position: 'absolute', zIndex: 8123781237812, top: 25, left: 25, display: 'flex', gap: 45, flexWrap: 'wrap'}}>

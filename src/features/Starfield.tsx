@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from  'three/examples/jsm/loaders/GLTFLoader';
-import './styles/starfield.css'
+import '../styles/starfield.css'
 import { useGLTF } from '@react-three/drei';
 
 const Starfield: React.FC = () => {
@@ -83,7 +82,7 @@ const Starfield: React.FC = () => {
     if (starfieldRef.current) {
       createStarfield();
     }
-  }, []);
+  }, [blackHoleScene, planetScene, scene]);
 
   return (
     <div ref={starfieldRef} className='starfield-container' />

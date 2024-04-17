@@ -1,14 +1,13 @@
 import { FC, ElementRef, useState, useEffect } from "react";
 import { Suspense, useRef } from "react";
-import { Vector3, Quaternion, ShaderMaterial, Color, Mesh, MeshStandardMaterial } from "three";
+import { Vector3, Quaternion, Mesh, MeshStandardMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import useStore, { SGS } from "../store/useStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import RocketBooster from "./RocketBooster";
-import fragmentShader from "./shaders/glowFragmentShader";
-import vertexShader from "./shaders/glowVertexShader";
-import SelectedIcon from "./pyramidMesh";
-import UseSoundEffect from "./SoundEffect";
+import SelectedIcon from "./tools/pyramidMesh";
+import UseSoundEffect from "../hooks/SoundEffect";
+import Laser from "./weapons/Laser";
 interface Props {
   ship: SGS["Ship"];
 }
@@ -17,19 +16,19 @@ const Ship: FC<Props> = ({ ship }) => {
   const {
     destination,
     origin,
-    setOrigin,
     setSelected,
     selected,
     setResources,
   } = useStore();
   const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
   const [shipsDestination, setShipsDestination] = useState<Vector3>();
+  const [fire, setFire] = useState(false)
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
   const [isHarvesting, setIsHarvesting] = useState(false);
   const meshRef = useRef<ElementRef<"mesh">>(null);
-  const { scene, materials } = useGLTF(glbPath);
+  const { scene } = useGLTF(glbPath);
   const theScene = scene.clone();
   if(ship.assetId === "fighter") {theScene.children[0].rotation.y = -55}
   const meshes: Mesh[] = theScene.children as Mesh[]; 
@@ -57,8 +56,14 @@ const Ship: FC<Props> = ({ ship }) => {
       scene: theScene,
       camera: camera,
     });
+  const { sound: laserSound, calculateVolume: calculateLaserSound } = 
+    UseSoundEffect({
+      sfxPath: '/assets/sounds/laser.mp3',
+      scene: theScene,
+      camera: camera
+    })
 
-  const glowMaterial = new ShaderMaterial({
+/*   const glowMaterial = new ShaderMaterial({
     uniforms: {
       glowColor: { value: new Color(0x00ff80) }, // Neon green color
       glowStrength: { value: 1.0 },
@@ -66,7 +71,7 @@ const Ship: FC<Props> = ({ ship }) => {
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     transparent: true, // Important for blend effects like glows
-  });
+  }); */
 
   useEffect(() => {
     if (!selected.find((s) => s.id === ship.id)) return;
@@ -163,17 +168,23 @@ const Ship: FC<Props> = ({ ship }) => {
     }
   });
 
+  const handleOnClick = (e: any) => {
+    if(ship.assetId === "fighter" && e.ctrlKey) {setFire(!fire); laserSound?.stop(); laserSound?.play()}
+    else setSelected(ship.id)
+  }
+
   return (
     <Suspense fallback={null}>
       <mesh
-        onClick={() => setSelected(ship.id)}
+        onClick={handleOnClick}
         ref={meshRef}
         position={position}
       >
         {selected.find((s) => s.id === ship.id) && (
           <SelectedIcon color={0x00ff80} position={new Vector3(0, 1.5, 2)} />
         )}
-        <primitive object={theScene} />
+        <primitive onRightClick={() => console.log("adisujnhf")} object={theScene} />
+        {ship.assetId === "fighter" && <group><Laser fire={fire} origin={theScene.position} target={new Vector3(0,0,0)}/><Laser fire={fire} second origin={theScene.position} target={new Vector3(0,0,0)}/></group>}
         {(isTraveling || isReturning) && (
           <group>
             <RocketBooster

@@ -1,24 +1,30 @@
 export default /*glsl*/ `
-uniform vec3 glowColor;
-uniform float glowStrength;
+uniform vec3 glowColor; // Color of the laser glow
+uniform float glowStrength; // Strength of the glow effect
+uniform float time; // Time uniform passed from component
+
 varying vec3 vNormal;
+varying vec3 vPosition;
 
 void main() {
-  // Adjust the glow extent
-  const float threshold = 0.8; 
+  vec3 cameraDirection = normalize(cameraPosition - vPosition);
+  float viewAlignment = dot(vNormal, cameraDirection);
+  vec3 fragmentToCenter = vPosition - laserMesh.position;
+  float distance = length(fragmentToCenter);
+  float normalizedDistance = distance / laserScale.z;
+  float falloff = smoothstep(0.0, 0.5, normalizedDistance) * viewAlignment;
 
-  // Calculate how much the surface faces the view direction
-  float viewAlignment = dot(vNormal, normalize(vec3(0, 0, 1))); 
+  // Introduce a time-based factor for pulsation
+  float pulse = sin(time) * 0.5 + 0.5;
 
-  // Control glow falloff with a smooth curve
-  float glow = smoothstep(threshold - 0.1, threshold + 0.1, viewAlignment) * glowStrength;
+  float glow = smoothstep(0.6, 0.8, viewAlignment) * glowStrength * pulse;
 
-  // Ensure glow stays within 0.0 to 1.0 range
-  glow = clamp(glow, 0.0, 1.0);
+  float glow = falloff * glowStrength * pulse;
 
-  // Mix with optional base color (modify the mix factor if desired)
-  vec3 finalColor = mix(glowColor * glow, vec3(1.0, 0.8, 0.5), 0.3);
+  vec3 baseColor = vec3(1.0, 0.0, 0.0);
 
-  gl_FragColor = vec4(finalColor, 1.0); 
+  vec3 finalColor = mix(baseColor, glowColor * glow, pow(viewAlignment, 2.0));
+
+  gl_FragColor = vec4(finalColor, 1.0);
 }
 `;

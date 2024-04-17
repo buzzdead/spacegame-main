@@ -38,7 +38,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoPlay = false, loop =
       window.removeEventListener('click', handleUserInteraction);
       window.removeEventListener('keydown', handleUserInteraction);
     };
-  }, [autoPlay, hasInteracted, shouldPlay, handleUserInteraction]);
+  }, [autoPlay, hasInteracted, shouldPlay, handleUserInteraction, src]);
 
   return (
     <audio muted={false} ref={audioRef} src={src} loop={loop} />
