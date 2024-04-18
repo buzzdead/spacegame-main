@@ -1,13 +1,14 @@
 import { FC, ElementRef, useState, useEffect } from "react";
 import { Suspense, useRef } from "react";
 import { Vector3, Quaternion, Mesh, MeshStandardMaterial } from "three";
-import { useGLTF } from "@react-three/drei";
+import { Center, useGLTF } from "@react-three/drei";
 import useStore, { SGS } from "../store/useStore";
 import { useFrame, useThree } from "@react-three/fiber";
 import RocketBooster from "./RocketBooster";
 import SelectedIcon from "./tools/pyramidMesh";
 import UseSoundEffect from "../hooks/SoundEffect";
 import Laser from "./weapons/Laser";
+import useKeyboard from "./keys";
 interface Props {
   ship: SGS["Ship"];
 }
@@ -23,6 +24,7 @@ const Ship: FC<Props> = ({ ship }) => {
   const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
   const [shipsDestination, setShipsDestination] = useState<Vector3>();
   const [fire, setFire] = useState(false)
+  const keyMap = useKeyboard()
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
@@ -72,7 +74,8 @@ const Ship: FC<Props> = ({ ship }) => {
     fragmentShader: fragmentShader,
     transparent: true, // Important for blend effects like glows
   }); */
-
+  const selectD = selected.find(s => s.id === ship.id)
+  const isFighter = ship.assetId === "fighter"
   useEffect(() => {
     if (!selected.find((s) => s.id === ship.id)) return;
     if (destination !== shipsDestination) {
@@ -115,7 +118,7 @@ const Ship: FC<Props> = ({ ship }) => {
     if (!meshRef.current) return;
     const distance = meshRef.current.position.distanceTo(targetPosition);
 
-    if (distance < 6.5) {
+    if (distance < (isReturning ? 12 : 7)) {
       motorSound?.pause();
       if (isTraveling) {
         setIsTraveling(false);
@@ -148,6 +151,7 @@ const Ship: FC<Props> = ({ ship }) => {
   };
 
   useFrame(() => {
+    keyMap['KeyF'] && selectD && isFighter && fireLaser()
     if (
       meshRef.current &&
       shipsDestination &&
@@ -168,11 +172,20 @@ const Ship: FC<Props> = ({ ship }) => {
     }
   });
 
-  const handleOnClick = (e: any) => {
-    if(ship.assetId === "fighter" && e.ctrlKey) {setFire(!fire); laserSound?.stop(); laserSound?.play()}
-    else setSelected(ship.id)
+  const fireLaser = () => {
+    console.log("Fire!")
+    setFire(!fire)
+    laserSound?.stop()
+    laserSound?.play()
   }
 
+  const handleOnClick = (e: any) => {
+    console.log(e)
+    e.stopPropagation()
+    if(isFighter && e.ctrlKey) fireLaser()
+    else setSelected(ship.id)
+  }
+  
   return (
     <Suspense fallback={null}>
       <mesh
@@ -180,17 +193,20 @@ const Ship: FC<Props> = ({ ship }) => {
         ref={meshRef}
         position={position}
       >
-        {selected.find((s) => s.id === ship.id) && (
-          <SelectedIcon color={0x00ff80} position={new Vector3(0, 1.5, 2)} />
+        {selectD && (
+          <SelectedIcon color={0x00ff80} position={isFighter ?  new Vector3(-4, 2.5, -1.5) : new Vector3(0, 2.5, 2)} />
         )}
-        <primitive onRightClick={() => console.log("adisujnhf")} object={theScene} />
-        {ship.assetId === "fighter" && <group><Laser fire={fire} origin={theScene.position} target={new Vector3(0,0,0)}/><Laser fire={fire} second origin={theScene.position} target={new Vector3(0,0,0)}/></group>}
+        {selectD && isFighter && ( 
+          <SelectedIcon color='red' position={new Vector3(-4, 4, -1.5)} fireIcon handleFire={fireLaser}/>
+        )}
+        <primitive object={theScene} />
+        {isFighter && <group><Laser fire={fire} origin={theScene.position} target={new Vector3(0,0,0)}/><Laser fire={fire} second origin={theScene.position} target={new Vector3(0,0,0)}/></group>}
         {(isTraveling || isReturning) && (
           <group>
             <RocketBooster
-              position={new Vector3(ship.assetId === "fighter" ? -3.3 : 1.04 / 100, 0.75 / 100, ship.assetId === "fighter" ? -4.5 : -0.3)}
+              position={new Vector3(isFighter ? -3.3 : 1.04 / 100, 0.75 / 100, isFighter ? -4.5 : -0.3)}
             />
-            <RocketBooster position={new Vector3(ship.assetId === "fighter" ? -5.3 : 1.04 / 100, 0.75 / 100, ship.assetId === "fighter" ? - 4.5 : -0)} />
+            <RocketBooster position={new Vector3(isFighter ? -5.3 : 1.04 / 100, 0.75 / 100, isFighter ? - 4.5 : -0)} />
           </group>
         )}
         {isHarvesting && ship.assetId !== "fighter" && (

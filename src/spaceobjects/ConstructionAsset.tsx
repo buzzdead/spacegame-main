@@ -11,14 +11,14 @@ const ConstructionAsset = ({shouldRender}: Props) => {
     const store = useStore()
     const { scene } = useGLTF("/assets/spaceships/fighter.glb")
     const theScene = scene.clone()
-
-    theScene.scale.set(4, 4, 4)
-    theScene.position.y = 18
-    theScene.position.z = -8
+    theScene.scale.set(8, 8, 8)
+    theScene.position.y = 12    
+    theScene.position.z = -2
     useFrame(() => {
-        theScene.rotation.y += .004
+        theScene.children[0].rotation.y += .004
     })
-    const handleOnClick = () => {
+    const handleOnClick = (e: any) => {
+        e.stopPropagation()
         store.addShip("fighter", [3 + store.ships.length * 15,0,3], 11)
         i += 1
     }

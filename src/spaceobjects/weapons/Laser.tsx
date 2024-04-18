@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from 'three'
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 
 interface Props {
     origin: any
@@ -13,7 +13,8 @@ type a = THREE.Mesh<THREE.BoxGeometry, THREE.ShaderMaterial, THREE.Object3DEvent
 type arr = a[]
 
 const Laser = ({ origin, target, second = false, fire = false }: Props) => {
-    const laserRef = useRef<THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.Material | THREE.Material[], THREE.Object3DEventMap>>(null);
+  const { scene } = useThree()
+    const laserRef = useRef<any>(scene);
     const [lasherMeshes, setLasherMeshes] = useState<arr>([])
     const laserGeometry = new THREE.BoxGeometry(.08, .08, 2); 
     const laserMaterial = new THREE.ShaderMaterial({
@@ -26,8 +27,14 @@ const Laser = ({ origin, target, second = false, fire = false }: Props) => {
     laserMesh.position.z += 3
     useEffect(() => {
         const lm = laserMesh.clone()
-        setLasherMeshes([...lasherMeshes.filter(l => l.position.z < 60), lm])
-        console.log(lasherMeshes.length)
+        console.log(laserRef.current)
+        const oldMeshes = lasherMeshes.filter(e => e.position.z >= 100)
+        oldMeshes.forEach(m => {scene.remove(m); m.removeFromParent()})
+        setLasherMeshes([...lasherMeshes.filter(l => l.position.z <= 100), lm])
+      return () => {
+        scene.remove(lm)
+      }
+        
     }, [fire])
   
     useFrame(() => {
@@ -35,10 +42,10 @@ const Laser = ({ origin, target, second = false, fire = false }: Props) => {
           
     
           // Check for exceeding z limit and remove the mesh
-          if (mesh.position.z >= 50) {
-                mesh.geometry.scale(0.93,0.93, 0.9)
+          if (mesh.position.z >= 75) {
+                mesh.geometry.scale(0.9,0.9, 0.9)
             } 
-         mesh.position.z += 0.2;
+         mesh.position.z += 1;
             
         });
       });
