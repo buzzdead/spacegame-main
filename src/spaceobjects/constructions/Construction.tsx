@@ -6,6 +6,7 @@ import { SGS, useShallowStore } from '../../store/useStore';
 import SelectedIcon from '../tools/pyramidMesh';
 import ConstructionAsset from './ConstructionAsset';
 import { useAsset } from '../useAsset';
+import { Menu } from './Menu';
 
 interface Props {
   construction: SGS['Construction'];
@@ -16,19 +17,20 @@ const Construction: FC<Props> = ({ construction }) => {
   const { glbPath, position, scale } = construction;
   const meshRef = useRef<ElementRef<'mesh'>>(null);
   const scene = useAsset(glbPath, scale || 1)
-  const [menu, setMenu] = useState(false)
-  const handleClick = () => {
+  const menu = useRef(false)
+  const handleClick = (e: any) => {
+    e.stopPropagation()
     construction.type === "Refinary" ?
     origin === position ? setOrigin(undefined) : setOrigin(position)
     : 
-    setMenu(!menu)
+    menu.current = !menu.current
   }
 
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={null}>  
       <mesh ref={meshRef} position={position}>
       {origin === position && <SelectedIcon color={'yellow'} position={new Vector3(0,4,0)} /> }
-        <Center disableY><ConstructionAsset shouldRender={menu} /></Center>
+      <Menu menu={menu} />
         <primitive onClick={handleClick} object={scene} />
       </mesh>
     </Suspense>

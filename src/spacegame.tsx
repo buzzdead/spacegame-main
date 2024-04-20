@@ -4,8 +4,6 @@ import ThreeSetup from "./components/ThreeSetup";
 import { LoadCelestialObjects } from "./loadcelestialobjects";
 import { LoadConstructions } from "./loadConstructions";
 import { LoadShips } from "./loadships";
-import SelectedIcon from "./spaceobjects/tools/pyramidMesh";
-import { Vector3 } from "three"
 import {Starfield2} from "./features/starfield2";
 
 interface Props {

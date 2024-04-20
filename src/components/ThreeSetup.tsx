@@ -4,22 +4,29 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import {
   AccumulativeShadows,
+  Environment,
+  EnvironmentMap,
   OrbitControls,
   RandomizedLight,
   Stars,
+  useEnvironment
 } from "@react-three/drei";
+
+import * as THREE from 'three'
 
 interface Props {
     children: React.ReactNode
 }
 
+function Background() {
+  
+}
+
 const ThreeSetup = ({children}: Props) => {
   const aspect = window.innerWidth / window.innerHeight;
   const zoom = 100; // Adjust as needed for starfield density
-
   const frustumHeight = 2 * zoom; // Assuming zoom behaves similarly to FOV
   const frustumWidth = frustumHeight * aspect;
-
   const left = -frustumWidth;
   const right = frustumWidth;
   const top = frustumHeight;
@@ -35,8 +42,9 @@ const ThreeSetup = ({children}: Props) => {
         near: 0.1,
         position: [35, 5, -15],
       }}
-      style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}
+      style={{ width: "100vw", height: "100vh" }}
     >
+      <Environment backgroundIntensity={0.05} files={'./starmap-min.jpg'} background />
       <EffectComposer>
         <Bloom
           intensity={0.035}
@@ -54,7 +62,6 @@ const ThreeSetup = ({children}: Props) => {
         />
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.5} />
-        <Stars radius={5000} count={250} factor={4} saturation={4} />
 
         <OrbitControls />
 

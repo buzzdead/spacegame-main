@@ -65,15 +65,15 @@ export const useStoreMulti = (...items: Array<keyof SpaceGameState>) => {
 }; */
 
 export const useShallowStore = <T extends (keyof SpaceGameState)[]>(parts: T) => {
-  const abc = useStore(state => {
-    const obj = {} as { [K in T[number]]: SpaceGameState[K] } & SpaceGameState;
+  const shallowStore = useStore(state => {
+    const obj = {} as { [K in T[number]]: SpaceGameState[K] }
     parts.forEach((p) => {
       //@ts-ignore
       obj[p] = state[p as keyof SpaceGameState];
     });
     return obj;
   }, shallow);
-  return abc;
+  return shallowStore;
 };
 
 export default useStore;
