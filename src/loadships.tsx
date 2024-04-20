@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { SpaceShipId } from "./store/storeAssets";
 import useStore from "./store/useStore";
 import Ship from "./spaceobjects/ships/Ship";
+import { ShipScene } from "./spaceobjects/ships/ShipScene";
 
 interface Props {
   startShip: SpaceShipId;
@@ -18,7 +19,7 @@ export const LoadShips = ({ startShip }: Props) => {
   return (
     <group>
       {ships.map((ship) => (
-        <Ship key={ship.id} ship={ship} />
+        <ShipScene key={ship.id} ship={ship} />
       ))}
     </group>
   );

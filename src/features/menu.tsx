@@ -3,6 +3,7 @@ import { Form, Input, Select, Button } from "antd";
 import { UserOutlined, HomeOutlined, RocketOutlined } from "@ant-design/icons";
 import Starfield from "./Starfield";
 import AudioPlayer from "../components/AudioPlayer";
+import { Suspense } from "react";
 const menuMusic = require("../assets/coddy.mp3");
 
 interface PlayerInfo {
@@ -26,7 +27,7 @@ const Menu = ({ setGameStarted }: Props) => {
   };
 
   return (
-    <div>
+    <Suspense fallback={<div style={{fontSize: 100}}>Loading</div>}>
       <AudioPlayer src={menuMusic} autoPlay loop shouldPlay />
       <div>
         <Starfield />
@@ -107,7 +108,7 @@ const Menu = ({ setGameStarted }: Props) => {
           </Form>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

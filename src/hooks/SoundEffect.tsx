@@ -5,12 +5,13 @@ import {
   AudioLoader,
   Group,
   Camera,
-  Object3DEventMap
+  Object3DEventMap,
+  Scene
 } from "three";
 
 interface Props {
     sfxPath: string
-    scene: Group<Object3DEventMap>
+    scene: Group<Object3DEventMap> | Scene
     camera: Camera & {
         manual?: boolean | undefined; }
     minVolume?: number
@@ -22,6 +23,7 @@ const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera}: Props) => {
         const listener = new AudioListener();
         const audioLoader = new AudioLoader();
         const sound = new PositionalAudio(listener);
+        sound.setVolume(0.33)
         audioLoader.load(sfxPath, (buffer) => {
           sound.setBuffer(buffer);
         });

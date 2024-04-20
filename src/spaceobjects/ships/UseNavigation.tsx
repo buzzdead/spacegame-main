@@ -1,18 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Vector3, Quaternion } from 'three'
-import useStore from "../../store/useStore";
+import useStore, { useShallowStore } from "../../store/useStore";
 
 interface Props {
+  shipId: string
   meshRef: any
 }
 
-const UseNavigation = ({meshRef}: Props) => {
-    const setResources = useStore(state => state.setResources)
+const UseNavigation = ({shipId, meshRef}: Props) => {
+    const { destination, setResources, origin, selected, setSelected} = useShallowStore(["destination", "setResources", "origin", "selected", "setSelected"])
     const [isTraveling, setIsTraveling] = useState(false);
     const [isReturning, setIsReturning] = useState(false);
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
     const [shipsDestination, setShipsDestination] = useState<Vector3>();
+
+    useEffect(() => {
+      if (!selected.find((s) => s.id === shipId)) return;
+      if (destination !== shipsDestination) {
+        setShipsDestination(destination);
+      }
+      if (origin !== shipsOrigin) {
+        setShipsOrigin(origin);
+      }
+    }, [destination, origin]);
+  
+    useEffect(() => {
+      if (shipsOrigin && shipsDestination) {
+        setIsTraveling(true);
+        setSelected(shipId);
+      }
+    }, [shipsOrigin, shipsDestination]);
 
     const calculateDirectionAndRotation = (targetPosition: Vector3) => {
         if (!meshRef.current) return {};
@@ -30,11 +48,10 @@ const UseNavigation = ({meshRef}: Props) => {
       const updateShipPosition = (
         direction: Vector3,
         targetQuaternion: Quaternion,
-        targetPosition: Vector3
+        targetPosition: Vector3,
       ) => {
-        //if (!meshRef.current) return;
-        const distance = 123
-        //const distance = meshRef.current.position.distanceTo(targetPosition);
+        if (!meshRef.current) return;
+        const distance = meshRef.current.position.distanceTo(targetPosition);
     
         if (distance < (isReturning ? 12 : 7)) {
           if (isTraveling) {
@@ -62,4 +79,8 @@ const UseNavigation = ({meshRef}: Props) => {
     
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
       };
+
+      return { isHarvesting, isReturning, isTraveling, shipsOrigin, shipsDestination, calculateDirectionAndRotation, updateShipPosition }
 }
+
+export default UseNavigation
