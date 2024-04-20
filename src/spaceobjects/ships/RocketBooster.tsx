@@ -11,41 +11,43 @@ interface Props {
 
 const RocketBooster = ({ position, isHarvesting = false }: Props) => {
   const particleSystemRef = useRef<THREE.Points>(null);
-
   const [particlePositions, setParticlePositions] = useState<Float32Array>();
+
   const texture = useTexture(
     isHarvesting ? "/assets/fire.jpg" : "/assets/particle.png"
   );
 
   useEffect(() => {
-    const positions = new Float32Array(900 * 3);
-    for (let i = 0; i < 500; i++) {
-      positions[i] = (Math.random() - 0.5) * 0.3;
-    }
-    setParticlePositions(positions);
+    const initializeParticles = () => {
+      const positions = new Float32Array(900 * 3);
+      for (let i = 0; i < 500; i++) {
+        positions[i] = (Math.random() - 0.5) * 0.3;
+      }
+      setParticlePositions(positions);
+    };
+    initializeParticles();
   }, []);
-  function randomIntFromInterval(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
 
   useFrame(() => {
-    if (particleSystemRef.current) {
-      const positions = particleSystemRef.current.geometry.attributes.position
-        .array as Float32Array;
+    const updateParticles = () => {
+      if (particleSystemRef.current) {
+        const positions = particleSystemRef.current.geometry.attributes.position.array as Float32Array;
 
-      for (let i = 0; i < positions.length; i += 3) {
-        positions[i + 1] += 0.03;
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i + 1] += 0.03;
 
-        const maxLimit = randomIntFromInterval(25, 100);
+          const maxLimit = randomIntFromInterval(25, 100);
 
-        if (positions[i + 1] > maxLimit / (isHarvesting ? 40 : 25)) {
-          positions[i] = (Math.random() - 0.5) * 0.3;
-          positions[i + 1] = 0;
-          positions[i + 2] = (Math.random() - 0.5) * 0.2;
+          if (positions[i + 1] > maxLimit / (isHarvesting ? 40 : 25)) {
+            positions[i] = (Math.random() - 0.5) * 0.3;
+            positions[i + 1] = 0;
+            positions[i + 2] = (Math.random() - 0.5) * 0.2;
+          }
         }
+        particleSystemRef.current.geometry.attributes.position.needsUpdate = true;
       }
-      particleSystemRef.current.geometry.attributes.position.needsUpdate = true;
-    }
+    };
+    updateParticles();
   });
 
   if (!particlePositions) return null;
@@ -75,6 +77,10 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
       </points>
     </group>
   );
+};
+
+const randomIntFromInterval = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 export default RocketBooster;

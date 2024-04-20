@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useStore from "./store/useStore";
-import Construction from "./spaceobjects/Construction";
+import Construction from "./spaceobjects/constructions/Construction";
 
 export const LoadConstructions = () => {
   const constructions = useStore((state) => state.constructions);

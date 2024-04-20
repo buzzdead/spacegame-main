@@ -1,7 +1,12 @@
-import React from "react";
-import LoadObjects from "./loadobjects";
+import React, { Suspense } from "react";
 import UI from "./features/ui";
 import ThreeSetup from "./components/ThreeSetup";
+import { LoadCelestialObjects } from "./loadcelestialobjects";
+import { LoadConstructions } from "./loadConstructions";
+import { LoadShips } from "./loadships";
+import SelectedIcon from "./spaceobjects/tools/pyramidMesh";
+import { Vector3 } from "three"
+import {Starfield2} from "./features/starfield2";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -9,12 +14,15 @@ interface Props {
 }
 
 const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
-  
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />
       <ThreeSetup>
-      <LoadObjects startPlanet={startPlanet} startShip={startShip}/>
+      <Suspense fallback={<Starfield2 />}>
+        <LoadCelestialObjects startPlanet={startPlanet} />
+        <LoadConstructions />
+        <LoadShips startShip={startShip} />
+      </Suspense>
       </ThreeSetup>
     </div>
   );

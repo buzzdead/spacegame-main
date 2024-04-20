@@ -27,7 +27,6 @@ const Laser = ({ origin, target, second = false, fire = false }: Props) => {
     laserMesh.position.z += 3
     useEffect(() => {
         const lm = laserMesh.clone()
-        console.log(laserRef.current)
         const oldMeshes = lasherMeshes.filter(e => e.position.z >= 100)
         oldMeshes.forEach(m => {scene.remove(m); m.removeFromParent()})
         setLasherMeshes([...lasherMeshes.filter(l => l.position.z <= 100), lm])
@@ -50,7 +49,7 @@ const Laser = ({ origin, target, second = false, fire = false }: Props) => {
         });
       });
   
-    return <mesh ref={laserRef}>{lasherMeshes.map(lm => <primitive object={lm} />)}</mesh>;
+    return <mesh ref={laserRef}>{lasherMeshes.map(lm => <primitive key={lm.id} object={lm} />)}</mesh>;
   };
   
 

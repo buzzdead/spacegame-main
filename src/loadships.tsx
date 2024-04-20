@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { SpaceShipId } from "./store/storeAssets";
 import useStore from "./store/useStore";
-import Ship from "./spaceobjects/Ship";
+import Ship from "./spaceobjects/ships/Ship";
 
 interface Props {
   startShip: SpaceShipId;

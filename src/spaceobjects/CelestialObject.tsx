@@ -1,10 +1,10 @@
 import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
 import { Color, ShaderMaterial, AdditiveBlending } from 'three'
 import useStore, { SGS } from '../store/useStore';
 import fragmentShader from './shaders/glowFragmentShader'
 import vertexShader from './shaders/glowVertexShader'
+import { useAsset } from './useAsset';
 
 interface CelestialObjectProps {
   celestialObject: SGS['CO'];
@@ -12,10 +12,9 @@ interface CelestialObjectProps {
 
 const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => { 
   const { glbPath, position, scale } = celestialObject;
-  const { setDestination } = useStore()
+  const setDestination = useStore((state) => state.setDestination)
   const meshRef = useRef<ElementRef<'mesh'>>(null);
-  const { scene } = useGLTF(glbPath);
-  scale && scene.scale.set(scale, scale, scale)
+  const scene = useAsset(glbPath, scale || 1)
 
   const glowMaterial = new ShaderMaterial({
     uniforms: {
@@ -44,7 +43,7 @@ const handleSetDestination = () => {
     <Suspense fallback={null}>
       <mesh onClick={handleSetDestination} ref={meshRef} position={position}>
         {celestialObject.assetId.includes("planet") && <directionalLight position={[185, 185, 0]} intensity={5.5}/>}
-        <primitive object={scene.clone()} />
+        <primitive object={scene} />
       </mesh>
     </Suspense>
   );

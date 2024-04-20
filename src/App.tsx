@@ -11,10 +11,10 @@ const App: React.FC = () => {
   return (
     <div className="App">
       {gameStarted ? (
-        <div>
+        <>
           <AudioPlayer src={gameMusic} autoPlay loop shouldPlay={gameStarted} />{" "}
           <SpaceGame startShip="cargo" startPlanet="planet5" />{" "}
-        </div>
+        </>
       ) : (
         <Menu setGameStarted={setGameStarted} />
       )}

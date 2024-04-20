@@ -1,71 +1,64 @@
 import { FC, ElementRef, useState, useEffect } from "react";
 import { Suspense, useRef } from "react";
 import { Vector3, Quaternion, Mesh, MeshStandardMaterial } from "three";
-import { Center, useGLTF } from "@react-three/drei";
-import useStore, { SGS } from "../store/useStore";
+import { SGS, useShallowStore } from "../../store/useStore";
 import { useFrame, useThree } from "@react-three/fiber";
-import RocketBooster from "./RocketBooster";
-import SelectedIcon from "./tools/pyramidMesh";
-import UseSoundEffect from "../hooks/SoundEffect";
-import Laser from "./weapons/Laser";
-import useKeyboard from "./keys";
+import SelectedIcon from "../tools/pyramidMesh";
+import UseSoundEffect from "../../hooks/SoundEffect";
+import useKeyboard from "../keys";
+import { useAsset } from "../useAsset";
+import { Ignition } from "./Ignition";
+import { HarvestLaser } from "./HarvestLaser";
+import { LaserCannon, useLaser } from "./LaserCannon";
 interface Props {
   ship: SGS["Ship"];
 }
 
 const Ship: FC<Props> = ({ ship }) => {
-  const {
-    destination,
-    origin,
-    setSelected,
-    selected,
-    setResources,
-  } = useStore();
+  const { destination, origin, setSelected, selected ,setResources} = useShallowStore(["destination", "origin", "setSelected", "selected", "setResources"])
+
   const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
   const [shipsDestination, setShipsDestination] = useState<Vector3>();
-  const [fire, setFire] = useState(false)
-  const keyMap = useKeyboard()
+  const keyMap = useKeyboard();
   const { glbPath, position, scale } = ship;
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
   const [isHarvesting, setIsHarvesting] = useState(false);
   const meshRef = useRef<ElementRef<"mesh">>(null);
-  const { scene } = useGLTF(glbPath);
-  const theScene = scene.clone();
-  if(ship.assetId === "fighter") {theScene.children[0].rotation.y = -55}
-  const meshes: Mesh[] = theScene.children as Mesh[]; 
-
-  // Assuming a MeshStandardMaterial:
-  for(let i = 0; i < meshes.length; i++){
-    const newMaterial = meshes[i].material as MeshStandardMaterial;
-    newMaterial.color.set(ship.assetId === "fighter" ? 'darkorange' : 'orange'); // Green
-    newMaterial.color.multiplyScalar(2.5)
-    meshes[i].material = newMaterial;
-  }
-  
- 
+  const scene = useAsset(glbPath, scale || 1);
   const { camera } = useThree();
+  const { fireLaser, fire, calculateLaserSound } = useLaser({
+    camera: camera,
+    scene: scene,
+  });
+
+  scene.rotation.set(0, -1.55, 0);
+  if (ship.assetId === "fighter") {
+    scene.children[0].rotation.y = -55;
+  }
+
   const { sound: miningSound, calculateVolume: calculateMiningSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/mining.mp3",
-      scene: theScene,
+      scene: scene,
       minVolume: 0.05,
       camera: camera,
     });
   const { sound: motorSound, calculateVolume: calculateMotorSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/sc.mp3",
-      scene: theScene,
+      scene: scene,
       camera: camera,
     });
-  const { sound: laserSound, calculateVolume: calculateLaserSound } = 
-    UseSoundEffect({
-      sfxPath: '/assets/sounds/laser.mp3',
-      scene: theScene,
-      camera: camera
-    })
 
-/*   const glowMaterial = new ShaderMaterial({
+  const meshes: Mesh[] = scene.children as Mesh[];
+  for (let i = 0; i < meshes.length; i++) {
+    const newMaterial = meshes[i].material as MeshStandardMaterial;
+    newMaterial.color.set(ship.assetId === "fighter" ? "darkorange" : "orange"); // Green
+    newMaterial.color.multiplyScalar(2.5);
+    meshes[i].material = newMaterial;
+  }
+  /*   const glowMaterial = new ShaderMaterial({
     uniforms: {
       glowColor: { value: new Color(0x00ff80) }, // Neon green color
       glowStrength: { value: 1.0 },
@@ -74,8 +67,8 @@ const Ship: FC<Props> = ({ ship }) => {
     fragmentShader: fragmentShader,
     transparent: true, // Important for blend effects like glows
   }); */
-  const selectD = selected.find(s => s.id === ship.id)
-  const isFighter = ship.assetId === "fighter"
+  const selectD = selected.find((s) => s.id === ship.id);
+  const isFighter = ship.assetId === "fighter";
   useEffect(() => {
     if (!selected.find((s) => s.id === ship.id)) return;
     if (destination !== shipsDestination) {
@@ -93,9 +86,6 @@ const Ship: FC<Props> = ({ ship }) => {
       setSelected(ship.id);
     }
   }, [shipsOrigin, shipsDestination]);
-
-  theScene.rotation.set(0, -1.55, 0);
-  scale && theScene.scale.set(scale, scale, scale);
 
   const calculateDirectionAndRotation = (targetPosition: Vector3) => {
     if (!meshRef.current) return {};
@@ -119,23 +109,18 @@ const Ship: FC<Props> = ({ ship }) => {
     const distance = meshRef.current.position.distanceTo(targetPosition);
 
     if (distance < (isReturning ? 12 : 7)) {
-      motorSound?.pause();
       if (isTraveling) {
         setIsTraveling(false);
         setIsHarvesting(true);
-        miningSound?.play();
         setTimeout(() => {
           setIsReturning(true);
           setIsHarvesting(false);
-          motorSound?.play();
-          miningSound?.stop();
         }, 5000);
       } else if (isReturning) {
         setIsReturning(false);
         setTimeout(() => {
           setIsTraveling(true);
           setResources(500);
-          motorSound?.play();
         }, 3000);
       }
 
@@ -151,7 +136,7 @@ const Ship: FC<Props> = ({ ship }) => {
   };
 
   useFrame(() => {
-    keyMap['KeyF'] && selectD && isFighter && fireLaser()
+    keyMap["KeyF"] && selectD && isFighter && fireLaser();
     if (
       meshRef.current &&
       shipsDestination &&
@@ -165,65 +150,59 @@ const Ship: FC<Props> = ({ ship }) => {
       direction &&
         updateShipPosition(direction, targetQuaternion, targetPosition);
     }
+  });
+
+  useEffect(() => {
+    if(isHarvesting) miningSound?.play()
+    else miningSound?.stop()
+    if(isTraveling || isReturning) motorSound?.play()
+    else motorSound?.pause() 
+  },[isTraveling, isReturning, isHarvesting])
+  useEffect(() => {
     if (meshRef.current && (isTraveling || isReturning)) {
       const distance = camera.position.distanceTo(meshRef.current.position);
       calculateMiningSound(distance);
       calculateMotorSound(distance);
+      calculateLaserSound(distance);
     }
-  });
-
-  const fireLaser = () => {
-    console.log("Fire!")
-    setFire(!fire)
-    laserSound?.stop()
-    laserSound?.play()
-  }
+  }, [camera, isTraveling, isReturning])
 
   const handleOnClick = (e: any) => {
-    console.log(e)
-    e.stopPropagation()
-    if(isFighter && e.ctrlKey) fireLaser()
-    else setSelected(ship.id)
-  }
-  
+    e.stopPropagation();
+    if (isFighter && e.ctrlKey) fireLaser();
+    else setSelected(ship.id);
+  };
+
   return (
     <Suspense fallback={null}>
-      <mesh
-        onClick={handleOnClick}
-        ref={meshRef}
-        position={position}
-      >
+      <mesh onClick={handleOnClick} ref={meshRef} position={position}>
         {selectD && (
-          <SelectedIcon color={0x00ff80} position={isFighter ?  new Vector3(-4, 2.5, -1.5) : new Vector3(0, 2.5, 2)} />
+          <SelectedIcon
+            color={0x00ff80}
+            position={
+              isFighter ? new Vector3(-4, 2.5, -1.5) : new Vector3(0, 2.5, 2)
+            }
+          />
         )}
-        {selectD && isFighter && ( 
-          <SelectedIcon color='red' position={new Vector3(-4, 4, -1.5)} fireIcon handleFire={fireLaser}/>
+        {selectD && isFighter && (
+          <SelectedIcon
+            color="red"
+            position={new Vector3(-4, 4, -1.5)}
+            fireIcon
+            handleFire={fireLaser}
+          />
         )}
-        <primitive object={theScene} />
-        {isFighter && <group><Laser fire={fire} origin={theScene.position} target={new Vector3(0,0,0)}/><Laser fire={fire} second origin={theScene.position} target={new Vector3(0,0,0)}/></group>}
-        {(isTraveling || isReturning) && (
-          <group>
-            <RocketBooster
-              position={new Vector3(isFighter ? -3.3 : 1.04 / 100, 0.75 / 100, isFighter ? -4.5 : -0.3)}
-            />
-            <RocketBooster position={new Vector3(isFighter ? -5.3 : 1.04 / 100, 0.75 / 100, isFighter ? - 4.5 : -0)} />
-          </group>
+        <primitive object={scene} />
+        {isFighter && (
+          <LaserCannon
+            position={scene.position}
+            target={new Vector3(0, 0, 0)}
+            fire={fire}
+          />
         )}
+        {(isTraveling || isReturning) && <Ignition isFighter={isFighter} />}
         {isHarvesting && ship.assetId !== "fighter" && (
-          <group>
-            <RocketBooster
-              isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 4.75)}
-            />
-            <RocketBooster
-              isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 5.25)}
-            />
-            <RocketBooster
-              isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 5.75)}
-            />
-          </group>
+          <HarvestLaser isHarvesting={isHarvesting} />
         )}
       </mesh>
     </Suspense>
