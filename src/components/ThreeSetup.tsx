@@ -44,7 +44,7 @@ const ThreeSetup = ({children}: Props) => {
       }}
       style={{ width: "100vw", height: "100vh" }}
     >
-      <Environment backgroundIntensity={0.05} files={'./starmap-min.jpg'} background />
+      <Environment backgroundIntensity={0.15} files={'./starmap-min.jpg'} background />
       <EffectComposer>
         <Bloom
           intensity={0.035}
