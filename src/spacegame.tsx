@@ -5,6 +5,7 @@ import { LoadCelestialObjects } from "./loadcelestialobjects";
 import { LoadConstructions } from "./loadConstructions";
 import { LoadShips } from "./loadships";
 import {Starfield2} from "./features/starfield2";
+import { EnemyShip } from "./spaceobjects/ships/EnemyShip";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -20,6 +21,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
         <LoadCelestialObjects startPlanet={startPlanet} />
         <LoadConstructions />
         <LoadShips startShip={startShip} />
+        <EnemyShip />
       </Suspense>
       </ThreeSetup>
     </div>

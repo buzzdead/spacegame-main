@@ -18,14 +18,14 @@ export const LaserCannon = ({fire, position, target, color = 'red'}: Props) => {
           color={color}
           fire={fire}
           origin={position}
-          target={new Vector3(0, 0, 0)}
+          target={target}
         />
         <Laser
           color={color}
           fire={fire}
           second
           origin={position}
-          target={new Vector3(0, 0, 0)}
+          target={target}
         />
       </group>
     )

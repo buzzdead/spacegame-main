@@ -97,7 +97,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         {(isFighter || ship.assetId === "hawk") && (
           <LaserCannon
             position={isHawk ? new Vector3(scene.position.x + 4.5, scene.position.y, scene.position.z) : scene.position}
-            target={new Vector3(0, 0, 0)}
+            target={new Vector3(155, 0, 155)}
             color={isHawk ? 'green' : 'red'}
             fire={fire}
           />
