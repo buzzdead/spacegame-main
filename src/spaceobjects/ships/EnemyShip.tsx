@@ -4,9 +4,11 @@ import Ship from "./Ship";
 import { Mesh, MeshStandardMaterial } from 'three'
 import { useAsset } from "../useAsset";
 import { Explosion } from "./Explosion";
+import { useTexture } from "@react-three/drei";
 
 export const EnemyShip = () => {
     const scene = useAsset('/assets/spaceships/cruiser.glb', 1);
+    const texture = useTexture("/assets/fire.jpg");
     const meshes: Mesh[] = scene.children as Mesh[];
     const [destroyed, setDestroyed] = useState(false)
     scene.position.set(155, 0, 155)
