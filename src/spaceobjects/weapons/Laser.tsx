@@ -5,19 +5,21 @@ import { useFrame, useThree } from "@react-three/fiber";
 interface Props {
     origin: any
     target: any
+    color: string
     second?: boolean
     fire?: boolean
 }
 
-type a = THREE.Mesh<THREE.BoxGeometry, THREE.ShaderMaterial, THREE.Object3DEventMap>
+type a = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>
 type arr = a[]
 
-const Laser = ({ origin, target, second = false, fire = false }: Props) => {
+const Laser = ({ origin, target, second = false, fire = false, color }: Props) => {
   const { scene } = useThree()
     const laserRef = useRef<any>(scene);
     const [lasherMeshes, setLasherMeshes] = useState<arr>([])
-    const laserGeometry = new THREE.BoxGeometry(.08, .08, 2); 
-    const laserMaterial = new THREE.ShaderMaterial({
+    const laserGeometry = new THREE.BoxGeometry(.08, .08, 2);
+    const laserMaterial = new THREE.MeshBasicMaterial({
+      color: color,
       transparent: true,
       opacity: 1,
     });

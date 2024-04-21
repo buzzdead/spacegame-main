@@ -39,11 +39,13 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 
   const selectD = selected.find((s) => s.id === ship.id);
   const isFighter = ship.assetId === "fighter";
+  const isHawk = ship.assetId === "hawk"
+  const isLaserCannon = isFighter || isHawk
 
 
   useFrame(() => {
       // move this into lasercannon.tsx
-    keyMap["KeyF"] && selectD && isFighter && fireLaser();
+    keyMap["KeyF"] && selectD && isLaserCannon && fireLaser();
     if (
       meshRef.current &&
       shipsDestination &&
@@ -92,14 +94,15 @@ const Ship: FC<Props> = ({ ship, scene }) => {
           />
         )}
         <primitive object={scene} />
-        {isFighter && (
+        {(isFighter || ship.assetId === "hawk") && (
           <LaserCannon
-            position={scene.position}
+            position={isHawk ? new Vector3(scene.position.x + 4.5, scene.position.y, scene.position.z) : scene.position}
             target={new Vector3(0, 0, 0)}
+            color={isHawk ? 'green' : 'red'}
             fire={fire}
           />
         )}
-        {(isTraveling || isReturning) && <Ignition isFighter={isFighter} />}
+        {(isTraveling || isReturning) && <Ignition type={ship.assetId} />}
         {isHarvesting && ship.assetId !== "fighter" && (
           <HarvestLaser isHarvesting={isHarvesting} />
         )}

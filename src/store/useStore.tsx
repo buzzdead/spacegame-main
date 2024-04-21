@@ -41,7 +41,7 @@ const useStore = create<SpaceGameState>((set) => ({
   setDestination: (m: Vector3) => set((state) => ({destination: m})),
   selected: [],
   setSelected: (id: string) => set((state) => ({selected: SpaceGameStateUtils.addToSelected(state.ships, state.selected, id)})),
-  resources: 1500,
+  resources: 150000,
   setResources: (n: number) => {
     let a = false
      set((state) => {

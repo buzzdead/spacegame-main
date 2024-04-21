@@ -16,13 +16,14 @@ const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, me
     UseSoundEffect({
       sfxPath: "/assets/sounds/mining.mp3",
       scene: scene,
-      minVolume: 0.05,
+      minVolume: 0.04,
       camera: camera,
     });
   const { sound: motorSound, calculateVolume: calculateMotorSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/sc.mp3",
       scene: scene,
+      minVolume: 0.15,
       camera: camera,
     });
 

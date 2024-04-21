@@ -8,17 +8,20 @@ interface Props {
     position: Vector3
     fire: boolean
     target: Vector3
+    color?: string
 }
 
-export const LaserCannon = ({fire, position, target}: Props) => {
+export const LaserCannon = ({fire, position, target, color = 'red'}: Props) => {
     return (
         <group>
         <Laser
+          color={color}
           fire={fire}
           origin={position}
           target={new Vector3(0, 0, 0)}
         />
         <Laser
+          color={color}
           fire={fire}
           second
           origin={position}

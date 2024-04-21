@@ -16,7 +16,7 @@ export const LoadCelestialObjects = ({ startPlanet }: Props) => {
     addCelestialObject("asteroid-minerals", [34, 5, 12], 2);
     addCelestialObject("asteroid-minerals", [34, 5, 20], 2);
     addCelestialObject("asteroid-minerals", [34, 5, 32], 2);
-    addCelestialObject("blackhole", [-166, 3, 246], 9);
+    addCelestialObject("blackhole", [-1606, 3, 246], 18);
   }, []);
   return (
     <group>
