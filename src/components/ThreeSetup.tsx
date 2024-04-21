@@ -44,40 +44,16 @@ const ThreeSetup = ({children}: Props) => {
       }}
       style={{ width: "100vw", height: "100vh" }}
     >
-      <Environment backgroundIntensity={0.15} files={'./starmap-min.jpg'} background />
+      <Environment backgroundIntensity={0.5} files={'./starmap-min.jpg'} background />
       <EffectComposer>
         <Bloom
           intensity={0.035}
           luminanceThreshold={0.98}
           luminanceSmoothing={0.85}
         />
-
-        <spotLight
-          position={[0, 15, 0]}
-          angle={30}
-          penumbra={5}
-          castShadow
-          intensity={0.5}
-          shadow-bias={-0.0001}
-        />
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.5} />
-
         <OrbitControls />
-
-        <AccumulativeShadows
-          position={[0, -1.16, 0]}
-          frames={100}
-          alphaTest={0.9}
-          scale={10}
-        >
-          <RandomizedLight
-            amount={8}
-            radius={55}
-            ambient={0.5}
-            position={[1, 5, -1]}
-          />
-        </AccumulativeShadows>
       </EffectComposer>
       {children}
     </Canvas>

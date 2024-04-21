@@ -25,7 +25,7 @@ export interface SpaceGameState {
   selected: SelectedShip[],
   setSelected: (id: string) => void
   resources: number
-  setResources: (n: number) => void
+  setResources: (n: number) => boolean
 }
 
 const useStore = create<SpaceGameState>((set) => ({
@@ -41,8 +41,17 @@ const useStore = create<SpaceGameState>((set) => ({
   setDestination: (m: Vector3) => set((state) => ({destination: m})),
   selected: [],
   setSelected: (id: string) => set((state) => ({selected: SpaceGameStateUtils.addToSelected(state.ships, state.selected, id)})),
-  resources: 0,
-  setResources: (n: number) => set((state) => ({resources: state.resources + n}))
+  resources: 1500,
+  setResources: (n: number) => {
+    let a = false
+     set((state) => {
+      const newResources = state.resources + n;
+      const success = newResources >= 0;
+      a = success
+      return { resources: success ? newResources : state.resources };
+    });
+    return a
+  }
 }));
 
 

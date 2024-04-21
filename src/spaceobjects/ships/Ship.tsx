@@ -99,7 +99,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
             fire={fire}
           />
         )}
-        {(isTraveling || isReturning) && <Ignition isFighter={isFighter || ship.assetId === "hawk"} />}
+        {(isTraveling || isReturning) && <Ignition isFighter={isFighter} />}
         {isHarvesting && ship.assetId !== "fighter" && (
           <HarvestLaser isHarvesting={isHarvesting} />
         )}
