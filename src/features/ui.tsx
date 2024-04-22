@@ -11,7 +11,7 @@ const UI = () => {
       else if(destination !== undefined && helperUi === "Great! Now left-click on one of the asteroids, and then on the debris-field behind them") setHelperUi("")
     }, [selected, destination])
     useEffect(() => {
-      if(ships.find(ship => ship.assetId === "fighter") && helperUi === "") setHelperUi("hold ctrl and left click fighter ship to shoot laser")
+      if(ships.find(ship => ship.assetId === "fighter") && helperUi === "") setHelperUi("Great, now find one of the cruisers further out and click on it")
     }, [ships])
     
     return (

@@ -6,11 +6,11 @@ interface Props {
   isHarvesting: boolean;
   isTraveling: boolean;
   isReturning: boolean;
+  fire: boolean
   meshRef: any
-  calculateLaserSound: (d: number) => void
 }
 
-const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, meshRef, calculateLaserSound }) => {
+const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, meshRef, fire }) => {
     const { camera, scene } = useThree()
     const { sound: miningSound, calculateVolume: calculateMiningSound } =
     UseSoundEffect({
@@ -27,6 +27,14 @@ const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, me
       camera: camera,
     });
 
+    const { sound: laserSound, calculateVolume: calculateLaserSound } =
+    UseSoundEffect({
+      sfxPath: "/assets/sounds/laser.mp3",
+      scene: scene,
+      minVolume: 0.15,
+      camera: camera,
+    });
+
   useEffect(() => {
     if (isHarvesting) miningSound?.play();
     else miningSound?.stop();
@@ -36,6 +44,11 @@ const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, me
     if (isTraveling || isReturning) motorSound?.play();
     else motorSound?.pause();
   }, [isTraveling, isReturning]);
+
+  useEffect(() => {
+    laserSound?.stop()
+    laserSound?.play()
+  }, [fire])
 
   useEffect(() => {
     if (meshRef.current && (isTraveling || isReturning)) {

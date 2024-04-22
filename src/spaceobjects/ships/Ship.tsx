@@ -27,15 +27,16 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const {
     isHarvesting,
     isReturning,
+    isFighting,
     isTraveling,
     calculateDirectionAndRotation,
     shipsDestination,
     shipsOrigin,
     updateShipPosition,
-  } = UseNavigation({ shipId: ship.id, meshRef });
-  const { camera } = useThree();
+    setIsFighting
+  } = UseNavigation({ shipId: ship.id, meshRef, shipType: ship.assetId });
   // move this into lasercannon.tsx
-  const { fireLaser, fire, calculateLaserSound } = useLaser()
+  const { fireLaser, fire } = useLaser()
 
   const selectD = selected.find((s) => s.id === ship.id);
   const isFighter = ship.assetId === "fighter";
@@ -44,7 +45,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 
 
   useFrame(() => {
-      // move this into lasercannon.tsx
+      // move this into lasercannon.tsx, possible solution is to bind mouse, keep like this until actually having the attack move in place
     keyMap["KeyF"] && selectD && isLaserCannon && fireLaser();
     if (
       meshRef.current &&
@@ -66,7 +67,6 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     if (isFighter && e.ctrlKey) fireLaser();
     else setSelected(ship.id);
   };
-  console.log("rendering123")
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleOnClick} ref={meshRef} position={position}>
@@ -75,7 +75,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
           isReturning={isReturning}
           isTraveling={isTraveling}
           meshRef={meshRef}
-          calculateLaserSound={calculateLaserSound}
+          fire={fire}
         />
         {selectD && (
           <SelectedIcon
@@ -85,21 +85,14 @@ const Ship: FC<Props> = ({ ship, scene }) => {
             }
           />
         )}
-        {selectD && isFighter && (
-          <SelectedIcon
-            color="red"
-            position={new Vector3(-4, 4, -1.5)}
-            fireIcon
-            handleFire={fireLaser}
-          />
-        )}
         <primitive object={scene} />
         {(isFighter || ship.assetId === "hawk") && (
           <LaserCannon
-            position={isHawk ? new Vector3(scene.position.x + 4.5, scene.position.y, scene.position.z) : scene.position}
-            target={new Vector3(155, 0, 155)}
+            position={meshRef.current ? meshRef.current.position : new Vector3(0,0,0)}
+            setFightDone={() => setIsFighting(false)}
+            target={shipsDestination || new Vector3(0,0,0)}
             color={isHawk ? 'green' : 'red'}
-            fire={fire}
+            fire={isFighting}
           />
         )}
         {(isTraveling || isReturning) && <Ignition type={ship.assetId} />}

@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { Vector3, Quaternion } from 'three'
 import useStore, { useShallowStore } from "../../store/useStore";
+import { SpaceShipId } from "../../store/storeAssets";
 
 interface Props {
+  shipType: SpaceShipId
   shipId: string
   meshRef: any
 }
 
-const UseNavigation = ({shipId, meshRef}: Props) => {
+const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
     const { destination, setResources, origin, selected, setSelected} = useShallowStore(["destination", "setResources", "origin", "selected", "setSelected"])
     const [isTraveling, setIsTraveling] = useState(false);
     const [isReturning, setIsReturning] = useState(false);
+    const [isFighting, setIsFighting] = useState(false)
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
     const [shipsDestination, setShipsDestination] = useState<Vector3>();
@@ -20,9 +23,10 @@ const UseNavigation = ({shipId, meshRef}: Props) => {
       if (destination !== shipsDestination) {
         setShipsDestination(destination);
       }
-      if (origin !== shipsOrigin) {
+      if (origin && origin !== shipsOrigin) {
         setShipsOrigin(origin);
       }
+      if(shipType === "fighter" || shipType === "hawk") setShipsOrigin(meshRef.current.position)
     }, [destination, origin]);
   
     useEffect(() => {
@@ -30,6 +34,7 @@ const UseNavigation = ({shipId, meshRef}: Props) => {
         setIsTraveling(true);
         setSelected(shipId);
       }
+
     }, [shipsOrigin, shipsDestination]);
 
     const calculateDirectionAndRotation = (targetPosition: Vector3) => {
@@ -53,15 +58,21 @@ const UseNavigation = ({shipId, meshRef}: Props) => {
         if (!meshRef.current) return;
         const distance = meshRef.current.position.distanceTo(targetPosition);
     
-        if (distance < (isReturning ? 12 : 7)) {
+        if (distance < (isReturning ? 12 : (shipType === "fighter" || shipType === "hawk") ? 50 : 7)) {
           if (isTraveling) {
+            if(shipType === "fighter" || shipType === "hawk")
+              {
+                setIsFighting(true)
+                setIsTraveling(false)
+              }
+              else {
             setIsTraveling(false);
             setIsHarvesting(true);
             setTimeout(() => {
               setIsReturning(true);
               setIsHarvesting(false);
             }, 5000);
-          } else if (isReturning) {
+          }} else if (isReturning) {
             setIsReturning(false);
             setTimeout(() => {
               setIsTraveling(true);
@@ -72,7 +83,7 @@ const UseNavigation = ({shipId, meshRef}: Props) => {
           // Reset position to new target
         }
     
-        const speedFactor = Math.max(5); // Adjust for sensitivity
+        const speedFactor = Math.max(15); // Adjust for sensitivity
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );
@@ -80,7 +91,7 @@ const UseNavigation = ({shipId, meshRef}: Props) => {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
       };
 
-      return { isHarvesting, isReturning, isTraveling, shipsOrigin, shipsDestination, calculateDirectionAndRotation, updateShipPosition }
+      return { isHarvesting, isReturning, isTraveling, shipsOrigin, shipsDestination, calculateDirectionAndRotation, updateShipPosition, isFighting, setIsFighting }
 }
 
 export default UseNavigation
