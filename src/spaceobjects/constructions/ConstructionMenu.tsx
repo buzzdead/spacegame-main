@@ -8,7 +8,7 @@ interface Props {
   menu: React.MutableRefObject<boolean>;
 }
 
-export const Menu = ({ menu }: Props) => {
+export const ConstructionMenu = ({ menu }: Props) => {
   const ships = spaceShips;
   const fighter = ships.find((e) => e.id === "fighter");
   const hawk = ships.find((e) => e.id === "hawk");
@@ -27,7 +27,7 @@ export const Menu = ({ menu }: Props) => {
         glbPath={hawk?.glbPath || ""}
         shouldRender={showMenu}
         x={-10}
-      />{" "}
+      />
     </Center>
   );
 };

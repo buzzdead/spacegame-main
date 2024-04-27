@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import useStore from "./store/useStore";
-import Construction from "./spaceobjects/constructions/Construction";
+import useStore from "../store/useStore";
+import Construction from "../spaceobjects/constructions/Construction";
 
 export const LoadConstructions = () => {
   const constructions = useStore((state) => state.constructions);
@@ -8,7 +8,7 @@ export const LoadConstructions = () => {
   useEffect(() => {
     addConstruction("spacestation4", [4, 0, 64], "Construction", .031);
     addConstruction("spacestation5", [64, 6, 18], "Refinary", 2.5);
-  }, []);
+  }, [addConstruction]);
   return (
     <group>
       {constructions.map((construction) => (

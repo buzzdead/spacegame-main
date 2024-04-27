@@ -2,27 +2,13 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
-import {
-  AccumulativeShadows,
-  Environment,
-  EnvironmentMap,
-  OrbitControls,
-  RandomizedLight,
-  Stars,
-  useEnvironment
-} from "@react-three/drei";
-
-import * as THREE from 'three'
+import { Environment, OrbitControls } from "@react-three/drei";
 
 interface Props {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-function Background() {
-  
-}
-
-const ThreeSetup = ({children}: Props) => {
+const ThreeSetup = ({ children }: Props) => {
   const aspect = window.innerWidth / window.innerHeight;
   const zoom = 100; // Adjust as needed for starfield density
   const frustumHeight = 2 * zoom; // Assuming zoom behaves similarly to FOV
@@ -44,7 +30,12 @@ const ThreeSetup = ({children}: Props) => {
       }}
       style={{ width: "100vw", height: "100vh" }}
     >
-      <Environment backgroundIntensity={0.3} files={'./starmap-min.jpg'} background />
+      <Environment
+        encoding={3001}
+        backgroundIntensity={0.3}
+        files={"./starmap-min.jpg"}
+        background
+      />
       <EffectComposer>
         <Bloom
           intensity={0.035}

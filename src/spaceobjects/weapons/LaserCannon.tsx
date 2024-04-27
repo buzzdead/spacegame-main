@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import UseSoundEffect from "../../hooks/SoundEffect"
-import Laser from "../weapons/Laser"
+import Laser from "./Laser"
 import { Vector3 } from 'three'
 import { useThree } from "@react-three/fiber";
 
@@ -24,7 +24,7 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   useEffect(() => {
     const distance = camera.position.distanceTo(position)
     calculateLaserSound(distance)
-  }, [camera])
+  }, [camera, calculateLaserSound])
     return (
         <group>
         <Laser
@@ -49,7 +49,6 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
 }
 
 export const useLaser = () => {
-  const {camera, scene} = useThree()
     const [fire, setFire] = useState(false);
     const fireLaser = () => {
         setFire(!fire);

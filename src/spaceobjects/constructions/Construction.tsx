@@ -5,8 +5,8 @@ import { Center } from '@react-three/drei';
 import { SGS, useShallowStore } from '../../store/useStore';
 import SelectedIcon from '../tools/pyramidMesh';
 import ConstructionAsset from './ConstructionAsset';
-import { useAsset } from '../useAsset';
-import { Menu } from './Menu';
+import { useAsset } from '../../hooks/useAsset';
+import { ConstructionMenu } from './ConstructionMenu';
 
 interface Props {
   construction: SGS['Construction'];
@@ -30,7 +30,7 @@ const Construction: FC<Props> = ({ construction }) => {
     <Suspense fallback={null}>  
       <mesh ref={meshRef} position={position}>
       {origin === position && <SelectedIcon color={'yellow'} position={new Vector3(0,4,0)} /> }
-      <Menu menu={menu} />
+      <ConstructionMenu menu={menu} />
         <primitive onClick={handleClick} object={scene} />
       </mesh>
     </Suspense>

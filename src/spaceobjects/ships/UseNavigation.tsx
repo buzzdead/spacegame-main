@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Vector3, Quaternion } from 'three'
-import useStore, { useShallowStore } from "../../store/useStore";
+import { useShallowStore } from "../../store/useStore";
 import { SpaceShipId } from "../../store/storeAssets";
 
 interface Props {
@@ -17,16 +17,18 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
     const [shipsDestination, setShipsDestination] = useState<Vector3>();
+    const isFighter = (shipType === "fighter" || shipType === "hawk")
 
     useEffect(() => {
       if (!selected.find((s) => s.id === shipId)) return;
       if (destination !== shipsDestination) {
+        if(isFighting) setIsFighting(false)
         setShipsDestination(destination);
       }
       if (origin && origin !== shipsOrigin) {
         setShipsOrigin(origin);
       }
-      if(shipType === "fighter" || shipType === "hawk") setShipsOrigin(meshRef.current.position)
+      if(isFighter) setShipsOrigin(meshRef.current.position)
     }, [destination, origin]);
   
     useEffect(() => {
@@ -57,11 +59,12 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
       ) => {
         if (!meshRef.current) return;
         const distance = meshRef.current.position.distanceTo(targetPosition);
+        const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
     
-        if (distance < (isReturning ? 12 : (shipType === "fighter" || shipType === "hawk") ? 50 : 7)) {
+        if (distance < (isReturning ? 12 : isFighter ? 50 : 7) && theAngle < 0.05) {
           if (isTraveling) {
-            if(shipType === "fighter" || shipType === "hawk")
-              {
+            if(isFighter)
+              { 
                 setIsFighting(true)
                 setIsTraveling(false)
               }
@@ -79,8 +82,6 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
               setResources(500);
             }, 3000);
           }
-    
-          // Reset position to new target
         }
     
         const speedFactor = Math.max(15); // Adjust for sensitivity

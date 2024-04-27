@@ -1,14 +1,15 @@
-import { FC, ElementRef, Suspense, useRef } from "react";
+import { FC, ElementRef, Suspense, useRef, useEffect, useState } from "react";
 import { Vector3, Group, Object3DEventMap } from "three";
 import { SGS, useShallowStore } from "../../store/useStore";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import SelectedIcon from "../tools/pyramidMesh";
-import useKeyboard from "../keys";
-import { Ignition } from "./Ignition";
-import { HarvestLaser } from "./HarvestLaser";
-import { LaserCannon, useLaser } from "./LaserCannon";
+import { Ignition } from "../tools/Ignition";
+import { HarvestLaser } from "../tools/HarvestLaser";
+import { LaserCannon } from "../weapons/LaserCannon";
 import UseNavigation from "./UseNavigation";
 import ShipSound from "./ShipSound";
+import { ShipHull } from "./EnemyShip/ShipHull";
+import Explosion from "../tools/Explosion";
 
 interface Props {
   ship: SGS["Ship"];
@@ -16,14 +17,15 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship, scene }) => {
-  const { setSelected, selected } = useShallowStore([
+  const { setSelected, selected, setShipRef } = useShallowStore([
     "setSelected",
     "selected",
+    "setShipRef"
   ]);
 
-  const keyMap = useKeyboard();
-  const { glbPath, position, scale } = ship;
+  const { position } = ship;
   const meshRef = useRef<ElementRef<"mesh">>(null);
+  const [destroyed, setDestroyed] = useState(false)
   const {
     isHarvesting,
     isReturning,
@@ -35,24 +37,19 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     updateShipPosition,
     setIsFighting
   } = UseNavigation({ shipId: ship.id, meshRef, shipType: ship.assetId });
-  // move this into lasercannon.tsx
-  const { fireLaser, fire } = useLaser()
 
   const selectD = selected.find((s) => s.id === ship.id);
   const isFighter = ship.assetId === "fighter";
   const isHawk = ship.assetId === "hawk"
-  const isLaserCannon = isFighter || isHawk
-
 
   useFrame(() => {
-      // move this into lasercannon.tsx, possible solution is to bind mouse, keep like this until actually having the attack move in place
-    keyMap["KeyF"] && selectD && isLaserCannon && fireLaser();
     if (
       meshRef.current &&
       shipsDestination &&
       shipsOrigin &&
       (isTraveling || isReturning)
     ) {
+      if(!meshRef.current.name) {meshRef.current.name = ship.id}
       const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
       const { direction, targetQuaternion } =
         calculateDirectionAndRotation(targetPosition);
@@ -64,18 +61,22 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 
   const handleOnClick = (e: any) => {
     e.stopPropagation();
-    if (isFighter && e.ctrlKey) fireLaser();
-    else setSelected(ship.id);
+    setSelected(ship.id);
   };
+
+  useEffect(() => {
+    setShipRef(meshRef.current, ship.id)
+  }, [meshRef])
+  if(destroyed) return <Explosion position={meshRef.current?.position || new Vector3(0,0,0)}/>
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleOnClick} ref={meshRef} position={position}>
+        <ShipHull friend destroyShip={() => setDestroyed(true)} shipId={ship.id}/>
         <ShipSound
           isHarvesting={isHarvesting}
           isReturning={isReturning}
           isTraveling={isTraveling}
           meshRef={meshRef}
-          fire={fire}
         />
         {selectD && (
           <SelectedIcon

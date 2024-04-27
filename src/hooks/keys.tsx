@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 
 export default function useKeyboard() {
   const keyMap = useRef<any>({})
+  // usage keyMap["KeyF"] && selectD && isLaserCannon && fireLaser();
 
   useEffect(() => {
     const onDocumentKey = (e: any) => {

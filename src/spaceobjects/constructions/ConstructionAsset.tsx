@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { useShallowStore } from "../../store/useStore";
-import { useAsset } from "../useAsset";
+import { useAsset } from "../../hooks/useAsset";
 import * as THREE from "three";
 import { Center, Text } from "@react-three/drei";
 import { useRef, useState } from "react";
@@ -45,7 +45,7 @@ const ConstructionAsset = ({ shouldRender, glbPath, x, scale }: Props) => {
         {x ? 5000 : 1500}
       </Text>
       <AssetPortal assetPosition={scene.position.clone()} x={x || 0} />
-      <primitive object={scene} />{" "}
+      <primitive object={scene} />
     </mesh>
   ) : null;
 };

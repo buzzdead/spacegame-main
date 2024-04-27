@@ -42,6 +42,7 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
     addShip(
       x ? "hawk" : "fighter",
       [3 + ships.length * 15, 0, 3],
+      100,
       x ? 0.03 : 11
     );
     setTimeout(() => setClicked(false), 150);

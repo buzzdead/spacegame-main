@@ -2,7 +2,7 @@ import React from "react";
 import { SGS } from "../../store/useStore";
 import Ship from "./Ship";
 import { Mesh, MeshStandardMaterial } from 'three'
-import { useAsset } from "../useAsset";
+import { useAsset } from "../../hooks/useAsset";
 
 interface Props {
     ship: SGS["Ship"];

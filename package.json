@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-three/drei": "^9.105.1",
+    "@react-three/drei": "^9.105.4",
     "@react-three/postprocessing": "^2.16.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -13,14 +13,18 @@
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
     "@types/three-nebula": "^10.0.4",
-    "antd": "^5.16.0",
+    "antd": "^5.16.4",
     "axios": "^1.6.8",
     "lamina": "^1.1.23",
+    "postprocessing": "^6.35.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-h5-audio-player": "^3.9.1",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5"
+    "three": "^0.163.0",
+    "typescript": "^4.9.5",
+    "zustand": "^4.5.2",
+    "zustand-slices": "^0.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,6 +52,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "babel-plugin-glsl": "^1.0.0",
+    "glslify": "^7.1.1",
     "raw-loader": "^4.0.2"
   }
 }
