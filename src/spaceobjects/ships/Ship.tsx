@@ -10,6 +10,8 @@ import UseNavigation from "./UseNavigation";
 import ShipSound from "./ShipSound";
 import { ShipHull } from "./EnemyShip/ShipHull";
 import Explosion from "../tools/Explosion";
+import { SWave } from "./EnemyShip/swave";
+import { EffectComposer } from "@react-three/postprocessing";
 
 interface Props {
   ship: SGS["Ship"];
@@ -20,7 +22,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const { setSelected, selected, setShipRef } = useShallowStore([
     "setSelected",
     "selected",
-    "setShipRef"
+    "setShipRef",
   ]);
 
   const { position } = ship;
@@ -71,7 +73,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleOnClick} ref={meshRef} position={position}>
-        <ShipHull friend destroyShip={() => setDestroyed(true)} shipId={ship.id}/>
+        <ShipHull friend destroyShip={() =>{setDestroyed(true);}} shipId={ship.id}/>
         <ShipSound
           isHarvesting={isHarvesting}
           isReturning={isReturning}

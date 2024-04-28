@@ -13,6 +13,7 @@ const HeavyLaser = ({ color, target, origin}: Props) => {
   const dealDamageToEnemy = useStore(state => state.dealDamageToEnemy)
   const [hit, setHit] = useState(false)
   const { scene } = useThree()
+  const lastKnownTarget = useRef<any>()
   const laserRef = useRef<THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>>(null);
   const laserGeometry = new THREE.BoxGeometry(0.08, 0.08, 2);
   const laserMaterial = new THREE.MeshBasicMaterial({
@@ -23,9 +24,10 @@ const HeavyLaser = ({ color, target, origin}: Props) => {
 
 
   useFrame(() => {
-    if (laserRef.current && target && !hit) {
+    if (laserRef.current && (target || lastKnownTarget.current) && !hit) {
+      if(target) lastKnownTarget.current = target.clone()
       const direction = new THREE.Vector3();
-      direction.subVectors(target, laserRef.current.position);
+      direction.subVectors(target || lastKnownTarget.current, laserRef.current.position);
       direction.normalize();
       const targetQuaternion = new THREE.Quaternion().setFromUnitVectors(
         new THREE.Vector3(0, 0, 1), // Assuming front of your ship is along +Z
@@ -37,8 +39,8 @@ const HeavyLaser = ({ color, target, origin}: Props) => {
         );
     
         laserRef.current.quaternion.slerp(targetQuaternion, 0.1);
-        if(laserRef.current.position.distanceTo(target) < 4) laserRef.current.geometry.scale(0.94,0.94,0.94)
-        if(laserRef.current.position.distanceTo(target) < 1) {dealDamageToEnemy(target, 34, true); laserRef.current.removeFromParent(); scene.remove(laserRef.current); setHit(true)}
+        if(laserRef.current.position.distanceTo(target || lastKnownTarget.current) < 4) laserRef.current.geometry.scale(0.94,0.94,0.94)
+        if(laserRef.current.position.distanceTo(target || lastKnownTarget.current) < 1) {target && dealDamageToEnemy(target, 34, true); laserRef.current.removeFromParent(); scene.remove(laserRef.current); setHit(true)}
     }
   });
 

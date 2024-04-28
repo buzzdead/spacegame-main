@@ -8,6 +8,7 @@ import { LoadShips } from "./loadships";
 import {Starfield2} from "../features/starfield2";
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
 import { EffectComposer } from "@react-three/postprocessing";
+import ShockWaveComponent from "../spaceobjects/test/test";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -23,10 +24,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
         <LoadCelestialObjects startPlanet={startPlanet} />
         <LoadConstructions />
         <LoadShips startShip={startShip} />
-        <EnemyShipScene position={new Vector3(155, 55, 0)}/>
-        <EnemyShipScene position={new Vector3(185, 55, 0)}/>
-        <EnemyShipScene position={new Vector3(155, 55, 55)}/>
-        <EnemyShipScene position={new Vector3(115, 155, 0)}/>
+        <ShockWaveComponent/>
       </Suspense>
       </ThreeSetup>
     </div>

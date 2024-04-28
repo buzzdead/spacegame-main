@@ -3,6 +3,7 @@ import { Effect } from 'postprocessing'
 
 import fragmentShader from "../shaders/shock-wave"
 import vertexShader from "../shaders/shock-wavev"
+import { getLength } from "./test";
 
 const HALF_PI = Math.PI * 0.5;
 const v = /* @__PURE__ */ new Vector3();
@@ -14,6 +15,13 @@ const ab = /* @__PURE__ */ new Vector3();
  * Based on a Gist by Jean-Philippe Sarda:
  * https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
  */
+
+const createArray = () => {
+	const length = getLength()
+	let a = []
+	for(let i = 0; i < length; i++) a.push(new Vector2(0.5,0.5))
+	return a
+}
 
 export class ShockWaveEffect extends Effect {
 
@@ -29,8 +37,8 @@ export class ShockWaveEffect extends Effect {
 	 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 	 */
 
-	constructor(camera, position = new Vector3(), {
-		speed = 2.0,
+	constructor(camera, position, {
+		speed = 1.5,
 		maxRadius = 12.0,
 		waveSize = 0.2,
 		amplitude = 0.05
@@ -40,14 +48,14 @@ export class ShockWaveEffect extends Effect {
 			vertexShader,
             defines: 
                 new Map([
-                    ["centerCount", "2"]
+                    ["centerCount", getLength().toString()]
                 ])
             ,
 			uniforms:
              new Map([
 				["active", new Uniform(false)],
-				["center", new Uniform([new Vector2(0.5, 0.5), new Vector2(0.5, 0.5)])],
-				["cameraDistance", new Uniform(1.0)],
+				["center", new Uniform(createArray())],
+				["cameraDistance", new Uniform(1)],
 				["size", new Uniform(1.0)],
 				["radius", new Uniform(-waveSize)],
 				["maxRadius", new Uniform(maxRadius)],
@@ -62,7 +70,7 @@ export class ShockWaveEffect extends Effect {
 		 * @type {Vector3}
 		 */
 
-		this.position = [position, position];
+		this.position = position;
 
 		/**
 		 * The speed of the shock wave animation.
@@ -263,13 +271,16 @@ export class ShockWaveEffect extends Effect {
 
 	update(renderer, inputBuffer, delta) {
 
-		const position = [this.position, new Vector3(155, 55, 0)];
+		const position = this.position
 		const camera = this.camera;
 		const uniforms = this.uniforms;
 		const uActive = uniforms.get("active");
+		const positions = [new Vector3(155, 55, 0), new Vector3(185, 55, 0), new Vector3(155, 55, 55), new Vector3(115, 155, 0)]
+		const sumVector = positions[0].add(positions[1]).add(positions[2]).add(positions[3]);
+		const meanVector = sumVector.divideScalar(4);
 
 		if(this.active) {
-            for (let i = 0; i < this.screenPosition.length; i ++){
+            for (let i = 0; i < this.screenPosition.length; i++){
 
 			const waveSize = uniforms.get("waveSize").value;
 
@@ -279,11 +290,10 @@ export class ShockWaveEffect extends Effect {
 
 			// Don't render the effect if the object is behind the camera.
 			uActive.value = (v.angleTo(ab) > HALF_PI);
-
 			if(uActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = camera.position.distanceTo(position[i]);
+				uniforms.get("cameraDistance").value = camera.position.distanceTo(meanVector);
 
 				// Calculate the screen position of the shock wave.
 				v.copy(position[i]).project(camera);

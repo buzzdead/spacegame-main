@@ -14,20 +14,29 @@ interface Props {
 
 export const RadarScanner = ({setNearbyEnemies, origin}: Props) => {
     const [hasNearby, setHasNearby] = useState(false)
+    const [hasNearby2, setHasNearby2] = useState(false)
     const ships = useStore(state => state.ships)
+    const toggleNearby = useStore(state => state.toggleNearby)
     const [scan, setScan] = useState(false)
     const groupRef = useRef<any>(null)
 
     useEffect(() => {
         const checkForNearByShips = () => {
         const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 50).map(e => e.meshRef.position)
+        const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 75).map(e => e.meshRef.position)
+        const isNear = nearby2.length > 0
+        isNear !== hasNearby2 && toggleNearby(origin)
         setNearbyEnemies(nearby)
+        setHasNearby2(nearby2.length > 0)
         setHasNearby(nearby.length > 0)
+        
+        
+        
         }
         checkForNearByShips()
         setTimeout(() => setScan(!scan), 1500)
     }, [scan])
-    
+    return null
     return (<group ref={groupRef}>{hasNearby && <EffectComposer><SWave pos={origin} scan={scan}/></EffectComposer>}</group>)
 
 }

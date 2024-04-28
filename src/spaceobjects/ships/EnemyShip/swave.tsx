@@ -1,27 +1,34 @@
-import { ShockWave, EffectComposer } from "@react-three/postprocessing"
-import { useEffect, useRef } from "react"
+import { ShockWave } from "@react-three/postprocessing"
+import { useEffect, useRef, useState } from "react"
 import {Vector3} from 'three'
-import { BlendFunction, BlendMode, Effect, ShockWaveEffect } from 'postprocessing'
-import { useThree } from "@react-three/fiber";
-import { vertexShader } from "three-nebula/src/renderer/GPURenderer/Desktop/shaders/vertexShader";
-import { time } from "console";
+import { BlendFunction, BlendMode } from 'postprocessing'
+import { useThree, useFrame } from "@react-three/fiber";
+import useKeyboard from "../../../hooks/keys";
 interface Props {
     pos: Vector3
-    scan: boolean
+    scan?: boolean
 }
-export const SWave = ({pos, scan}: Props) => {
+export const SWave = ({pos, scan = false}: Props) => {
     const { camera, scene } = useThree()
+    const keyMap = useKeyboard()
+    const explodeRef = useRef(false)
+    const [exploding, setExploding] = useState(true)
     const shockWaveRef = useRef<any>(null)
+
+    useFrame(() => {
+        if(explodeRef.current) {shockWaveRef.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 750)}
+    })
+
     useEffect(() => {
-        shockWaveRef.current.epicenter = new Vector3(pos.x, pos.y, pos.z)
-        shockWaveRef.current.explode()
-    }, [scan])
+        explodeRef.current = true
+    }, [])
+
+
     return (
         //@ts-ignore
         <ShockWave
-        position={pos}
         id={pos.x}
-        epicenter={pos}
+        position={pos}
         coordinateSystem={2001}
         castShadow
         ref={shockWaveRef}

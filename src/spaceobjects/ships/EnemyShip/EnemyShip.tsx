@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useStore, { useShallowStore } from "../../../store/useStore";
-import {  Vector3, Color } from "three";
+import {  Vector3, Color, Group, Object3DEventMap } from "three";
 import { useThree } from "@react-three/fiber";
 import { Explosion } from "../../tools/Explosion";
 import { useTexture } from "@react-three/drei";
@@ -12,12 +12,12 @@ import { EnemyShipSystem } from "./EnemyShipSystem";
 
 interface Props {
   shipId: string
-  eScene: any
+  eScene: Group<Object3DEventMap>
   position: Vector3
 }
 
 export const EnemyShip = ({shipId, eScene, position}: Props) => {
-  const { setDestination, setSelectedEnemies } = useShallowStore(["setDestination", "setSelectedEnemies"])
+  const { setDestination, setSelectedEnemies, removeShip } = useShallowStore(["setDestination", "setSelectedEnemies", "removeShip"])
   const { camera, scene } = useThree()
   const [fire, setFire] = useState(false)
   const texture = useTexture.preload("/assets/fire.jpg");
@@ -36,8 +36,9 @@ export const EnemyShip = ({shipId, eScene, position}: Props) => {
   }, [camera])
 
   const destroyShip = () => {
-    console.log("what")
+    console.log("what", shipId)
     setDestroyed(true);
+    setTimeout(() => removeShip(shipId), 5000)
     explosionSound?.play()
     //setTimeout(() => {setDestroyed(false); setSelectedEnemies({ship: shipId, hull: 100})}, 10000)
   };

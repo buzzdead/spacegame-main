@@ -13,7 +13,7 @@ const App: React.FC = () => {
       {gameStarted ? (
         <>
           <AudioPlayer src={gameMusic} autoPlay loop shouldPlay={gameStarted} />
-          <SpaceGame startShip="cargo" startPlanet="planet5" />
+          <SpaceGame startShip="cargo" startPlanet="planet1" />
         </>
       ) : (
         <Menu setGameStarted={setGameStarted} />

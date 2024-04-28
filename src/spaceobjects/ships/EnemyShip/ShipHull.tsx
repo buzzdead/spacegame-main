@@ -11,7 +11,7 @@ export const ShipHull = ({ shipId, destroyShip, friend = false }: Props) => {
   useEffect(() => {
     if (selectedEnemies.length === 0) return;
     const s =  selectedEnemies?.find((e) => e.id.toString() === shipId.toString());
-    if(s) console.log(s)
+
     if (s && s?.hull <= 0) destroyShip()
   }, [selectedEnemies]);
 return null

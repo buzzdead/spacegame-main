@@ -1,35 +1,37 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three'
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import {ShockWaveEffect} from './test2'; // Import your recreated effect
+import { useShallowStore } from '../../store/useStore';
 
-interface Props {
-  pos: Vector3;
-  scan: boolean;
-}
 
 const SWave = wrapEffect(ShockWaveEffect)
-
-export const ShockWaveComponent = ({ pos, scan }: Props) => {
-  const [Wave, setWave] = useState<any>(null)
-  const { camera, scene } = useThree();
+let length = 0
+export const getLength = () => {
+  return length
+}
+export const ShockWaveComponent = () => {
+  const {enemyShips} = useShallowStore(["enemyShips"])
+  const [positions, setPositions] = useState<Vector3[]>()
+  const explodeRef = useRef(true)
   const ref = useRef<any>(null)
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.position = pos;
-      ref.current.explode();
-    }
-  }, [scan]);
-  useEffect(() => {
-    const SWave2 = wrapEffect(ShockWaveEffect)
-    setWave(SWave2)
-  }, [])
-  
-  if(!Wave) return null
+    console.log("wtf")
+    const abc = enemyShips.filter(s => s.nearby).map(s => s.position)
+    abc.length !== positions?.length && setPositions(abc)
+    length = abc.length
+  }, [enemyShips])
+
+  useFrame(() => {
+    if(explodeRef.current && ref.current) {console.log("huh ?"); ref.current.speed = length === 1 ? 2 : 1.25; ref.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 1500)}
+    
+  });
+  console.log("rendering")
+  if(!positions || positions.length === 0) return null
   return (
-    <Wave pos={pos} camera={camera} ref={ref}/>
+    <EffectComposer><SWave position={positions} ref={ref}/></EffectComposer>
   );
 };
 

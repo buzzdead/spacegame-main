@@ -22,12 +22,29 @@ const useShips: StateCreator<
         scale
       ),
     })),
+    removeShip: (id: string, friend = false) => set((state) =>
+    {
+      if(friend) return {ships: [...state.ships.filter(s => s.id !== id)]}
+      else return { enemyShips: [...state.enemyShips.filter(e => e.id !== id)]}
+    }),
+
     setShipRef: (shipRef: any, shipId: string) => 
       set((state) => {
         const ship = state.ships.find(s => s.id === shipId)
         const newShip = {...(ship as Ship & { meshRef: any }), meshRef: shipRef}
         return { ships: ship ? [...state.ships.map(s => s.id === shipId ? newShip : s)] : state.ships }
       }),
+    enemyShips: [],
+    addEnemyShip: (pos: Vector3) => set((state) => ({
+      enemyShips: [...state.enemyShips, {position: pos, nearby: false, id: state.enemyShips.length.toString()}]
+    })),
+    toggleNearby: (pos: Vector3) => set((state) => 
+      {
+        const ship = state.enemyShips.find(s => s.position === pos)
+        if(ship) ship.nearby = !ship.nearby
+
+     return { enemyShips: ship ? [...state.enemyShips.map(es => es.position === pos ? ship : es)] : [...state.enemyShips]}
+    }),
   dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => {
     let destroyed = false;
     set((state) => {

@@ -9,6 +9,7 @@ import {
 } from "./spaceGameStateUtils";
 
 export type SelectedEnemy = { id: string; hull: number; position: Vector3 }
+type EnemyShip = { id: string; position: Vector3, nearby: boolean }
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -27,12 +28,16 @@ export type CelestialObjectState = {
       hull: number,
       scale?: number
     ) => void;
+    enemyShips: EnemyShip[]
+    addEnemyShip: (pos: Vector3) => void
+    toggleNearby: (pos: Vector3) => void
     setShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => boolean;
     selected: SelectedShip[];
     setSelected: (id: string) => void;
     selectedEnemies: SelectedEnemy[];
     setSelectedEnemies: (a: SelectedEnemy) => void;
+    removeShip: (id: string) => void
   };
   
  export  type ConstructionState = {
