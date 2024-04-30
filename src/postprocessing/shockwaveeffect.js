@@ -1,9 +1,9 @@
 import { Uniform, Vector2, Vector3 } from "three";
 import { Effect } from 'postprocessing'
 
-import fragmentShader from "../shaders/shock-wave"
-import vertexShader from "../shaders/shock-wavev"
-import { getLength } from "./test";
+import fragmentShader from "../spaceobjects/shaders/shock-wave"
+import vertexShader from "../spaceobjects/shaders/shock-wavev"
+import { getLength } from "./shockwave";
 
 const HALF_PI = Math.PI * 0.5;
 const v = /* @__PURE__ */ new Vector3();
@@ -39,7 +39,7 @@ export class ShockWaveEffect extends Effect {
 
 	constructor(camera, position, {
 		speed = 1.5,
-		maxRadius = 12.0,
+		maxRadius = 152.0,
 		waveSize = 0.2,
 		amplitude = 0.05
 	} = {}) {

@@ -22,12 +22,7 @@ export const ConstructionMenu = ({ menu }: Props) => {
         glbPath={fighter?.glbPath || ""}
         shouldRender={showMenu}
       />
-      <ConstructionAsset
-        scale={0.015}
-        glbPath={hawk?.glbPath || ""}
-        shouldRender={showMenu}
-        x={-10}
-      />
+    
     </Center>
   );
 };

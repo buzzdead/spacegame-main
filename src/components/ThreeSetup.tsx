@@ -24,7 +24,8 @@ const ThreeSetup = ({ children }: Props) => {
         right: right,
         top: top,
         bottom: bottom,
-        far: 40000,
+        far: 60000,
+        fov: 60,
         near: 0.1,
         position: [55, 5, -225],
       }}
@@ -44,7 +45,6 @@ const ThreeSetup = ({ children }: Props) => {
         />
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.5} />
-        <OrbitControls />
       </EffectComposer>
       {children}
     </Canvas>

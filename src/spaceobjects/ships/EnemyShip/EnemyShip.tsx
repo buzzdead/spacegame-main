@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import useStore, { useShallowStore } from "../../../store/useStore";
+import { useShallowStore } from "../../../store/useStore";
 import {  Vector3, Color, Group, Object3DEventMap } from "three";
 import { useThree } from "@react-three/fiber";
 import { Explosion } from "../../tools/Explosion";
 import { useTexture } from "@react-three/drei";
 import UseSoundEffect from "../../../hooks/SoundEffect";
 import { ShipHull } from "./ShipHull";
-import HeavyLaser from "../../weapons/HeavyLaser";
-import { RadarScanner } from "./RadarScanner";
 import { EnemyShipSystem } from "./EnemyShipSystem";
+import BlueFlame from "../../tools/test/BlueFlame";
 
 interface Props {
   shipId: string
@@ -45,7 +44,7 @@ export const EnemyShip = ({shipId, eScene, position}: Props) => {
   const handleOnClick = (e: any) => {
     e.stopPropagation()
     if(e.ctrlKey) setFire(!fire)
-    setDestination(position);
+    setDestination(position, "Attack");
     setSelectedEnemies({id: shipId, hull: 100, position: position});
   };
 
@@ -53,9 +52,9 @@ export const EnemyShip = ({shipId, eScene, position}: Props) => {
     return destroyed ? (
       <Explosion position={position} />
     ) : (
-      <group>
+      <group onClick={handleOnClick}>
         <ShipHull shipId={shipId} destroyShip={destroyShip}/>
-      <primitive onClick={handleOnClick} object={eScene} />
+      <primitive object={eScene} />
      <EnemyShipSystem color={new Color('green')} origin={position} />
       </group>
     );

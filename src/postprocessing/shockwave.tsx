@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three'
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
-import {ShockWaveEffect} from './test2'; // Import your recreated effect
-import { useShallowStore } from '../../store/useStore';
+import {ShockWaveEffect} from './shockwaveeffect'; // Import your recreated effect
+import { useShallowStore } from '../store/useStore';
 
 
 const SWave = wrapEffect(ShockWaveEffect)

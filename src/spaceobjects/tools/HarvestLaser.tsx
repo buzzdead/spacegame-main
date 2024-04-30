@@ -10,15 +10,15 @@ export const HarvestLaser = ({isHarvesting}: Props) => {
         <group>
             <RocketBooster
               isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 4.75)}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 8)}
             />
             <RocketBooster
               isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 5.25)}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 8.5)}
             />
             <RocketBooster
               isHarvesting={isHarvesting}
-              position={new Vector3(1.04 / 100, 0.75 / 100, 5.75)}
+              position={new Vector3(1.04 / 100, 0.75 / 100, 9)}
             />
           </group>
     )

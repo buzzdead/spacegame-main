@@ -15,7 +15,7 @@ interface Props {
 
 type a = THREE.Mesh<
   THREE.BoxGeometry,
-  THREE.MeshBasicMaterial,
+  THREE.ShaderMaterial,
   THREE.Object3DEventMap
 >;
 type arr = a[];
@@ -34,14 +34,32 @@ const Laser = ({
   const dealDamageToEnemy = useStore((state) => state.dealDamageToEnemy);
   const laserRef = useRef<any>(scene);
   const [lasherMeshes, setLasherMeshes] = useState<arr>([]);
-  const laserGeometry = new THREE.BoxGeometry(0.08, 0.08, 2);
-  const laserMaterial = new THREE.MeshBasicMaterial({
-    color: color,
-    transparent: true,
-    opacity: 1,
+  const laserGeometry = new THREE.BoxGeometry(0.2, 0.2, 5);
+  const gradientMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      color1: { value: new THREE.Color('red') },
+      color2: { value: new THREE.Color('orange') },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+  varying vec2 vUv;
+  uniform vec3 color1;
+  uniform vec3 color2;
+  void main() {
+    float gradient = vUv.x * vUv.x * 0.8; // non-linear gradient
+    vec3 color = mix(color1, color2, gradient);
+    gl_FragColor = vec4(color, 1.0);
+  }
+`,
   });
-  const laserMesh = new THREE.Mesh(laserGeometry, laserMaterial);
-  laserMesh.position.x -= second ? 5.95 : 2.75;
+  const laserMesh = new THREE.Mesh(laserGeometry, gradientMaterial);
+  laserMesh.position.x -= second ? 10.8 : 5;
   laserMesh.position.z += 3;
   const distance = origin.distanceTo(target);
   useEffect(() => {

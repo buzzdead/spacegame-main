@@ -12,6 +12,7 @@ import { ShipHull } from "./EnemyShip/ShipHull";
 import Explosion from "../tools/Explosion";
 import { SWave } from "./EnemyShip/swave";
 import { EffectComposer } from "@react-three/postprocessing";
+import { ParticleSystem } from "../tools/particlesystem";
 
 interface Props {
   ship: SGS["Ship"];
@@ -84,7 +85,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
           <SelectedIcon
             color={0x00ff80}
             position={
-              isFighter ? new Vector3(-4, 2.5, -1.5) : new Vector3(0, 2.5, 2)
+              isFighter ? new Vector3(-8, 2.5, -1.5) : new Vector3(0, 2.5, 2)
             }
           />
         )}

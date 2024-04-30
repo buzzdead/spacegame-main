@@ -3,6 +3,7 @@ import { Suspense, useRef } from 'react';
 import { Color, ShaderMaterial, AdditiveBlending } from 'three'
 import useStore, { SGS } from '../store/useStore';
 import { useAsset } from '../hooks/useAsset';
+import { DestinationType } from '../store/storeState';
 
 interface CelestialObjectProps {
   celestialObject: SGS['CO'];
@@ -15,8 +16,8 @@ const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => {
   const scene = useAsset(glbPath, scale || 1)
 
 const handleSetDestination = () => {
-  if(celestialObject.assetId.includes("planet")) return
-  setDestination(position)
+  const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : "Harvest"
+  setDestination(position, type)
 }
   return (
     <Suspense fallback={null}>

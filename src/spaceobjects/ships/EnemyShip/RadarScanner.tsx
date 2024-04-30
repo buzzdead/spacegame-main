@@ -4,7 +4,7 @@ import { useThree } from "@react-three/fiber";
 import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
 import  {ShockWaveEffect} from 'postprocessing'
-import ShockWaveComponent from "../../test/test";
+import ShockWaveComponent from "../../../postprocessing/shockwave";
 import { SWave } from "./swave";
 
 interface Props {

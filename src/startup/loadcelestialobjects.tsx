@@ -13,10 +13,10 @@ export const LoadCelestialObjects = ({ startPlanet }: Props) => {
   useEffect(() => {
     addCelestialObject(startPlanet, [-305, 0, -80], 65);
     addCelestialObject("planet5", [100, 50, 1000], 50)
-    addCelestialObject("asteroid-minerals", [34, 5, 3], 2);
-    addCelestialObject("asteroid-minerals", [34, 5, 12], 2);
-    addCelestialObject("asteroid-minerals", [34, 5, 20], 2);
-    addCelestialObject("asteroid-minerals", [34, 5, 32], 2);
+    addCelestialObject("asteroid-minerals", [34, 5, 3], 3.5);
+    addCelestialObject("asteroid-minerals", [34, 5, 12], 3.5);
+    addCelestialObject("asteroid-minerals", [34, 5, 20], 3.5);
+    addCelestialObject("asteroid-minerals", [34, 5, 32], 3.5);
     addCelestialObject("blackhole", [-2606, 3, 246], 36);
     addCelestialObject("sun1", [-5000, 0, 14999], 100)
   }, [addCelestialObject, startPlanet]);

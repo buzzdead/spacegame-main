@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import vertexShader from '../shaders/shock-wavev'
-import fragmentShader from '../shaders/shock-wave'
+import vertexShader from '../spaceobjects/shaders/shock-wavev'
+import fragmentShader from '../spaceobjects/shaders/shock-wave'
 import { useRef, useState } from 'react';
 class ShockWave {
     constructor(position, options = {}) {

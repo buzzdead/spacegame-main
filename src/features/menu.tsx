@@ -1,9 +1,16 @@
 import "../styles/theme.css";
-import { Form, Input, Select, Button } from "antd";
-import { UserOutlined, HomeOutlined, RocketOutlined } from "@ant-design/icons";
+import { Form, Input, Select, Button, Flex, Modal, Checkbox } from "antd";
+import {
+  UserOutlined,
+  HomeOutlined,
+  RocketOutlined,
+  SettingFilled,
+} from "@ant-design/icons";
 import Starfield from "./Starfield";
 import AudioPlayer from "../components/AudioPlayer";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
+import { useShallowStore } from "../store/useStore";
+import { Options } from "./options";
 const menuMusic = require("../assets/coddy.mp3");
 
 interface PlayerInfo {
@@ -17,6 +24,7 @@ interface Props {
 }
 
 const Menu = ({ setGameStarted }: Props) => {
+
   const onFinish = (values: PlayerInfo) => {
     // Simulate starting the game (replace with your logic)
     setGameStarted(true);
@@ -25,9 +33,12 @@ const Menu = ({ setGameStarted }: Props) => {
   const onFinishFailed = (errorInfo: any) => {
     console.error("Failed:", errorInfo);
   };
+  const [showOptions, setShowOptions] = useState(false);
+
 
   return (
-    <Suspense fallback={<div style={{fontSize: 100}}>Loading</div>}>
+    <Suspense fallback={<div style={{ fontSize: 100 }}>Loading</div>}>
+     <Options visible={showOptions} onClose={() => setShowOptions(false)}/>
       <AudioPlayer src={menuMusic} autoPlay loop shouldPlay />
       <div>
         <Starfield />
@@ -96,15 +107,34 @@ const Menu = ({ setGameStarted }: Props) => {
                 </Select>
               </div>
             </Form.Item>
-            <Form.Item>
+            <Flex gap={10} dir="row">
               <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "250px" }}
+                type="default"
+                onClick={() => setShowOptions(true)}
+                style={{ width: "120px" }}
               >
-                Start Game
+                Options
+                <SettingFilled
+                  style={{
+                    color: "lightblue",
+                    marginRight: 8,
+                    pointerEvents: "none",
+                    position: "absolute",
+                    left: -32.5,
+                    top: 7.5,
+                  }}
+                />
               </Button>
-            </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ width: "120px" }}
+                >
+                  Start Game
+                </Button>
+              </Form.Item>
+            </Flex>
           </Form>
         </div>
       </div>
@@ -112,4 +142,4 @@ const Menu = ({ setGameStarted }: Props) => {
   );
 };
 
-export default Menu
+export default Menu;

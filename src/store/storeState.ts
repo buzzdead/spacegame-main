@@ -10,6 +10,7 @@ import {
 
 export type SelectedEnemy = { id: string; hull: number; position: Vector3 }
 type EnemyShip = { id: string; position: Vector3, nearby: boolean }
+export type DestinationType = "Harvest" | "Attack" | "Travel"
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -52,15 +53,20 @@ export type CelestialObjectState = {
   
   export type LocationState = {
     origin: Vector3 | undefined;
-    destination: Vector3 | undefined;
+    destination: {pos: Vector3, type: DestinationType} | undefined;
     setOrigin: (pos: Vector3 | undefined) => void;
-    setDestination: (pos: Vector3) => void;
+    setDestination: (pos: Vector3, type: DestinationType) => void;
   };
   
   export type ResourceState = {
     setResources: (n: number) => boolean;
     resources: number;
   };
+
+  export type OptionsState = {
+    postProcessing: boolean
+    setPostProcessing: () => void
+  }
   
   
   export interface SpaceGameState
@@ -68,4 +74,5 @@ export type CelestialObjectState = {
       SpaceShipState,
       ConstructionState,
       LocationState,
-      ResourceState {}
+      ResourceState,
+      OptionsState {}

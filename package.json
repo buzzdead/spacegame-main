@@ -22,6 +22,8 @@
     "react-h5-audio-player": "^3.9.1",
     "react-scripts": "5.0.1",
     "three": "^0.163.0",
+    "three-nebula": "^10.0.3",
+    "three-nebula-types": "^1.0.1",
     "typescript": "^4.9.5",
     "zustand": "^4.5.2",
     "zustand-slices": "^0.1.0"

@@ -9,15 +9,15 @@ export const Ignition = ({type}: Props) => {
   const isHawk = type === "hawk"
   const rocketEngineLeft = 
   {
-    x: isFighter ?  -3.3 : 1.04 / 100,
+    x: isFighter ?  -6 : 1.04 / 100,
     y: 0.75 / 100,
-    z: isFighter ? -4.5 : isHawk ? -5 : -0.3
+    z: isFighter ? -7.5 : isHawk ? -5 : -0.3
   }
   const rocketEngineRight = 
   {
-    x: isFighter ? -5.3 : 1.04 / 100,
+    x: isFighter ? -9.6 : 1.04 / 100,
     y:  0.75 / 100,
-    z: isFighter ? -4.5 : isHawk ? -6 : -0
+    z: isFighter ? -7.5 : isHawk ? -6 : -0
   }
 
   const createVector3 = (engine: {x: number, y: number, z: number}) => {
@@ -29,9 +29,9 @@ export const Ignition = ({type}: Props) => {
         <RocketBooster
           position={createVector3(rocketEngineLeft)}
         />
-        <RocketBooster
+        {isFighter && <RocketBooster
           position={createVector3(rocketEngineRight)}
-        />
+        />}
       </group>
     )
 }

@@ -21,9 +21,9 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
 
     useEffect(() => {
       if (!selected.find((s) => s.id === shipId)) return;
-      if (destination !== shipsDestination) {
+      if (destination && destination.pos !== shipsDestination) {
         if(isFighting) setIsFighting(false)
-        setShipsDestination(destination);
+        setShipsDestination(destination.pos);
       }
       if (origin && origin !== shipsOrigin) {
         setShipsOrigin(origin);
@@ -61,7 +61,7 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
         const distance = meshRef.current.position.distanceTo(targetPosition);
         const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
     
-        if (distance < (isReturning ? 12 : isFighter ? 50 : 7) && theAngle < 0.05) {
+        if (distance < (isReturning ? 12 : isFighter ? 50 : 12) && theAngle < 0.05) {
           if (isTraveling) {
             if(isFighter)
               { 
