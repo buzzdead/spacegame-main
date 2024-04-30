@@ -17,9 +17,9 @@ export const LoadShips = ({ startShip }: Props) => {
   console.log(enemyShips)
   useEffect(() => {
     if(ships.length > 0) return
-    addShip(startShip, [8, 1, 4], 100, 0.014);
-    addShip(startShip, [10, 2, 8], 100, 0.014);
-    addShip(startShip, [12, 3, 12], 100, 0.014);
+    addShip(startShip, [8, 1, 0], 100, 0.014);
+    addShip(startShip, [10, 2, 12], 100, 0.014);
+    addShip(startShip, [12, 3, 24], 100, 0.014);
     addEnemyShip(new Vector3(155, 55, 0))
     addEnemyShip(new Vector3(185, 55, 155))
     addEnemyShip(new Vector3(215, 55, 255))
