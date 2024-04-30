@@ -23,14 +23,8 @@ export const Collisions = () => {
         }
       };
       useEffect(() => {
-        window.addEventListener('wheel', handleMouseMove)
-        window.addEventListener('touchmove', handleMouseMove)
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => {
-          window.removeEventListener('mousemove', handleMouseMove);
-          window.removeEventListener('wheel', handleMouseMove)
-          window.addEventListener('touchmove', handleMouseMove)
-        };
-      }, [handleMouseMove]);
-      return  <OrbitControls panSpeed={isClose ? 0.01 : 0.5} zoomSpeed={isClose ? 0.01 : 1} rotateSpeed={isClose ? 0.01 : 0.35} onPointerMove={handleMouseMove}/>
+      
+        
+      }, []);
+      return  <OrbitControls panSpeed={isClose ? 0.01 : 0.5} zoomSpeed={isClose ? 0.01 : 1} rotateSpeed={isClose ? 0.01 : 0.35} />
 }
