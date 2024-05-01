@@ -1,8 +1,8 @@
-import { Button, Typography } from "antd";
-import useStore, { useShallowStore } from "../store/useStore";
+import { Typography } from "antd";
+import { useShallowStore } from "../store/UseStore";
 import { useEffect, useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
-import { Options } from "./options";
+import { Options } from "./Options";
 
 const UI = () => {
   const [showOptions, setShowOptions] = useState(false);

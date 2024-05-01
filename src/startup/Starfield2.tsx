@@ -1,5 +1,4 @@
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { Mesh, SphereGeometry, MeshBasicMaterial } from 'three'
 

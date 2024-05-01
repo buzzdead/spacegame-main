@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Vector3, Quaternion } from 'three'
-import { useShallowStore } from "../../store/useStore";
-import { SpaceShipId } from "../../store/storeAssets";
+import { useShallowStore } from "../../store/UseStore";
+import { SpaceShipId } from "../../store/StoreAssets";
 
 interface Props {
   shipType: SpaceShipId

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { SpaceShipId } from "../store/storeAssets";
-import useStore from "../store/useStore";
+import { SpaceShipId } from "../store/StoreAssets";
+import useStore from "../store/UseStore";
 import { ShipScene } from "../spaceobjects/ships/ShipScene";
 import { Vector3 } from 'three'
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
@@ -14,7 +14,7 @@ export const LoadShips = ({ startShip }: Props) => {
   const addShip = useStore((state) => state.addShip);
   const addEnemyShip = useStore((state) => state.addEnemyShip)
   const enemyShips = useStore((state) => state.enemyShips)
-  console.log(enemyShips)
+  
   useEffect(() => {
     if(ships.length > 0) return
     addShip(startShip, [8, 1, 0], 100, 0.014);

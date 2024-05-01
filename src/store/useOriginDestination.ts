@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { Vector3 } from 'three'
-import { DestinationType, LocationState } from "./storeState";
+import { DestinationType, LocationState } from "./StoreState";
 
 const useOriginDestination: StateCreator<
   LocationState,

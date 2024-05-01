@@ -52,7 +52,6 @@ export const ParticleSystem = ({ position }: Props) => {
   const { scene } = useThree();
   const texture = useTexture("/assets/particle.png");
   const [particles, setParticles] = useState<Float32Array>();
-    console.log( window.innerHeight / (2.0 * Math.tan(0.5 * 60.0 * Math.PI / 180.0)))
   useEffect(() => {
     const addParticles = () => {
       const newParticles = new Float32Array(100 * 3); // 3 components per vertex (x, y, z)

@@ -1,6 +1,6 @@
 // spaceGameStateUtils.ts
 import { Vector3 } from 'three';
-import { CelestialObjectId, celestialObjects, ConstructionId, constructions, SpaceShipId, spaceShips } from './storeAssets';
+import { CelestialObjectId, celestialObjects, ConstructionId, constructions, SpaceShipId, spaceShips } from './StoreAssets';
 import Construction from '../spaceobjects/constructions/Construction';
 export interface CelestialObject {
     assetId: CelestialObjectId

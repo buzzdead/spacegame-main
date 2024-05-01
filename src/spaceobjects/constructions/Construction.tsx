@@ -1,11 +1,9 @@
-import { FC, ElementRef, useState } from 'react';
+import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
 import { Vector3 } from 'three'
-import { Center } from '@react-three/drei';
-import { SGS, useShallowStore } from '../../store/useStore';
+import { SGS, useShallowStore } from '../../store/UseStore';
 import SelectedIcon from '../tools/pyramidMesh';
-import ConstructionAsset from './ConstructionAsset';
-import { useAsset } from '../../hooks/useAsset';
+import { useAsset } from '../../hooks/Asset';
 import { ConstructionMenu } from './ConstructionMenu';
 
 interface Props {

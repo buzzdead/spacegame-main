@@ -29,8 +29,6 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
     initializeParticles();
   }, []);
 
-  console.log(isHarvesting)
-
   useFrame(() => {
     const updateParticles = () => {
       if (particleSystemRef.current) {

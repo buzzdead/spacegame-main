@@ -1,6 +1,6 @@
 import { FC, ElementRef, Suspense, useRef, useEffect, useState } from "react";
 import { Vector3, Group, Object3DEventMap } from "three";
-import { SGS, useShallowStore } from "../../store/useStore";
+import { SGS, useShallowStore } from "../../store/UseStore";
 import { useFrame } from "@react-three/fiber";
 import SelectedIcon from "../tools/pyramidMesh";
 import { Ignition } from "../tools/Ignition";

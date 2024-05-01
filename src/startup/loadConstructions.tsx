@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useStore from "../store/useStore";
+import useStore from "../store/UseStore";
 import Construction from "../spaceobjects/constructions/Construction";
 
 export const LoadConstructions = () => {

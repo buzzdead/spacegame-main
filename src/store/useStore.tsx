@@ -3,15 +3,15 @@ import {
   CelestialObject,
   Construction,
   Ship,
-} from "./spaceGameStateUtils";
+} from "./SpaceGameStateUtils";
 import {shallow} from "zustand/shallow";
-import { SpaceGameState } from "./storeState";
-import useCelestialObjects from "./useCelestialObjects";
-import useConstructions from "./useConstructions";
-import useOriginDestination from "./useOriginDestination";
-import useResources from "./useResources";
-import useShips from "./useShips";
-import useOptions from './useOptions'
+import { SpaceGameState } from "./StoreState";
+import useCelestialObjects from "./UseCelestialObjects";
+import useConstructions from "./UseConstructions";
+import useOriginDestination from "./UseOriginDestination";
+import useResources from "./UseResources";
+import useShips from "./UseShips";
+import useOptions from './UseOptions'
 
 export type SGS = {
   CO: CelestialObject;

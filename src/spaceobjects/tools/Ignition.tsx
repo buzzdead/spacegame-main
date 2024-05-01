@@ -1,4 +1,4 @@
-import { SpaceShipId } from "../../store/storeAssets"
+import { SpaceShipId } from "../../store/StoreAssets"
 import RocketBooster from "./RocketBooster"
 import { Vector3 } from 'three'
 

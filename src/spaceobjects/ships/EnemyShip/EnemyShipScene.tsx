@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { useAsset } from "../../../hooks/useAsset";
+import { useAsset } from "../../../hooks/Asset";
 import { EnemyShip } from "./EnemyShip";
 
 interface Props {

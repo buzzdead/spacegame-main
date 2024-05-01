@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useThree, useFrame } from '@react-three/fiber';
+import { useRef, useEffect, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three'
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
-import {ShockWaveEffect} from './shockwaveeffect'; // Import your recreated effect
-import { useShallowStore } from '../store/useStore';
+import {ShockWaveEffect} from '../postprocessing/ShockWaveEffect'; // Import your recreated effect
+import { useShallowStore } from '../store/UseStore';
 
 
 const SWave = wrapEffect(ShockWaveEffect)
@@ -18,17 +18,15 @@ export const ShockWaveComponent = () => {
   const ref = useRef<any>(null)
 
   useEffect(() => {
-    console.log("wtf")
     const abc = enemyShips.filter(s => s.nearby).map(s => s.position)
     abc.length !== positions?.length && setPositions(abc)
     length = abc.length
   }, [enemyShips])
 
   useFrame(() => {
-    if(explodeRef.current && ref.current) {console.log("huh ?"); ref.current.speed = length === 1 ? 2 : 1.25; ref.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 1500)}
+    if(explodeRef.current && ref.current) {ref.current.speed = length === 1 ? 2 : 1.25; ref.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 1500)}
     
   });
-  console.log("rendering")
   if(!positions || positions.length === 0) return null
   return (
     <EffectComposer><SWave position={positions} ref={ref}/></EffectComposer>

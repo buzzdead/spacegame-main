@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { CelestialObjectId } from "../store/storeAssets";
-import useStore from "../store/useStore";
+import { CelestialObjectId } from "../store/StoreAssets";
+import useStore from "../store/UseStore";
 import CelestialObject from "../spaceobjects/CelestialObject";
 
 interface Props {

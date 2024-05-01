@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import {Vector3} from 'three'
 import { BlendFunction, BlendMode } from 'postprocessing'
 import { useThree, useFrame } from "@react-three/fiber";
-import useKeyboard from "../../../hooks/keys";
+import useKeyboard from "../../../hooks/Keys";
 interface Props {
     pos: Vector3
     scan?: boolean

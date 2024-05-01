@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useShallowStore } from "../store/useStore";
+import { useShallowStore } from "../store/UseStore";
 import { Checkbox, Modal } from "antd";
 
 interface Props {

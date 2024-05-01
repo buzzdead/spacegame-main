@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
-import useStore from "../../store/useStore";
+import useStore from "../../store/UseStore";
+import Shader from "../../postprocessing/Shader";
 
 interface Props {
   origin: any;
@@ -33,48 +34,48 @@ const Laser = ({
   const [autoAttack, setAutoAttack] = useState(false);
   const dealDamageToEnemy = useStore((state) => state.dealDamageToEnemy);
   const laserRef = useRef<any>(scene);
-  const [lasherMeshes, setLasherMeshes] = useState<arr>([]);
+  const [laserMeshes, setLaserMeshes] = useState<arr>([]);
   const laserGeometry = new THREE.BoxGeometry(0.2, 0.2, 5);
+  const {vs, fs} = Shader("laser-cannon")
   const gradientMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      color1: { value: new THREE.Color('red') },
-      color2: { value: new THREE.Color('orange') },
+      color1: { value: new THREE.Color(color) }, // Use the provided color prop
+      color2: { value: new THREE.Color('green') }, // Mix with white for a glow effect
+      time: { value: 0 },
     },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-  varying vec2 vUv;
-  uniform vec3 color1;
-  uniform vec3 color2;
-  void main() {
-    float gradient = vUv.x * vUv.x * 0.8; // non-linear gradient
-    vec3 color = mix(color1, color2, gradient);
-    gl_FragColor = vec4(color, 1.0);
-  }
-`,
+    vertexShader: vs,
+    fragmentShader: fs,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
   });
+ 
   const laserMesh = new THREE.Mesh(laserGeometry, gradientMaterial);
   laserMesh.position.x -= second ? 10.8 : 5;
   laserMesh.position.z += 3;
   const distance = origin.distanceTo(target);
   useEffect(() => {
     if (!fire) return;
-    const lm = laserMesh.clone();
-    setLasherMeshes([...lasherMeshes, lm]);
+  
+    // Create a new material instance for each clone
+    const newMaterial = gradientMaterial.clone();
+    newMaterial.uniforms = THREE.UniformsUtils.clone(gradientMaterial.uniforms);
+  
+    const mesh = laserMesh.clone();
+    mesh.material = newMaterial; // Assign the new material to the clone
+    setLaserMeshes([...laserMeshes, mesh]);
     laserSound.stop();
     laserSound.play();
+  
     return () => {
-      scene.remove(lm);
+      scene.remove(mesh);
     };
   }, [fire, autoAttack]);
 
-  useFrame(() => {
-    lasherMeshes.forEach((mesh) => {
+  useFrame(({clock}) => {
+    laserMeshes.forEach((mesh) => {
+      if (mesh.material.uniforms.time) {
+        mesh.material.uniforms.time.value = clock.getElapsedTime() * 2;
+      }
       // Check for exceeding z limit and remove the mesh
       if (mesh.position.z >= distance - 10) {
         mesh.geometry.scale(0.9, 0.9, 0.9);
@@ -86,11 +87,11 @@ const Laser = ({
         const destroyed = dealDamageToEnemy(target, 5);
         scene.remove(mesh);
         mesh.removeFromParent();
-        setLasherMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));
+        setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));
         if (!destroyed) {
           setTimeout(() => setAutoAttack(!autoAttack), 150);
         } else {
-          setLasherMeshes([]);
+          setLaserMeshes([]);
           setFightDone();
         }
       }
@@ -99,7 +100,7 @@ const Laser = ({
 
   return (
     <mesh ref={laserRef}>
-      {lasherMeshes.map((lm) => (
+      {laserMeshes.map((lm) => (
         <primitive key={lm.id} object={lm} />
       ))}
     </mesh>

@@ -1,9 +1,8 @@
 import { useFrame } from "@react-three/fiber";
-import { useShallowStore } from "../../store/useStore";
-import { useAsset } from "../../hooks/useAsset";
+import { useAsset } from "../../hooks/Asset";
 import * as THREE from "three";
-import { Center, Text } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { Text } from "@react-three/drei";
+import { useRef } from "react";
 import { AssetPortal } from "./AssetPortal";
 
 interface Props {

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useShallowStore } from "../../store/useStore";
+import { useShallowStore } from "../../store/UseStore";
 import * as THREE from 'three'
-import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 interface Props {

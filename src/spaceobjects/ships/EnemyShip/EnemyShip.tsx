@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useShallowStore } from "../../../store/useStore";
+import { useShallowStore } from "../../../store/UseStore";
 import {  Vector3, Color, Group, Object3DEventMap } from "three";
 import { useThree } from "@react-three/fiber";
 import { Explosion } from "../../tools/Explosion";
@@ -35,7 +35,6 @@ export const EnemyShip = ({shipId, eScene, position}: Props) => {
   }, [camera])
 
   const destroyShip = () => {
-    console.log("what", shipId)
     setDestroyed(true);
     setTimeout(() => removeShip(shipId), 5000)
     explosionSound?.play()

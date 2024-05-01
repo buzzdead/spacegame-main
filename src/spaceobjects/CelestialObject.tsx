@@ -1,9 +1,9 @@
 import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
 import { Color, ShaderMaterial, AdditiveBlending } from 'three'
-import useStore, { SGS } from '../store/useStore';
-import { useAsset } from '../hooks/useAsset';
-import { DestinationType } from '../store/storeState';
+import useStore, { SGS } from '../store/UseStore';
+import { useAsset } from '../hooks/Asset';
+import { DestinationType } from '../store/StoreState';
 
 interface CelestialObjectProps {
   celestialObject: SGS['CO'];

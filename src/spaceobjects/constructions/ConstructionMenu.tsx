@@ -2,7 +2,7 @@ import { Center } from "@react-three/drei";
 import ConstructionAsset from "./ConstructionAsset";
 import { useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { spaceShips } from "../../store/storeAssets";
+import { spaceShips } from "../../store/StoreAssets";
 
 interface Props {
   menu: React.MutableRefObject<boolean>;

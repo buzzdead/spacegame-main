@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
-import SpaceGameStateUtils, { Ship } from "./spaceGameStateUtils";
-import { SelectedEnemy, SpaceShipState } from "./storeState";
+import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
+import { SelectedEnemy, SpaceShipState } from "./StoreState";
 import { Vector3 } from 'three'
 
 

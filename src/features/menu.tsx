@@ -1,16 +1,15 @@
 import "../styles/theme.css";
-import { Form, Input, Select, Button, Flex, Modal, Checkbox } from "antd";
+import { Form, Input, Select, Button, Flex } from "antd";
 import {
   UserOutlined,
   HomeOutlined,
   RocketOutlined,
   SettingFilled,
 } from "@ant-design/icons";
-import Starfield from "./Starfield";
-import AudioPlayer from "../components/AudioPlayer";
+import Starfield from "../startup/Starfield";
+import AudioPlayer from "./AudioPlayer";
 import { Suspense, useState } from "react";
-import { useShallowStore } from "../store/useStore";
-import { Options } from "./options";
+import { Options } from "./Options";
 const menuMusic = require("../assets/coddy.mp3");
 
 interface PlayerInfo {

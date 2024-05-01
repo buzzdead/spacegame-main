@@ -1,9 +1,9 @@
 import { Uniform, Vector2, Vector3 } from "three";
 import { Effect } from 'postprocessing'
 
-import fragmentShader from "../spaceobjects/shaders/shock-wave"
-import vertexShader from "../spaceobjects/shaders/shock-wavev"
-import { getLength } from "./shockwave";
+import fragmentShader from "./shaders/fragment/shock-wave"
+import vertexShader from "./shaders/vertex/shock-wave"
+import { getLength } from "../features/Shockwave";
 
 const HALF_PI = Math.PI * 0.5;
 const v = /* @__PURE__ */ new Vector3();

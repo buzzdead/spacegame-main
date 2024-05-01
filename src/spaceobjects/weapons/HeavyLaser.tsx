@@ -1,7 +1,7 @@
 import {  useFrame, useThree } from '@react-three/fiber';
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
-import useStore from '../../store/useStore';
+import useStore from '../../store/UseStore';
 
 interface Props {
   color: THREE.Color;

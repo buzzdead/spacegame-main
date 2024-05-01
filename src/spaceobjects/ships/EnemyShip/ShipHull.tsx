@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useStore from "../../../store/useStore";
+import useStore from "../../../store/UseStore";
 
 interface Props {
   shipId: string;

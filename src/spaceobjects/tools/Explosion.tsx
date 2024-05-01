@@ -1,193 +1,179 @@
 import { useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useMemo } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
+import { Shader } from "../../postprocessing/Shader";
 
 interface Props {
   position: Vector3;
 }
 
-
-
-const _VS = /*glsl*/`
-uniform float pointMultiplier;
-
-attribute float size;
-attribute float angle;
-attribute float blend;
-attribute vec4 colour;
-
-varying vec4 vColour;
-varying vec2 vAngle;
-varying float vBlend;
-
-void main() {
-  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-
-  gl_Position = projectionMatrix * mvPosition;
-  gl_PointSize = 125.0;
-
-  vAngle = vec2(cos(angle), sin(angle));
-  vColour = colour;
-  vBlend = blend;
-}`;
-
-const _FS = /*glsl*/`
-
-uniform sampler2D diffuseTexture;
-
-varying vec4 vColour;
-varying vec2 vAngle;
-varying float vBlend;
-
-void main() {
-  vec2 coords = (gl_PointCoord - 0.5) * mat2(vAngle.x, vAngle.y, -vAngle.y, vAngle.x) + 0.5;
-  gl_FragColor = texture2D(diffuseTexture, coords) * vColour;
-  gl_FragColor.xyz *= gl_FragColor.w;
-  gl_FragColor.w *= vBlend;
-}`;
-
 export const Explosion = ({ position }: Props) => {
-  const { camera } = useThree()
   const particleSystemRef = useRef<THREE.Points>(null);
-  const colors = [
-    new THREE.Color("#ea5104"),
-    new THREE.Color("#470b04"),
-    new THREE.Color("#a40e04"),
-    new THREE.Color("#fb7604"),
-    new THREE.Color("#740a04"),
+  const smokeParticleSystemRef = useRef<THREE.Points>(null);
+  const shaderMaterialRef = useRef<any>(null);
+  const shaderMaterialRefSmoke = useRef<any>(null);
 
-    new THREE.Color("#fca204"),
-    new THREE.Color("#ba0b04"),
-    new THREE.Color("#a40e04"),
-    new THREE.Color("#cb2004"),
-    new THREE.Color("#c93204"),
-  ];
-
-  const particleColors = new Float32Array(3900 * 3);
-  for (let i = 0; i < 3900; i++) {
-    const colorIndex = Math.floor(Math.random() * colors.length);
-    particleColors[i * 3] = colors[colorIndex].r;
-    particleColors[i * 3 + 1] = colors[colorIndex].g;
-    particleColors[i * 3 + 2] = colors[colorIndex].b;
-  }
-  const [particlePositions, setParticlePositions] = useState<Float32Array>();
-
-  const texture = useTexture("/assets/particle.png");
-  
-  const pointMultiplier = useMemo(() => {
-    const distance = position.distanceTo(camera.position);
-    const zoom = camera.zoom;
-    return 1000.0 * (10.0 / distance) * (1.0 / zoom);
-  }, [position, camera]);
-  useEffect(() => {
-    const initializeParticles = () => {
-      const positions = new Float32Array(3900 * 3);
-      for (let i = 0; i < 6900; i++) {
-        positions[i] = (Math.random() - 0.5) * 10;
-      }
-      setParticlePositions(positions);
-    };
-    initializeParticles();
+  const { vs: smokeVS, fs: smokeFS } = Shader("explosion-smoke");
+  const { vs: explosionVS, fs: explosionFS } = Shader("explosion");
+  const fireTexture = useTexture("/assets/fire.png");
+  const smokeTexture = useTexture("/assets/blackSmoke00.png");
+  const pointsMultiplier = useMemo(() => {
+    return (
+      window.innerHeight / (2.0 * Math.tan((0.5 * 60.0 * Math.PI) / 180.0))
+    );
   }, []);
 
-  useFrame(() => {
-    const updateParticles = () => {
-      if (
-        particleSystemRef.current &&
-        particleSystemRef.current.geometry.attributes.position &&
-        particleSystemRef.current.geometry.attributes.velocity
-      ) {
-        const positions = particleSystemRef.current.geometry.attributes.position
-          .array as Float32Array;
-        const velocities = particleSystemRef.current.geometry.attributes
-          .velocity.array as Float32Array;
-        
+  const numParticles = 1500;
+  const numSmokeParticles = 45;
+  const {
+    particlePositions,
+    particleVelocities,
+    particleSizes,
+    particleAngles,
+  } = useMemo(() => {
+    const particlePositions = new Float32Array(numParticles * 3);
+    const particleVelocities = new Float32Array(numParticles * 3);
+    const particleSizes = new Float32Array(numParticles);
+    const particleAngles = new Float32Array(numParticles);
+    for (let i = 0; i < numParticles; i++) {
+      let idx = i * 3;
+      // Use spherical coordinates to ensure uniform distribution
+      let theta = Math.random() * 2 * Math.PI; // Azimuthal angle
+      let phi = Math.acos(2 * Math.random() - 1); // Polar angle
+      let radius = Math.random() * 0.05; // Random radius
 
-        for (let i = 0; i < positions.length; i += 3) {
-          // Calculate the direction from the center of the explosion
-          const direction = new Vector3(
-            positions[i],
-            positions[i + 1],
-            positions[i + 2]
-          ).normalize();
-          // Apply a force in the direction of the explosion
-          velocities[i] += direction.x * 0.00005 + (Math.random() - 0.5) * 0.0001;
-          velocities[i + 1] +=
-            direction.y * 0.00005 + (Math.random() - 0.5) * 0.0001;
-          velocities[i + 2] +=
-            direction.z * 0.00005 + (Math.random() - 0.5) * 0.0001;
+      // Convert spherical coordinates to Cartesian coordinates
+      particlePositions[idx] = radius * Math.sin(phi) * Math.cos(theta);
+      particlePositions[idx + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      particlePositions[idx + 2] = radius * Math.cos(phi);
 
-           
-          // Update the position of the particle
-          positions[i] += velocities[i];
-          positions[i + 1] += velocities[i + 1];
-          positions[i + 2] += velocities[i + 2];
-          const material = particleSystemRef.current.material;
-         
-          // Check if the particle has reached the edge of the explosion
-          const maxLimit = 1.5;
-          if (
-            Math.abs(positions[i]) > maxLimit) { positions[i] = 0; velocities[i] = 0;}
-            if(Math.abs(positions[i + 1]) > maxLimit) { positions[i + 1] = 0; velocities[i + 1] = 0;}
-            if(Math.abs(positions[i + 2]) > maxLimit) { positions[i + 2] = 0; velocities[i + 2] = 0;}
-          
-            
-              // Gradually darken the color over time
-              particleColors[i] *= 0.98; // red component
-              particleColors[i + 1] *= 0.98; // green component
-              particleColors[i + 2] *= 0.98; // blue component
-            
-        
-        }
-        particleSystemRef.current.geometry.attributes.position.needsUpdate =
-          true;
-        particleSystemRef.current.geometry.attributes.velocity.needsUpdate =
-          true;
-          particleSystemRef.current.geometry.attributes.colour.needsUpdate = true;
-      }
+      // Assign velocities to move particles outward from the center
+      particleVelocities[idx] = particlePositions[idx] * 0.542; // Scale for speed
+      particleVelocities[idx + 1] = particlePositions[idx + 1] * 0.542;
+      particleVelocities[idx + 2] = particlePositions[idx + 2] * 0.542;
+
+      particleSizes[i] = Math.random() * 7.5 + 7.5; // Smaller sizes for explosion particles
+      particleAngles[i] = Math.random() * Math.PI * 2;
+    }
+    return {
+      particlePositions,
+      particleVelocities,
+      particleSizes,
+      particleAngles,
     };
-    updateParticles();
+  }, []);
+
+  const { smokePositions, smokeVelocities, smokeSizes, smokeLifetimes } =
+    useMemo(() => {
+      const smokePositions = new Float32Array(numSmokeParticles * 3);
+      const smokeVelocities = new Float32Array(numSmokeParticles * 3);
+      const smokeSizes = new Float32Array(numSmokeParticles);
+      const smokeLifetimes = new Float32Array(numSmokeParticles);
+      for (let i = 0; i < numSmokeParticles; i++) {
+        let idx = i * 3;
+        // Use spherical coordinates to ensure uniform distribution
+        let theta = Math.random() * 2 * Math.PI; // Azimuthal angle
+        let phi = Math.acos(2 * Math.random() - 1); // Polar angle
+        let radius = Math.random() * 0.055; // Random radius
+        smokePositions[idx] = radius * Math.sin(phi) * Math.cos(theta);
+        smokePositions[idx + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        smokePositions[idx + 2] = radius * Math.cos(phi);
+        smokeVelocities[idx] = smokePositions[idx] * 0.662; // Scale for speed
+        smokeVelocities[idx + 1] = smokePositions[idx + 1] * 0.662;
+        smokeVelocities[idx + 2] = smokePositions[idx + 2] * 0.662;
+        smokeSizes[i] = Math.random() * 13 + 6.5; // Larger sizes for smoke
+        smokeLifetimes[i] = Math.random() * 0.2 + 1; // Longer lifetimes for smoke
+      }
+      return { smokePositions, smokeVelocities, smokeSizes, smokeLifetimes };
+    }, []);
+
+  useFrame(({ clock }) => {
+    if (!particleSystemRef.current) return;
+    shaderMaterialRef.current.uniforms.uTime.value = THREE.MathUtils.clamp(
+      shaderMaterialRef.current.uniforms.uTime.value + 0.001,
+      0,
+      1
+    );
+    const geometry = particleSystemRef.current.geometry;
+    const positions = geometry.attributes.position.array;
+    const velocities = geometry.attributes.velocity.array;
+
+    for (let i = 0; i < positions.length; i += 3) {
+      positions[i] += velocities[i];
+      positions[i + 1] += velocities[i + 1];
+      positions[i + 2] += velocities[i + 2];
+    }
+
+    particleSystemRef.current.geometry.attributes.position.needsUpdate = true;
+    if (!smokeParticleSystemRef.current) return;
+    const smokeGeometry = smokeParticleSystemRef.current.geometry;
+    const smokePositions = smokeGeometry.attributes.position.array;
+    const smokeVelocities = smokeGeometry.attributes.velocity.array;
+    const smokeLifetimes = smokeGeometry.attributes.lifetime.array;
+    shaderMaterialRefSmoke.current.uniforms.uTime.value = THREE.MathUtils.clamp(
+      shaderMaterialRefSmoke.current.uniforms.uTime.value + 0.0014,
+      0,
+      1
+    );
+
+    for (let i = 0; i < smokePositions.length; i += 3) {
+      if (smokeLifetimes[i / 3] > 0) {
+        smokePositions[i] += smokeVelocities[i] * 1.25;
+        smokePositions[i + 1] += smokeVelocities[i + 1] * 1.25;
+        smokePositions[i + 2] += smokeVelocities[i + 2] * 1.25;
+        smokeLifetimes[i / 3] -= clock.getDelta(); // Decrease lifetime by the elapsed time
+      } else {
+        // Reset particle logic can go here
+      }
+    }
+    smokeParticleSystemRef.current.geometry.attributes.position.needsUpdate =
+      true;
+    smokeParticleSystemRef.current.geometry.attributes.lifetime.needsUpdate =
+      true;
   });
 
   if (!particlePositions) return null;
 
   return (
     <group position={position}>
-      <points scale={5} ref={particleSystemRef}>
+      <points scale={1} ref={particleSystemRef} renderOrder={0}>
         <bufferGeometry attach="geometry">
           <bufferAttribute
             attach="attributes-position"
             array={particlePositions}
-            count={(particlePositions?.length || 3) / 3}
+            count={numParticles}
             itemSize={3}
           />
           <bufferAttribute
             attach="attributes-velocity"
-            array={new Float32Array(3900 * 3)} // Initialize with zeros
-            count={(1500 * 3) / 3}
+            array={particleVelocities} // Initialize with zeros
+            count={numParticles}
             itemSize={3}
           />
           <bufferAttribute
-          attach="attributes-colour"
-          array={particleColors}
-          count={(particleColors?.length || 3) / 3}
-          itemSize={3}
-        />
-       
+            itemSize={3}
+            array={particleSizes}
+            count={(particleSizes?.length || 3) / 3}
+            attach={"attributes-size"}
+          />
+          <bufferAttribute
+            itemSize={3}
+            array={particleAngles}
+            count={(particleAngles?.length || 3) / 3}
+            attach={"attributes-angle"}
+          />
         </bufferGeometry>
         <shaderMaterial
-          uniforms = {{
-            diffuseTexture: {
-                value: texture
-            },
-            pointMultiplier: {
-                value: pointMultiplier
-            }
-        }}
-          vertexShader={_VS}
-          fragmentShader={_FS}
+          ref={shaderMaterialRef}
+          uniforms={{
+            diffuseTexture: { value: fireTexture },
+            pointMultiplier: { value: pointsMultiplier },
+            uTime: { value: 0.0 },
+          }}
+          vertexShader={explosionVS}
+          fragmentShader={explosionFS}
           transparent
           depthWrite={false}
           depthTest
@@ -195,7 +181,53 @@ export const Explosion = ({ position }: Props) => {
           blendEquation={THREE.AddEquation}
           blendSrc={THREE.OneFactor}
           blendDst={THREE.OneMinusSrcAlphaFactor}
-          blending={THREE.CustomBlending}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+      <points ref={smokeParticleSystemRef} scale={1} renderOrder={1}>
+        <bufferGeometry attach="geometry">
+          <bufferAttribute
+            attach={"attributes-position"}
+            array={smokePositions}
+            count={numSmokeParticles}
+            itemSize={3}
+          />
+          <bufferAttribute
+            attach={"attributes-velocity"}
+            array={smokeVelocities}
+            count={numSmokeParticles}
+            itemSize={3}
+          />
+          <bufferAttribute
+            attach={"attributes-size"}
+            array={smokeSizes}
+            count={numSmokeParticles}
+            itemSize={1}
+          />
+          <bufferAttribute
+            attach={"attributes-lifetime"}
+            array={smokeLifetimes}
+            count={numSmokeParticles}
+            itemSize={1}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          ref={shaderMaterialRefSmoke}
+          attach="material"
+          uniforms={{
+            diffuseTexture: { value: smokeTexture },
+            pointMultiplier: { value: pointsMultiplier },
+            uTime: { value: 0.0 },
+          }}
+          vertexShader={smokeVS}
+          fragmentShader={smokeFS}
+          transparent
+          depthTest={false}
+          depthWrite={false}
+          blendEquation={THREE.AddEquation}
+          blendSrc={THREE.SrcAlphaFactor}
+          blendDst={THREE.OneMinusSrcAlphaFactor}
+          blending={THREE.AdditiveBlending}
         />
       </points>
     </group>

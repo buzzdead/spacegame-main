@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react"
-import useStore from "../../../store/useStore"
+import useStore from "../../../store/UseStore"
 import { useThree } from "@react-three/fiber";
 import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
 import  {ShockWaveEffect} from 'postprocessing'
-import ShockWaveComponent from "../../../postprocessing/shockwave";
+import ShockWaveComponent from "../../../features/Shockwave";
 import { SWave } from "./swave";
 
 interface Props {

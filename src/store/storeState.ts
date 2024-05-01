@@ -1,12 +1,12 @@
 import { Vector3 } from "three";
-import { CelestialObjectId, ConstructionId, SpaceShipId } from "./storeAssets";
+import { CelestialObjectId, ConstructionId, SpaceShipId } from "./StoreAssets";
 import {
   CelestialObject,
   Construction,
   numberVector,
   SelectedShip,
   Ship,
-} from "./spaceGameStateUtils";
+} from "./SpaceGameStateUtils";
 
 export type SelectedEnemy = { id: string; hull: number; position: Vector3 }
 type EnemyShip = { id: string; position: Vector3, nearby: boolean }
