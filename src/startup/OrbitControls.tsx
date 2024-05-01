@@ -22,7 +22,7 @@ export const Collisions = () => {
             if(intersects[0].distance > 10 && isClose) setIsClose(false)
         }
       };
-      useEffect(() => {
+      /* useEffect(() => {
         window.addEventListener('wheel', handleMouseMove)
         window.addEventListener('touchmove', handleMouseMove)
         window.addEventListener('mousemove', handleMouseMove);
@@ -31,6 +31,6 @@ export const Collisions = () => {
           window.removeEventListener('wheel', handleMouseMove)
           window.addEventListener('touchmove', handleMouseMove)
         };
-      }, [handleMouseMove]);
-      return  <OrbitControls panSpeed={isClose ? 0.01 : 0.5} zoomSpeed={isClose ? 0.01 : 1} rotateSpeed={isClose ? 0.01 : 0.35} onPointerMove={handleMouseMove}/>
+      }, [handleMouseMove]); */
+      return  <OrbitControls panSpeed={isClose ? 0.01 : 0.5} zoomSpeed={isClose ? 0.01 : 1} rotateSpeed={isClose ? 0.01 : 0.35} />
 }
