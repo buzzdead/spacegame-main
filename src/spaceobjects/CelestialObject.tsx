@@ -19,6 +19,8 @@ const handleSetDestination = () => {
   const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : "Harvest"
   setDestination(position, type)
 }
+
+console.log("rendering celestial")
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleSetDestination} ref={meshRef} position={position}>

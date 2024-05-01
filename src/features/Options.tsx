@@ -23,8 +23,8 @@ export const Options = ({onClose, visible}: Props) => {
     <Modal
         onCancel={onClose}
         onOk={handleModalOk}
-        visible={visible}
-        bodyStyle={{height: 100}}
+        open={visible}
+        styles={{body: {height: 100}}}
       >
         <Checkbox
           onClick={() => setEnablePostProcessing(!enablePostprocessing)}

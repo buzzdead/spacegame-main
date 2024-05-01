@@ -9,7 +9,7 @@ import {
 } from "./SpaceGameStateUtils";
 
 export type SelectedEnemy = { id: string; hull: number; position: Vector3 }
-type EnemyShip = { id: string; position: Vector3, nearby: boolean }
+export type EnemyShip = { id: string; position: Vector3, nearby: boolean }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
 
 export type CelestialObjectState = {

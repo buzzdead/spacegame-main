@@ -24,6 +24,8 @@ const Construction: FC<Props> = ({ construction }) => {
     menu.current = !menu.current
   }
 
+  console.log("rendering construction")
+
   return (
     <Suspense fallback={null}>  
       <mesh ref={meshRef} position={position}>

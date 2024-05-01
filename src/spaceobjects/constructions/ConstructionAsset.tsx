@@ -35,6 +35,7 @@ const ConstructionAsset = ({ shouldRender, glbPath, x, scale }: Props) => {
     <mesh>
       <Text
         ref={textRef}
+        font='./assets/AGENTORANGE.TTF'
         position={[
           scene.position.x,
           scene.position.y + 5,
