@@ -13,6 +13,8 @@ import Explosion from "../tools/Explosion";
 import { SWave } from "./EnemyShip/swave";
 import { EffectComposer } from "@react-three/postprocessing";
 import { ParticleSystem } from "../tools/particlesystem";
+import { SelectedShip } from "../tools/SelectedShip";
+import Navigation from "./UseNavigation";
 
 interface Props {
   ship: SGS["Ship"];
@@ -20,47 +22,22 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship, scene }) => {
-  const { setSelected, selected, setShipRef } = useShallowStore([
+  const { setSelected, setShipRef, removeShip } = useShallowStore([
     "setSelected",
-    "selected",
     "setShipRef",
+    "removeShip"
   ]);
 
   const { position } = ship;
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [destroyed, setDestroyed] = useState(false)
-  const {
-    isHarvesting,
-    isReturning,
-    isFighting,
-    isTraveling,
-    calculateDirectionAndRotation,
-    shipsDestination,
-    shipsOrigin,
-    updateShipPosition,
-    setIsFighting
-  } = UseNavigation({ shipId: ship.id, meshRef, shipType: ship.assetId });
+  const [isSelected, setIsSelected] = useState(false)
 
-  const selectD = selected.find((s) => s.id === ship.id);
   const isFighter = ship.assetId === "fighter";
   const isHawk = ship.assetId === "hawk"
+  console.log("rendering ship", ship.id)
 
-  useFrame(() => {
-    if (
-      meshRef.current &&
-      shipsDestination &&
-      shipsOrigin &&
-      (isTraveling || isReturning)
-    ) {
-      if(!meshRef.current.name) {meshRef.current.name = ship.id}
-      const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
-      const { direction, targetQuaternion } =
-        calculateDirectionAndRotation(targetPosition);
 
-      direction &&
-        updateShipPosition(direction, targetQuaternion, targetPosition);
-    }
-  });
 
   const handleOnClick = (e: any) => {
     e.stopPropagation();
@@ -70,39 +47,19 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   useEffect(() => {
     setShipRef(meshRef.current, ship.id)
   }, [meshRef])
+  useEffect(() => {
+    if(destroyed)
+      
+      setTimeout(() => {removeShip(ship.id, true); scene.removeFromParent()}, 5000)
+  }, [destroyed])
   if(destroyed) return <Explosion position={meshRef.current?.position || new Vector3(0,0,0)}/>
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleOnClick} ref={meshRef} position={position}>
         <ShipHull friend destroyShip={() =>{setDestroyed(true);}} shipId={ship.id}/>
-        <ShipSound
-          isHarvesting={isHarvesting}
-          isReturning={isReturning}
-          isTraveling={isTraveling}
-          meshRef={meshRef}
-        />
-        {selectD && (
-          <SelectedIcon
-            color={0x00ff80}
-            position={
-              isFighter ? new Vector3(-8, 2.5, -1.5) : new Vector3(0, 2.5, 2)
-            }
-          />
-        )}
+        <SelectedShip shipId={ship.id} isFighter={isFighter} onSelected={(b) => setIsSelected(b)}/>
+        <Navigation shipId={ship.id} isSelected={isSelected} meshRef={meshRef} shipType={ship.assetId}/>
         <primitive object={scene} />
-        {(isFighter || ship.assetId === "hawk") && (
-          <LaserCannon
-            position={meshRef.current ? meshRef.current.position : new Vector3(0,0,0)}
-            setFightDone={() => setIsFighting(false)}
-            target={shipsDestination || new Vector3(0,0,0)}
-            color={isHawk ? 'green' : 'red'}
-            fire={isFighting}
-          />
-        )}
-        {(isTraveling || isReturning) && <Ignition type={ship.assetId} />}
-        {isHarvesting && ship.assetId !== "fighter" && (
-          <HarvestLaser isHarvesting={isHarvesting} />
-        )}
       </mesh>
     </Suspense>
   );

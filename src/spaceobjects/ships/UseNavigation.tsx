@@ -2,15 +2,21 @@ import { useEffect, useState } from "react";
 import { Vector3, Quaternion } from 'three'
 import { useShallowStore } from "../../store/UseStore";
 import { SpaceShipId } from "../../store/StoreAssets";
+import { useFrame } from "@react-three/fiber";
+import ShipSound from "./ShipSound";
+import { LaserCannon } from "../weapons/LaserCannon";
+import { Ignition } from "../tools/Ignition";
+import { HarvestLaser } from "../tools/HarvestLaser";
 
 interface Props {
   shipType: SpaceShipId
   shipId: string
   meshRef: any
+  isSelected: boolean
 }
 
-const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
-    const { destination, setResources, origin, selected, setSelected} = useShallowStore(["destination", "setResources", "origin", "selected", "setSelected"])
+const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
+    const { destination, setResources, origin, setSelected} = useShallowStore(["destination", "setResources", "origin", "setSelected"])
     const [isTraveling, setIsTraveling] = useState(false);
     const [isReturning, setIsReturning] = useState(false);
     const [isFighting, setIsFighting] = useState(false)
@@ -20,7 +26,7 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
     const isFighter = (shipType === "fighter" || shipType === "hawk")
 
     useEffect(() => {
-      if (!selected.find((s) => s.id === shipId)) return;
+      if (!isSelected) return;
       if (destination && destination.pos !== shipsDestination) {
         if(isFighting) setIsFighting(false)
         setShipsDestination(destination.pos);
@@ -92,7 +98,44 @@ const UseNavigation = ({shipId, meshRef, shipType}: Props) => {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
       };
 
-      return { isHarvesting, isReturning, isTraveling, shipsOrigin, shipsDestination, calculateDirectionAndRotation, updateShipPosition, isFighting, setIsFighting }
+      useFrame(() => {
+        if (
+          meshRef.current &&
+          shipsDestination &&
+          shipsOrigin &&
+          (isTraveling || isReturning)
+        ) {
+          if(!meshRef.current.name) {meshRef.current.name = shipId}
+          const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
+          const { direction, targetQuaternion } =
+            calculateDirectionAndRotation(targetPosition);
+    
+          direction &&
+            updateShipPosition(direction, targetQuaternion, targetPosition);
+        }
+      });
+
+      return <group>
+        <ShipSound
+          isHarvesting={isHarvesting}
+          isReturning={isReturning}
+          isTraveling={isTraveling}
+          meshRef={meshRef}
+        />
+        {(isFighter) && (
+          <LaserCannon
+            position={meshRef.current ? meshRef.current.position : new Vector3(0,0,0)}
+            setFightDone={() => setIsFighting(false)}
+            target={shipsDestination || new Vector3(0,0,0)}
+            color={shipType === "hawk" ? 'green' : 'red'}
+            fire={isFighting}
+          />
+        )}
+         {(isTraveling || isReturning) && <Ignition type={shipType} />}
+        {isHarvesting && shipType !== "fighter" && (
+          <HarvestLaser isHarvesting={isHarvesting} />
+        )}
+      </group>
 }
 
-export default UseNavigation
+export default Navigation

@@ -4,6 +4,6 @@ import { useMemo } from 'react';
 export const useAsset = (glbPath: string, scale: number) => {
     const { scene } = useGLTF(glbPath)
     scene.scale.set(scale, scale, scale)
-    const clone = useMemo(() => scene.clone(), [scene])
+    const clone = scene.clone()
     return clone
 }

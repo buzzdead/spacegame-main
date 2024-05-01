@@ -17,14 +17,14 @@ export const Explosion = ({ position }: Props) => {
 
   const { vs: smokeVS, fs: smokeFS } = Shader("explosion-smoke");
   const { vs: explosionVS, fs: explosionFS } = Shader("explosion");
-  const fireTexture = useTexture("/assets/fire.png");
+  const fireTexture = useTexture("/assets/fire1.png");
   const smokeTexture = useTexture("/assets/blackSmoke00.png");
   const pointsMultiplier = useMemo(() => {
     return (
       window.innerHeight / (2.0 * Math.tan((0.5 * 60.0 * Math.PI) / 180.0))
     );
   }, []);
-
+  console.log("starting explosion")
   const numParticles = 1500;
   const numSmokeParticles = 45;
   const {

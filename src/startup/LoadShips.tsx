@@ -4,6 +4,7 @@ import useStore from "../store/UseStore";
 import { ShipScene } from "../spaceobjects/ships/ShipScene";
 import { Vector3 } from 'three'
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
+import { LoadEnemyShips } from "./LoadEnemyShips";
 
 interface Props {
   startShip: SpaceShipId;
@@ -12,27 +13,19 @@ interface Props {
 export const LoadShips = ({ startShip }: Props) => {
   const ships = useStore((state) => state.ships);
   const addShip = useStore((state) => state.addShip);
-  const addEnemyShip = useStore((state) => state.addEnemyShip)
-  const enemyShips = useStore((state) => state.enemyShips)
-  
+
   useEffect(() => {
     if(ships.length > 0) return
     addShip(startShip, [8, 1, 0], 100, 0.014);
     addShip(startShip, [10, 2, 12], 100, 0.014);
     addShip(startShip, [12, 3, 24], 100, 0.014);
-    addEnemyShip(new Vector3(155, 55, 0))
-    addEnemyShip(new Vector3(185, 55, 155))
-    addEnemyShip(new Vector3(215, 55, 255))
-    addEnemyShip(new Vector3(255, 85, 300))
   }, [addShip, startShip]);
   return (
     <group>
       {ships.map((ship) => (
         <ShipScene key={ship.id} ship={ship} />
       ))}
-      {enemyShips.map((ship) => (
-        <EnemyShipScene key={ship.id} id={ship.id} position={ship.position}/>
-      ))}
+      <LoadEnemyShips />
     </group>
   );
 };

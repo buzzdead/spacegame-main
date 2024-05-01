@@ -38,7 +38,7 @@ export type CelestialObjectState = {
     setSelected: (id: string) => void;
     selectedEnemies: SelectedEnemy[];
     setSelectedEnemies: (a: SelectedEnemy) => void;
-    removeShip: (id: string) => void
+    removeShip: (id: string, friend?: boolean) => void
   };
   
  export  type ConstructionState = {
