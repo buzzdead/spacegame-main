@@ -20,10 +20,8 @@ import Nebula, {
   Radius,
 } from 'three-nebula';
 
-async function createBeamWeapon(scene: any) {
+async function createBeamWeapon(scene: THREE.Scene, texture: THREE.Texture) {
   const nebula = new Nebula();
-  const particle = require('./fire1.png')
-  const texture = new THREE.TextureLoader().load(particle);
   function createSprite() {
     var material = new THREE.SpriteMaterial({
       map: texture,
@@ -70,8 +68,9 @@ const zone = new PointZone(0, 0);
 // Usage in your React component
 interface Props {
     position: THREE.Vector3
+    texture: THREE.Texture
 }
-export const BeamWeapon = ({ position }: Props) => {
+export const BeamWeapon = ({ position, texture }: Props) => {
   const { scene } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>()
   const stopEmit = useRef(false)
@@ -93,7 +92,7 @@ export const BeamWeapon = ({ position }: Props) => {
   });
 
   useEffect(() => {
-    createBeamWeapon(scene).then((nebulaSystem) => {
+    createBeamWeapon(scene, texture).then((nebulaSystem) => {
       setParticleSystem(nebulaSystem)
       nebulaSystem.setPosition(position);
       nebulaSystem.setDirection(new THREE.Vector3(0, 0, 1));

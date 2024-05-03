@@ -18,7 +18,7 @@ export const EnemyShip = ({shipId, eScene, position, nearby}: Props) => {
   const { setDestination, setSelectedEnemies, removeShip, setExplosions } = useShallowStore(["setDestination", "setSelectedEnemies", "removeShip", "setExplosions"])
   const { camera, scene } = useThree()
   const [fire, setFire] = useState(false)
-  const texture = useTexture.preload("/assets/fire.jpg");
+  const texture = useTexture.preload("/assets/fire1.png");
   const [destroyed, setDestroyed] = useState(false);
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
