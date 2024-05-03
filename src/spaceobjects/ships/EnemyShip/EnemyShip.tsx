@@ -35,18 +35,16 @@ export const EnemyShip = ({shipId, eScene, position, nearby}: Props) => {
   const destroyShip = () => {
     setDestroyed(true);
     setExplosions(position)
+    removeShip(shipId); scene.removeFromParent()
     explosionSound?.play()
-    setTimeout(() => setDestroyed(false),  5000)
+    //setTimeout(() => {setDestroyed(false); setSelectedEnemies({ship: shipId, hull: 100})}, 10000)
   };
   const handleOnClick = (e: any) => {
-    destroyShip();
-    return;
     e.stopPropagation()
     if(e.ctrlKey) setFire(!fire)
     setDestination(position, "Attack");
     setSelectedEnemies({id: shipId, hull: 100, position: position, nearby: false});
   };
-  if(destroyed) return null
   { return (
       <group onClick={handleOnClick}>
         <ShipHull shipId={shipId} destroyShip={destroyShip}/>

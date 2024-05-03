@@ -22,7 +22,7 @@ import Nebula, {
 
 async function createBeamWeapon(scene: any) {
   const nebula = new Nebula();
-  const particle = require('./explosion00.png')
+  const particle = require('./fire1.png')
   const texture = new THREE.TextureLoader().load(particle);
   function createSprite() {
     var material = new THREE.SpriteMaterial({
@@ -36,14 +36,14 @@ async function createBeamWeapon(scene: any) {
 }
 const zone = new PointZone(0, 0);
   const emitter = new Emitter()
-  .setRate(new Rate(new Span(2, 4), new Span(0.1)))
+  .setRate(new Rate(new Span(7, 14), new Span(0.1)))
   .setInitializers([
     new Position(zone),
     new Mass(1),
-    new Radius(5, 10),
-    new Life(.6),
+    new Radius(5, 12),
+    new Life(0.85),
     new Body(createSprite()),
-    new RadialVelocity(5, new Vector3D(0, 1, 0), 180)
+    new RadialVelocity(13, new Vector3D(0, 1, 0), 180)
   ])
   .setBehaviours([new Alpha(1, 0), new Scale(1, 2), new Color(new THREE.Color("white"), new THREE.Color("red"))])
   .emit();
@@ -55,7 +55,7 @@ const zone = new PointZone(0, 0);
   return {
     update: () => nebula.update(),
     setDirection: (direction: THREE.Vector3) => {
-      emitter.addInitializer(new RadialVelocity(5, new Vector3D(direction.x, direction.y, direction.z), 180))
+      emitter.addInitializer(new RadialVelocity(13, new Vector3D(direction.x, direction.y, direction.z), 180))
     },
     setPosition: (position: THREE.Vector3) => {
       emitter.position.set(position.x, position.y, position.z);
@@ -82,7 +82,7 @@ export const BeamWeapon = ({ position }: Props) => {
         if(particleSystem.emitter.life > 100)
         particleSystem.emitter.life = 100
         else {
-          particleSystem.emitter.life -= 5
+          particleSystem.emitter.life -= 2.5
       }
      
       }
@@ -98,7 +98,7 @@ export const BeamWeapon = ({ position }: Props) => {
       nebulaSystem.setPosition(position);
       nebulaSystem.setDirection(new THREE.Vector3(0, 0, 1));
     });
-    setTimeout(() => stopEmit.current = true, 600)
+    setTimeout(() => stopEmit.current = true, 1000)
     // Cleanup function to destroy the particle system when the component unmounts
     return () => {
       if (particleSystem) {
