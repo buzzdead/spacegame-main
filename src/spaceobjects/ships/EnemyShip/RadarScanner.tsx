@@ -10,11 +10,12 @@ import { SWave } from "./swave";
 interface Props {
     setNearbyEnemies: (n: Vector3[]) => void
     origin: Vector3
+    nearby: boolean
 }
 
-export const RadarScanner = ({setNearbyEnemies, origin}: Props) => {
+export const RadarScanner = ({setNearbyEnemies, origin, nearby}: Props) => {
     const [hasNearby, setHasNearby] = useState(false)
-    const [hasNearby2, setHasNearby2] = useState(false)
+    const [hasNearby2, setHasNearby2] = useState(nearby)
     const ships = useStore(state => state.ships)
     const toggleNearby = useStore(state => state.toggleNearby)
     const [scan, setScan] = useState(false)
@@ -29,9 +30,6 @@ export const RadarScanner = ({setNearbyEnemies, origin}: Props) => {
         setNearbyEnemies(nearby)
         setHasNearby2(nearby2.length > 0)
         setHasNearby(nearby.length > 0)
-        
-        
-        
         }
         checkForNearByShips()
         setTimeout(() => setScan(!scan), 1500)

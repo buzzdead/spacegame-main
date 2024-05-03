@@ -1,5 +1,4 @@
 import { memo, useEffect } from "react";
-import { SpaceShipId } from "../store/StoreAssets";
 import useStore from "../store/UseStore";
 import { Vector3 } from 'three'
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
@@ -13,25 +12,21 @@ export const LoadEnemyShips = () => {
     ship: EnemyShip
   }
   
- /*  const MemoizedShip = memo(({ ship }: ShipProps) => <EnemyShipScene position={ship.position} id={ship.id} />, (prevProps, nextProps) => {
-    return prevProps.ship.id === nextProps.ship.id &&
-           // Add other properties that should trigger a re-render
-           prevProps.ship.position.equals(nextProps.ship.position) &&
-           prevProps.ship.hull === nextProps.ship.hull && 
-           prevProps.ship.scale === nextProps.ship.scale
-  }); */
+  const MemoizedShip = memo(({ ship }: ShipProps) => <EnemyShipScene ship={ship} />, (prevProps, nextProps) => {
+    return prevProps.ship.id === nextProps.ship.id && prevProps.ship.nearby === nextProps.ship.nearby
+  });
   
   useEffect(() => {
     if(enemyShips.length > 0) return
-    addEnemyShip(new Vector3(155, 55, 0))
-    addEnemyShip(new Vector3(185, 55, 155))
-    addEnemyShip(new Vector3(215, 55, 255))
-    addEnemyShip(new Vector3(255, 85, 300))
+    addEnemyShip(new Vector3(155, 55, 0), 100)
+    addEnemyShip(new Vector3(185, 55, 155), 100)
+    addEnemyShip(new Vector3(215, 55, 255), 100)
+    addEnemyShip(new Vector3(255, 85, 300), 100)
   }, [addEnemyShip]);
   return (
     <group>
       {enemyShips.map((ship) => (
-        <EnemyShipScene key={ship.id} position={ship.position} id={ship.id}/>
+        <MemoizedShip key={ship.id} ship={ship} />
       ))}
     </group>
   );

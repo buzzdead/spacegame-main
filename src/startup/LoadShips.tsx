@@ -14,11 +14,7 @@ interface ShipProps {
 }
 
 const MemoizedShip = memo(({ ship }: ShipProps) => <ShipScene ship={ship} />, (prevProps, nextProps) => {
-  return prevProps.ship.id === nextProps.ship.id &&
-         // Add other properties that should trigger a re-render
-         prevProps.ship.position.equals(nextProps.ship.position) &&
-         prevProps.ship.hull === nextProps.ship.hull && 
-         prevProps.ship.scale === nextProps.ship.scale
+  return prevProps.ship.id === nextProps.ship.id 
 });
 
 export const LoadShips = ({ startShip }: Props) => {
@@ -37,7 +33,6 @@ export const LoadShips = ({ startShip }: Props) => {
       {ships.map((ship) => (
         <MemoizedShip key={ship.id} ship={ship} />
       ))}
-      <LoadEnemyShips />
     </group>
   );
 };

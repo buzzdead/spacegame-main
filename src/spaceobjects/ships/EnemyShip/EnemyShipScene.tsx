@@ -1,15 +1,15 @@
 import { Vector3 } from "three";
 import { useAsset } from "../../../hooks/Asset";
-import { EnemyShip } from "./EnemyShip";
+import { EnemyShip as ES } from "./EnemyShip";
+import { EnemyShip } from "../../../store/StoreState";
 
 interface Props {
-  position: Vector3;
-  id: string
+  ship: EnemyShip
 }
 
-export const EnemyShipScene = ({ position, id }: Props) => {
+export const EnemyShipScene = ({ ship }: Props) => {
   const esScene = useAsset("/assets/spaceships/cruiser.glb", 1);
-  esScene.position.copy(position);
+  esScene.position.copy(ship.position);
   esScene.scale.set(0.2, 0.2, 0.2);
-  return <EnemyShip position={position} eScene={esScene} shipId={id} />;
+  return <ES nearby={ship.nearby} position={ship.position} eScene={esScene} shipId={ship.id} />;
 };

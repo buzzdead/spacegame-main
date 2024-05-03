@@ -8,8 +8,7 @@ import {
   Ship,
 } from "./SpaceGameStateUtils";
 
-export type SelectedEnemy = { id: string; hull: number; position: Vector3 }
-export type EnemyShip = { id: string; position: Vector3, nearby: boolean }
+export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
 
 export type CelestialObjectState = {
@@ -30,14 +29,14 @@ export type CelestialObjectState = {
       scale?: number
     ) => void;
     enemyShips: EnemyShip[]
-    addEnemyShip: (pos: Vector3) => void
+    addEnemyShip: (pos: Vector3, hull: number) => void
     toggleNearby: (pos: Vector3) => void
     setShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => boolean;
     selected: SelectedShip[];
     setSelected: (id: string) => void;
-    selectedEnemies: SelectedEnemy[];
-    setSelectedEnemies: (a: SelectedEnemy) => void;
+    selectedEnemies: EnemyShip[];
+    setSelectedEnemies: (a: EnemyShip) => void;
     removeShip: (id: string, friend?: boolean) => void
   };
   
@@ -67,7 +66,11 @@ export type CelestialObjectState = {
     postProcessing: boolean
     setPostProcessing: () => void
   }
-  
+
+  export type EffectsState = {
+    explosions: Vector3[]
+    setExplosions: (newExplosion: Vector3, remove?: boolean) => void
+  }
   
   export interface SpaceGameState
     extends CelestialObjectState,
@@ -75,4 +78,6 @@ export type CelestialObjectState = {
       ConstructionState,
       LocationState,
       ResourceState,
-      OptionsState {}
+      OptionsState,
+      EffectsState
+      {}

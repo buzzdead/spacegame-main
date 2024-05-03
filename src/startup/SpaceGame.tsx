@@ -8,7 +8,8 @@ import { Starfield2 } from "./Starfield2";
 import ShockWaveComponent from "../features/Shockwave";
 import { Collisions } from "./OrbitControls";
 import useStore from "../store/UseStore";
-
+import { Effects } from "./Effects";
+import { LoadEnemyShips } from "./LoadEnemyShips";
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
   startShip: "hullspaceship" | "spaceship-evil" | "cargo";
@@ -25,7 +26,8 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
           <LoadCelestialObjects startPlanet={startPlanet} />
           <LoadConstructions />
           <LoadShips startShip={startShip} />
-          {postProcessing && <ShockWaveComponent />}
+          <LoadEnemyShips />
+          <Effects />
         </Suspense>
       </ThreeSetup>
     </div>

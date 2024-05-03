@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
-import { SelectedEnemy, SpaceShipState } from "./StoreState";
+import { EnemyShip, SpaceShipState } from "./StoreState";
 import { Vector3 } from 'three'
 
 
@@ -35,8 +35,8 @@ const useShips: StateCreator<
         return { ships: ship ? [...state.ships.map(s => s.id === shipId ? newShip : s)] : state.ships }
       }),
     enemyShips: [],
-    addEnemyShip: (pos: Vector3) => set((state) => ({
-      enemyShips: [...state.enemyShips, {position: pos, nearby: false, id: state.enemyShips.length.toString()}]
+    addEnemyShip: (pos: Vector3, hull: number) => set((state) => ({
+      enemyShips: [...state.enemyShips, {position: pos, nearby: false, hull: hull, id: state.enemyShips.length.toString()}]
     })),
     toggleNearby: (pos: Vector3) => set((state) => 
       {
@@ -46,6 +46,7 @@ const useShips: StateCreator<
      return { enemyShips: ship ? [...state.enemyShips.map(es => es.position === pos ? ship : es)] : [...state.enemyShips]}
     }),
   dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => {
+    console.log("is it that?")
     let destroyed = false;
     set((state) => {
       const attackedShip = friend ? state.ships.find(e => e.meshRef.position === pos) : state.selectedEnemies?.find(e => e.position === pos)
@@ -54,7 +55,7 @@ const useShips: StateCreator<
       destroyed = newHull <= n;
       attackedShip.hull = newHull
       const updatedShips = friend ? state.ships.map(s => s.id === attackedShip.id ? attackedShip : s)  : state.selectedEnemies.map(m => m.id === attackedShip.id ? attackedShip : m)
-      return friend ? {ships: updatedShips as Ship[] } : { selectedEnemies: updatedShips as SelectedEnemy[] };
+      return friend ? {ships: updatedShips as Ship[] } : { selectedEnemies: updatedShips as EnemyShip[] };
     });
     return destroyed;
   },
@@ -68,9 +69,9 @@ const useShips: StateCreator<
       ),
     })),
   selectedEnemies: [],
-  setSelectedEnemies: (a: SelectedEnemy) => {
+  setSelectedEnemies: (a: EnemyShip) => {
     const b = 0;
-
+    console.log("is it this?")
     set((state) => {
       const alreadySelected = state.selectedEnemies?.find(e => e.id === a.id)
       const newShips = alreadySelected ? [...state.selectedEnemies] : [...state.selectedEnemies, a]

@@ -2,7 +2,7 @@ import {StateCreator} from "zustand";
 import SpaceGameStateUtils from "./SpaceGameStateUtils";
 import { OptionsState } from "./StoreState";
 
-const useConstructions: StateCreator<
+const useOptions: StateCreator<
   OptionsState,
   [],
   [],
@@ -15,4 +15,4 @@ const useConstructions: StateCreator<
 })
 
 
-export default useConstructions;
+export default useOptions;
