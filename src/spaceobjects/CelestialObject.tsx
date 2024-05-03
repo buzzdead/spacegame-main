@@ -20,7 +20,6 @@ const handleSetDestination = () => {
   setDestination(position, type)
 }
 
-console.log("rendering celestial")
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleSetDestination} ref={meshRef} position={position}>

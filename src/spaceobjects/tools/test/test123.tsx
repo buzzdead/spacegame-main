@@ -29,7 +29,6 @@ async function createBeamWeapon(scene: THREE.Scene, texture: THREE.Texture) {
       blending: THREE.AdditiveBlending,
       fog: true
     });
-    console.log(material)
     return new THREE.Sprite(material);
 }
 const zone = new PointZone(0, 0);

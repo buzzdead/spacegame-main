@@ -35,7 +35,6 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 
   const isFighter = ship.assetId === "fighter";
   const isHawk = ship.assetId === "hawk"
-  console.log("rendering ship", ship.id)
 
 
 

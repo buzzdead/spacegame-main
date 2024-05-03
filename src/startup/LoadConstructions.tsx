@@ -1,6 +1,15 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import useStore from "../store/UseStore";
 import Construction from "../spaceobjects/constructions/Construction";
+import { Construction as C } from "../store/SpaceGameStateUtils";
+
+interface CProps {
+  c: C
+}
+
+const MemoizedC = memo(({ c }: CProps) => <Construction construction={c} />, (prevProps, nextProps) => {
+  return prevProps.c.id === nextProps.c.id 
+});
 
 export const LoadConstructions = () => {
   const constructions = useStore((state) => state.constructions);
@@ -12,7 +21,7 @@ export const LoadConstructions = () => {
   return (
     <group>
       {constructions.map((construction) => (
-        <Construction key={construction.id} construction={construction} />
+        <MemoizedC key={construction.id} c={construction} />
       ))}
     </group>
   );

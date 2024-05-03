@@ -17,7 +17,6 @@ export const SelectedShip = ({ shipId, onSelected, isFighter }: Props) => {
 
   useEffect(() => {
     if (selected.find((s) => s.id === shipId) && !isSelected){
-      console.log("uh")
       setIsSelected(true); onSelected(true);}
     else if (!selected.find((s) => s.id === shipId) && isSelected){
       setIsSelected(false); onSelected(false)}

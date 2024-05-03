@@ -46,7 +46,6 @@ const useShips: StateCreator<
      return { enemyShips: ship ? [...state.enemyShips.map(es => es.position === pos ? ship : es)] : [...state.enemyShips]}
     }),
   dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => {
-    console.log("is it that?")
     let destroyed = false;
     set((state) => {
       const attackedShip = friend ? state.ships.find(e => e.meshRef.position === pos) : state.selectedEnemies?.find(e => e.position === pos)
@@ -71,7 +70,6 @@ const useShips: StateCreator<
   selectedEnemies: [],
   setSelectedEnemies: (a: EnemyShip) => {
     const b = 0;
-    console.log("is it this?")
     set((state) => {
       const alreadySelected = state.selectedEnemies?.find(e => e.id === a.id)
       const newShips = alreadySelected ? [...state.selectedEnemies] : [...state.selectedEnemies, a]
