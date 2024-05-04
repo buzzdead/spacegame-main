@@ -5,6 +5,7 @@ import { SGS, useShallowStore } from '../../store/UseStore';
 import SelectedIcon from '../tools/pyramidMesh';
 import { useAsset } from '../../hooks/Asset';
 import { ConstructionMenu } from './ConstructionMenu';
+import { spaceShips } from '../../store/StoreAssets';
 
 interface Props {
   construction: SGS['Construction'];
@@ -15,6 +16,9 @@ const Construction: FC<Props> = ({ construction }) => {
   const { glbPath, position, scale } = construction;
   const meshRef = useRef<ElementRef<'mesh'>>(null);
   const scene = useAsset(glbPath, scale || 1)
+  const ships = spaceShips;
+  const fighter = ships.find((e) => e.id === "fighter");
+  const constructionAsset = useAsset(fighter?.glbPath || "", 8)
   const menu = useRef(false)
   const handleClick = (e: any) => {
     e.stopPropagation()
