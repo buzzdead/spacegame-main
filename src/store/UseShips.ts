@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
-import { EnemyShip, SpaceShipState } from "./StoreState";
+import { DamageReport, EnemyShip, SpaceShipState } from "./StoreState";
 import { Vector3 } from 'three'
 
 
@@ -51,12 +51,12 @@ const useShips: StateCreator<
      return { enemyShips: ship ? [...state.enemyShips.map(es => es.position === pos ? ship : es)] : [...state.enemyShips]}
     }),
   dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => {
-    let destroyed = false;
+    let destroyed: DamageReport = "Hit";
     set((state) => {
       const attackedShip = friend ? state.ships.find(e => e.meshRef.position === pos) : state.selectedEnemies?.find(e => e.position === pos)
-      if (!attackedShip) return friend ? { ships:[...state.ships] } : { selectedEnemies: [ ...state.selectedEnemies ] }
+      if (!attackedShip) {destroyed = "Not Found"; return friend ? { ships:[...state.ships] } : { selectedEnemies: [ ...state.selectedEnemies ] }}
       const newHull = attackedShip?.hull - n;
-      destroyed = newHull <= n;
+      destroyed = newHull <= n ? "Destroyed" : "Hit";
       attackedShip.hull = newHull
       const updatedShips = friend ? state.ships.map(s => s.id === attackedShip.id ? attackedShip : s)  : state.selectedEnemies.map(m => m.id === attackedShip.id ? attackedShip : m)
       return friend ? {ships: updatedShips as Ship[] } : { selectedEnemies: updatedShips as EnemyShip[] };

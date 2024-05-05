@@ -11,6 +11,7 @@ import {
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
 export type ObjectType = "Ship" | "Construction"
+export type DamageReport = "Destroyed" | "Hit" | "Not Found"
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -34,7 +35,7 @@ export type CelestialObjectState = {
     toggleNearby: (pos: Vector3, newPos: Vector3) => void
     setShipRef: (ref: any, shipId: string) => void
     setEnemyShipRef: (ref: any, shipId: string) => void
-    dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => boolean;
+    dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => DamageReport;
     selected: SelectedShip[];
     setSelected: (id: string) => void;
     selectedEnemies: EnemyShip[];
@@ -51,7 +52,7 @@ export type CelestialObjectState = {
       scale?: number
     ) => void;
     removeConstruction: (coId: string) => void
-    dealDamageToConstruction: (pos: Vector3, n: number) => boolean
+    dealDamageToConstruction: (pos: Vector3, n: number) => DamageReport
   };
   
   export type LocationState = {

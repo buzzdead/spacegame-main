@@ -91,7 +91,7 @@ const Laser = ({
         scene.remove(mesh);
         mesh.removeFromParent();
         setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));
-        if (!destroyed) {
+        if (destroyed === "Hit") {
           setTimeout(() => setAutoAttack(!autoAttack), 150);
         } else {
           setLaserMeshes([]);
