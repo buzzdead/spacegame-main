@@ -16,7 +16,8 @@ export interface Construction {
     glbPath: string
     position: Vector3
     scale?: number
-    type: "Refinary" | "Construction"
+    hull: number
+    type: "Refinary" | "Construction" | "Enemy"
 }
 
 export interface Ship {
@@ -42,12 +43,12 @@ class SpaceGameStateUtils {
         return [...ships]
     }
 
-    static addConstructionToState(currentConstructions: Construction[], constructionId: string, nv: numberVector, type: "Refinary" | "Construction", scale = 1): Construction[] {
+    static addConstructionToState(currentConstructions: Construction[], constructionId: string, nv: numberVector, type: Construction["type"], scale = 1): Construction[] {
         const position = createVector3(nv)
         const construction = constructions.find(construction => construction.id === constructionId)
         const newConstructionId = currentConstructions.length + 1
         if (construction) {
-            const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale, type: type }
+            const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale, hull: 100, type: type }
             return [...currentConstructions, newConstruction]
         }
         return [...currentConstructions]

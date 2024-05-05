@@ -17,7 +17,7 @@ const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => {
 
 const handleSetDestination = () => {
   const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : "Harvest"
-  setDestination(position, type)
+  setDestination(position, type, "Ship")
 }
 
   return (

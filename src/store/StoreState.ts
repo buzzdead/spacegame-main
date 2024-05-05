@@ -8,8 +8,9 @@ import {
   Ship,
 } from "./SpaceGameStateUtils";
 
-export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number }
+export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
+export type ObjectType = "Ship" | "Construction"
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -30,13 +31,14 @@ export type CelestialObjectState = {
     ) => void;
     enemyShips: EnemyShip[]
     addEnemyShip: (pos: Vector3, hull: number) => void
-    toggleNearby: (pos: Vector3) => void
+    toggleNearby: (pos: Vector3, newPos: Vector3) => void
     setShipRef: (ref: any, shipId: string) => void
+    setEnemyShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => boolean;
     selected: SelectedShip[];
     setSelected: (id: string) => void;
     selectedEnemies: EnemyShip[];
-    setSelectedEnemies: (a: EnemyShip) => void;
+    setSelectedEnemies: (a: EnemyShip, remove?: boolean) => void;
     removeShip: (id: string, friend?: boolean) => void
   };
   
@@ -45,16 +47,18 @@ export type CelestialObjectState = {
     addConstruction: (
       coId: ConstructionId,
       position: numberVector,
-      type: "Refinary" | "Construction",
+      type: "Refinary" | "Construction" | "Enemy",
       scale?: number
     ) => void;
+    removeConstruction: (coId: string) => void
+    dealDamageToConstruction: (pos: Vector3, n: number) => boolean
   };
   
   export type LocationState = {
     origin: Vector3 | undefined;
-    destination: {pos: Vector3, type: DestinationType} | undefined;
+    destination: {pos: Vector3, type: DestinationType, objectType: ObjectType} | undefined;
     setOrigin: (pos: Vector3 | undefined) => void;
-    setDestination: (pos: Vector3, type: DestinationType) => void;
+    setDestination: (pos: Vector3, type: DestinationType, objectType: ObjectType) => void;
   };
   
   export type ResourceState = {

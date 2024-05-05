@@ -30,6 +30,8 @@ export const constructions =  (<T>(p: readonly Asset<T>[]) => p)([
     { id: "spacestation3", glbPath: 'assets/constructions/spacestation3.glb'},
     { id: "spacestation4", glbPath: 'assets/constructions/spacestation4.glb'},
     { id: "spacestation5", glbPath: 'assets/constructions/spacestation5.glb'},
+    { id: "spacestation6", glbPath: 'assets/constructions/spacestation6.glb'},
+    { id: "spacestation7", glbPath: 'assets/constructions/spacestation7.glb'},
 ] as const)
 
 export type CelestialObjectId = typeof celestialObjects[number]["id"]

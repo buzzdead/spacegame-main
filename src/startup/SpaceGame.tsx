@@ -16,7 +16,6 @@ interface Props {
 }
 
 const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
-  const postProcessing = useStore((state) => state.postProcessing);
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />

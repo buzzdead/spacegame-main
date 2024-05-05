@@ -7,14 +7,15 @@ interface Props {
   color: THREE.Color;
   origin: THREE.Vector3;
   nearby: boolean
+  currentPos: THREE.Vector3
 }
 
-export const EnemyShipSystem = ({ color, origin, nearby }: Props) => {
+export const EnemyShipSystem = ({ color, origin, nearby, currentPos }: Props) => {
     const [nearbyEnemies, setNearbyEnemies] = useState<THREE.Vector3[]>([])
   return (
     <group>
       <HeavyLaser color={color} origin={origin} target={nearbyEnemies[0]} />
-      <RadarScanner nearby={nearby} origin={origin} setNearbyEnemies={setNearbyEnemies}/>
+      <RadarScanner currentPos={currentPos} nearby={nearby} origin={origin} setNearbyEnemies={setNearbyEnemies}/>
     </group>
   );
 };

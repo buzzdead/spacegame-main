@@ -39,7 +39,7 @@ export class ShockWaveEffect extends Effect {
 
 	constructor(camera, position, {
 		speed = 1.5,
-		maxRadius = 152.0,
+		maxRadius = 552.0,
 		waveSize = 0.2,
 		amplitude = 0.05
 	} = {}) {
@@ -293,7 +293,8 @@ export class ShockWaveEffect extends Effect {
 			if(uActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = camera.position.distanceTo(meanVector);
+				uniforms.get("cameraDistance").value = 100
+				console.log(uniforms.get("cameraDistance").value)
 
 				// Calculate the screen position of the shock wave.
 				v.copy(position[i]).project(camera);

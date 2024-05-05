@@ -9,7 +9,7 @@ interface Props {
 
 export const EnemyShipScene = ({ ship }: Props) => {
   const esScene = useAsset("/assets/spaceships/cruiser.glb", 1);
-  esScene.position.copy(ship.position);
   esScene.scale.set(0.2, 0.2, 0.2);
-  return <ES nearby={ship.nearby} position={ship.position} eScene={esScene} shipId={ship.id} />;
+  esScene.rotation.set(0, -1.55, 0);
+  return <ES eScene={esScene} enemyShip={ship} />;
 };

@@ -27,7 +27,12 @@ const useShips: StateCreator<
       if(friend) return {ships: [...state.ships.filter(s => s.id !== id)]}
       else return { enemyShips: [...state.enemyShips.filter(e => e.id !== id)]}
     }),
-
+    setEnemyShipRef: (shipRef: any, shipId: string) => 
+      set((state) => {
+        const ship = state.enemyShips.find(es => es.id === shipId)
+        const newShip = {...(ship as EnemyShip & { meshRef: any }), meshRef: shipRef}
+        return { enemyShips: ship ? state.enemyShips.map(es => es.id === shipId ? newShip : es) : state.enemyShips}
+      }),
     setShipRef: (shipRef: any, shipId: string) => 
       set((state) => {
         const ship = state.ships.find(s => s.id === shipId)
@@ -38,10 +43,10 @@ const useShips: StateCreator<
     addEnemyShip: (pos: Vector3, hull: number) => set((state) => ({
       enemyShips: [...state.enemyShips, {position: pos, nearby: false, hull: hull, id: state.enemyShips.length.toString()}]
     })),
-    toggleNearby: (pos: Vector3) => set((state) => 
+    toggleNearby: (pos: Vector3, newPos: Vector3) => set((state) => 
       {
         const ship = state.enemyShips.find(s => s.position === pos)
-        if(ship) ship.nearby = !ship.nearby
+        if(ship) {ship.nearby = !ship.nearby;}
 
      return { enemyShips: ship ? [...state.enemyShips.map(es => es.position === pos ? ship : es)] : [...state.enemyShips]}
     }),
@@ -68,9 +73,10 @@ const useShips: StateCreator<
       ),
     })),
   selectedEnemies: [],
-  setSelectedEnemies: (a: EnemyShip) => {
+  setSelectedEnemies: (a: EnemyShip, remove = false) => {
     const b = 0;
     set((state) => {
+      if(remove) return { selectedEnemies: state.selectedEnemies.filter(e => e.id !== a.id)}
       const alreadySelected = state.selectedEnemies?.find(e => e.id === a.id)
       const newShips = alreadySelected ? [...state.selectedEnemies] : [...state.selectedEnemies, a]
       return {

@@ -1,19 +1,17 @@
 import { useEffect, useRef, useState } from "react"
 import useStore from "../../../store/UseStore"
-import { useThree } from "@react-three/fiber";
 import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
-import  {ShockWaveEffect} from 'postprocessing'
-import ShockWaveComponent from "../../../features/Shockwave";
 import { SWave } from "./swave";
 
 interface Props {
     setNearbyEnemies: (n: Vector3[]) => void
     origin: Vector3
     nearby: boolean
+    currentPos: Vector3
 }
 
-export const RadarScanner = ({setNearbyEnemies, origin, nearby}: Props) => {
+export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Props) => {
     const [hasNearby, setHasNearby] = useState(false)
     const [hasNearby2, setHasNearby2] = useState(nearby)
     const ships = useStore(state => state.ships)
@@ -26,7 +24,7 @@ export const RadarScanner = ({setNearbyEnemies, origin, nearby}: Props) => {
         const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 50).map(e => e.meshRef.position)
         const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 75).map(e => e.meshRef.position)
         const isNear = nearby2.length > 0
-        isNear !== hasNearby2 && toggleNearby(origin)
+        isNear !== hasNearby2 && toggleNearby(origin, currentPos)
         setNearbyEnemies(nearby)
         setHasNearby2(nearby2.length > 0)
         setHasNearby(nearby.length > 0)

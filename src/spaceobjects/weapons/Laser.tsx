@@ -6,7 +6,7 @@ import Shader from "../../postprocessing/Shader";
 
 interface Props {
   origin: any;
-  target: any;
+  target: {pos: THREE.Vector3, objectType: "Ship" | "Construction"}
   color: string;
   laserSound: any;
   setFightDone: () => void;
@@ -33,10 +33,12 @@ const Laser = ({
   const { scene } = useThree();
   const [autoAttack, setAutoAttack] = useState(false);
   const dealDamageToEnemy = useStore((state) => state.dealDamageToEnemy);
+  const dealDamageToConstruction = useStore((state) => state.dealDamageToConstruction)
   const laserRef = useRef<any>(scene);
   const [laserMeshes, setLaserMeshes] = useState<arr>([]);
   const laserGeometry = new THREE.BoxGeometry(0.2, 0.2, 5);
   const {vs, fs} = Shader("laser-cannon")
+  console.log(target)
   const gradientMaterial = new THREE.ShaderMaterial({
     uniforms: {
       color1: { value: new THREE.Color(color) }, // Use the provided color prop
@@ -52,7 +54,7 @@ const Laser = ({
   const laserMesh = new THREE.Mesh(laserGeometry, gradientMaterial);
   laserMesh.position.x -= second ? 10.8 : 5;
   laserMesh.position.z += 3;
-  const distance = origin.distanceTo(target);
+  const distance = origin.distanceTo(target.pos);
   useEffect(() => {
     if (!fire) return;
   
@@ -84,7 +86,8 @@ const Laser = ({
 
       // Deal damage to the target
       if (mesh.position.z >= distance) {
-        const destroyed = dealDamageToEnemy(target, 5);
+        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.pos, 5) : dealDamageToConstruction(target.pos, 5)
+        console.log(destroyed)
         scene.remove(mesh);
         mesh.removeFromParent();
         setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));

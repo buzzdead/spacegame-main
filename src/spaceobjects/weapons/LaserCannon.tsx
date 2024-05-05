@@ -7,7 +7,7 @@ import { useThree } from "@react-three/fiber";
 interface Props {
     position: Vector3
     fire: boolean
-    target: Vector3
+    target: {pos: Vector3, objectType: "Ship" | "Construction"}
     setFightDone: () => void
     color?: string
 }

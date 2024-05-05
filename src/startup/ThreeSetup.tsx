@@ -1,7 +1,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-
 import { Environment } from "@react-three/drei";
 
 interface Props {

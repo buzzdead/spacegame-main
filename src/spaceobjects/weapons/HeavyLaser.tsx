@@ -45,7 +45,7 @@ const HeavyLaser = ({ color, target, origin}: Props) => {
   });
 
   return (
-    <mesh position={origin} ref={laserRef} geometry={laserGeometry} material={laserMaterial} scale={[3, 3, 3]} />
+    <mesh  ref={laserRef} geometry={laserGeometry} material={laserMaterial} scale={[3, 3, 3]} />
   );
 };
 

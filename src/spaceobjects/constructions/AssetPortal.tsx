@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useShallowStore } from "../../store/UseStore";
 import * as THREE from 'three'
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
+import UseSoundEffect from "../../hooks/SoundEffect";
 
 interface Props {
     assetPosition: THREE.Vector3
@@ -10,12 +11,19 @@ interface Props {
 
 export const AssetPortal = ({assetPosition, x}: Props) => {
   const [clicked, setClicked] = useState(false);
+  const {scene, camera} = useThree()
   const { ships, addShip, setResources } = useShallowStore([
     "addShip",
     "ships",
     "setResources",
   ]);
-
+  const { sound: fighterSound, calculateVolume: calculateFighterSound } =
+  UseSoundEffect({
+    sfxPath: "/assets/sounds/fighter.mp3",
+    scene: scene,
+    minVolume: 15,
+    camera: camera,
+  });
   const auraGeometry = new THREE.SphereGeometry(3, 32, 32);
   const auraMaterial = new THREE.MeshPhongMaterial({
     color: "green",
@@ -35,6 +43,8 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
 
   const handleOnClick = (e: any) => {
     e.stopPropagation();
+    fighterSound?.stop()
+    fighterSound?.play()
     const a = setResources(x ? -5000 : -1500);
     if (!a) return;
     setClicked(true);

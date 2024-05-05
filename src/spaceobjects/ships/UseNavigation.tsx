@@ -22,14 +22,14 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     const [isFighting, setIsFighting] = useState(false)
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
-    const [shipsDestination, setShipsDestination] = useState<Vector3>();
+    const [shipsDestination, setShipsDestination] = useState<{pos: Vector3, objectType: "Ship" | "Construction"}>({pos: new Vector3(0,0,0), objectType: "Construction"});
     const isFighter = (shipType === "fighter" || shipType === "hawk")
 
     useEffect(() => {
       if (!isSelected) return;
-      if (destination && destination.pos !== shipsDestination) {
+      if (destination && destination.pos !== shipsDestination.pos) {
         if(isFighting) setIsFighting(false)
-        setShipsDestination(destination.pos);
+        setShipsDestination({pos: destination.pos, objectType: destination.objectType});
       }
       if (origin && origin !== shipsOrigin) {
         setShipsOrigin(origin);
@@ -106,7 +106,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           (isTraveling || isReturning)
         ) {
           if(!meshRef.current.name) {meshRef.current.name = shipId}
-          const targetPosition = isTraveling ? shipsDestination : shipsOrigin;
+          const targetPosition = isTraveling ? shipsDestination.pos : shipsOrigin;
           const { direction, targetQuaternion } =
             calculateDirectionAndRotation(targetPosition);
     
@@ -126,7 +126,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           <LaserCannon
             position={meshRef.current ? meshRef.current.position : new Vector3(0,0,0)}
             setFightDone={() => setIsFighting(false)}
-            target={shipsDestination || new Vector3(0,0,0)}
+            target={shipsDestination}
             color={shipType === "hawk" ? 'green' : 'red'}
             fire={isFighting}
           />
