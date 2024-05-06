@@ -10,7 +10,7 @@ export const Effects = () => {
   const {scene, camera} = useThree()
   const postProcessing = useStore((state) => state.postProcessing);
   const explosions = useStore((state) => state.explosions)
-  const particle = require('./fire1.png')
+  const particle = require('./explosion00.png')
   const { sound: narrative, calculateVolume: calculateNarrative } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/narrative.mp3",

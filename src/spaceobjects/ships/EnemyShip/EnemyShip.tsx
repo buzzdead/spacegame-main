@@ -8,6 +8,7 @@ import { ShipHull } from "./ShipHull";
 import { EnemyShipSystem } from "./EnemyShipSystem";
 import { EnemyNavigation } from "./Navigation";
 import { EnemyShip as ES } from "../../../store/StoreState";
+import { Ignition } from "../../tools/Ignition";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -54,7 +55,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
 
   const destroyShip = () => {
     setDestroyed(true);
-    setExplosions(position);
+    setExplosions(meshRef.current?.position || position);
     removeShip(shipId);
     scene.removeFromParent();
     setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)
@@ -94,6 +95,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
         meshRef={meshRef}
         shipId={shipId}
       />
+      <Ignition type={"cruiser"} />
     </mesh>
   );
 };

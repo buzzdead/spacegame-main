@@ -33,16 +33,16 @@ async function createBeamWeapon(scene: THREE.Scene, texture: THREE.Texture) {
 }
 const zone = new PointZone(0, 0);
   const emitter = new Emitter()
-  .setRate(new Rate(new Span(7, 14), new Span(0.1)))
+  .setRate(new Rate(new Span(3, 6), new Span(0.3)))
   .setInitializers([
     new Position(zone),
     new Mass(1),
     new Radius(5, 12),
     new Life(0.85),
     new Body(createSprite()),
-    new RadialVelocity(13, new Vector3D(0, 1, 0), 180)
+    new RadialVelocity(13, new Vector3D(0, 1, 0), 360)
   ])
-  .setBehaviours([new Alpha(1, 0), new Scale(1, 2), new Color(new THREE.Color("white"), new THREE.Color("red"))])
+  .setBehaviours([new Alpha(1, 0), new Scale(1.5, 2), new Color(new THREE.Color("white"), new THREE.Color("red"))])
   .emit();
 
   nebula.addEmitter(emitter);
@@ -52,7 +52,7 @@ const zone = new PointZone(0, 0);
   return {
     update: () => nebula.update(),
     setDirection: (direction: THREE.Vector3) => {
-      emitter.addInitializer(new RadialVelocity(13, new Vector3D(direction.x, direction.y, direction.z), 180))
+      emitter.addInitializer(new RadialVelocity(13, new Vector3D(direction.x, direction.y, direction.z), 360))
     },
     setPosition: (position: THREE.Vector3) => {
       emitter.position.set(position.x, position.y, position.z);

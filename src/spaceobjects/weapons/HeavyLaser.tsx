@@ -27,7 +27,7 @@ const HeavyLaser = ({ color, target, origin}: Props) => {
     if (laserRef.current && (target || lastKnownTarget.current) && !hit) {
       if(target) lastKnownTarget.current = target.clone()
       const direction = new THREE.Vector3();
-      direction.subVectors(target || lastKnownTarget.current, laserRef.current.position);
+      direction.subVectors(origin, target || lastKnownTarget.current);
       direction.normalize();
       const targetQuaternion = new THREE.Quaternion().setFromUnitVectors(
         new THREE.Vector3(0, 0, 1), // Assuming front of your ship is along +Z
