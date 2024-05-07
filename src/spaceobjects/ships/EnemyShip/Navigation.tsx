@@ -1,7 +1,8 @@
 import { SpaceShipId } from "../../../store/StoreAssets"
 import { Quaternion, Vector3 } from 'three'
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Ignition } from "../../tools/Ignition";
 
 interface Props {
     shipType: SpaceShipId
@@ -12,6 +13,7 @@ interface Props {
   }
 
   export const EnemyNavigation = ({shipType, shipId, meshRef, origin, nearby}: Props) => {
+    const [brake, setBrake] = useState(false)
     const targetRef = origin.clone()
     const patrolDistance = 75;
     const patrolOffset = 125;
@@ -26,7 +28,7 @@ interface Props {
     useFrame(() => {
         if(nearby) return
         const target = patrolPosition[currentTarget.current]
-        if(target.distanceTo(meshRef.current.position) < 2) currentTarget.current = (currentTarget.current + 1) % patrolPosition.length
+        if(target.distanceTo(meshRef.current.position) < 2) {currentTarget.current = (currentTarget.current + 1) % patrolPosition.length; setBrake(true); setTimeout(() => setBrake(false), 250)}
         const direction = new Vector3()
         .subVectors(target, meshRef.current.position)
         .normalize();
@@ -43,5 +45,6 @@ interface Props {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
         
     })
-    return null
+    if(nearby) return null
+    return <Ignition brake={brake} type={"cruiser"} />
 }

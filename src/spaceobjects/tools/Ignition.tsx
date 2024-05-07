@@ -2,9 +2,9 @@ import { SpaceShipId } from "../../store/StoreAssets"
 import RocketBooster from "./RocketBooster"
 import { Vector3 } from 'three'
 
-interface Props { type: SpaceShipId }
+interface Props { type: SpaceShipId, brake?: boolean }
 
-export const Ignition = ({type}: Props) => {
+export const Ignition = ({type, brake = false}: Props) => {
   const isFighter = type === "fighter"
   const isHawk = type === "hawk"
   const rocketEngineLeft = 
@@ -27,7 +27,7 @@ export const Ignition = ({type}: Props) => {
   const cruiserRockets = () => {
     const rockets = Array(4).fill(createVector3(rocketEngineLeft))
     const r2 = rockets.map((r, id) => {
-      return <RocketBooster position={new Vector3(r.x + (id + 1) * 5, r.y, r.z)}/>
+      return <RocketBooster key={id} cruiser={true} brake={brake} position={new Vector3(r.x + (id + 1) * 4.6, r.y + id > 3 ? 2 : 1, r.z)}/>
     })
     return r2 || null
   }
@@ -39,6 +39,8 @@ export const Ignition = ({type}: Props) => {
     return (
         <group>
         <RocketBooster
+        brake={brake}
+        cruiser={type === "cruiser"}
           position={createVector3(rocketEngineLeft)}
         />
         {isFighter && <RocketBooster

@@ -49,7 +49,6 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   }, [camera]);
 
   useEffect(() => {
-    console.log("has ref");
     setEnemyShipRef(meshRef.current, shipId);
   }, []);
 
@@ -77,25 +76,27 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
       nearby: false,
     });
   };
-  console.log("did rerendwer");
   return (
+    <group>
     <mesh position={position} ref={meshRef} onClick={handleOnClick}>
       <ShipHull shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
-      <EnemyShipSystem
+     
+      <EnemyNavigation
+        nearby={nearby}
+        origin={origin}
+        shipType="cruiser"
+        meshRef={meshRef}
+        shipId={shipId}
+      />
+    </mesh>
+    <EnemyShipSystem
+        shipRef={meshRef}
         currentPos={meshRef.current?.position || position}
         nearby={nearby}
         color={new Color("green")}
         origin={position}
       />
-      <EnemyNavigation
-        nearby={nearby}
-        origin={position}
-        shipType="cruiser"
-        meshRef={meshRef}
-        shipId={shipId}
-      />
-      <Ignition type={"cruiser"} />
-    </mesh>
+    </group>
   );
 };

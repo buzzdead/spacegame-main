@@ -3,6 +3,7 @@ import useStore from "../../../store/UseStore"
 import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
 import { SWave } from "./swave";
+import { useFrame } from "@react-three/fiber";
 
 interface Props {
     setNearbyEnemies: (n: Vector3[]) => void
@@ -18,19 +19,20 @@ export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Pr
     const toggleNearby = useStore(state => state.toggleNearby)
     const [scan, setScan] = useState(false)
     const groupRef = useRef<any>(null)
+    const timeoutRef = useRef(true)
 
     useEffect(() => {
         const checkForNearByShips = () => {
-        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 50).map(e => e.meshRef.position)
-        const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(origin) <= 75).map(e => e.meshRef.position)
+        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75).map(e => e.meshRef.position)
+        const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75).map(e => e.meshRef.position)
         const isNear = nearby2.length > 0
-        isNear !== hasNearby2 && toggleNearby(origin, currentPos)
+        toggleNearby(currentPos, isNear)
         setNearbyEnemies(nearby)
         setHasNearby2(nearby2.length > 0)
         setHasNearby(nearby.length > 0)
         }
         checkForNearByShips()
-        setTimeout(() => setScan(!scan), 1500)
+        setTimeout(() => setScan(!scan), 2000)
     }, [scan])
     return null
     return (<group ref={groupRef}>{hasNearby && <EffectComposer><SWave pos={origin} scan={scan}/></EffectComposer>}</group>)

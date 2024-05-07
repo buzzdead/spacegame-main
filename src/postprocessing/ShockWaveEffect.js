@@ -293,8 +293,7 @@ export class ShockWaveEffect extends Effect {
 			if(uActive.value) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = 100
-				console.log(uniforms.get("cameraDistance").value)
+				uniforms.get("cameraDistance").value = 200
 
 				// Calculate the screen position of the shock wave.
 				v.copy(position[i]).project(camera);

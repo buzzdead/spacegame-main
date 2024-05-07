@@ -12,10 +12,11 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship, scene }) => {
-  const { setSelected, setShipRef, removeShip } = useShallowStore([
+  const { setSelected, setShipRef, removeShip, setExplosions } = useShallowStore([
     "setSelected",
     "setShipRef",
     "removeShip",
+    "setExplosions"
   ]);
 
   const { position } = ship;
@@ -35,16 +36,13 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     setShipRef(meshRef.current, ship.id);
   }, [meshRef]);
   useEffect(() => {
-    if (destroyed)
-      setTimeout(() => {
+    if (destroyed){
+        setExplosions(meshRef.current?.position || position)
         removeShip(ship.id, true);
         scene.removeFromParent();
-      }, 5000);
+      }
   }, [destroyed]);
-  if (destroyed)
-    return (
-      <Explosion position={meshRef.current?.position || new Vector3(0, 0, 0)} />
-    );
+ 
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleOnClick} ref={meshRef} position={position}>

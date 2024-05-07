@@ -3,11 +3,12 @@ import UseSoundEffect from "../../hooks/SoundEffect"
 import Laser from "./Laser"
 import { Vector3 } from 'three'
 import { useThree } from "@react-three/fiber";
+import { ObjectType } from "../../store/StoreState";
 
 interface Props {
     position: Vector3
     fire: boolean
-    target: {pos: Vector3, objectType: "Ship" | "Construction"}
+    target: {pos: Vector3, objectType: ObjectType}
     setFightDone: () => void
     color?: string
 }

@@ -19,6 +19,7 @@ import Nebula, {
   Mass,
   Radius,
 } from 'three-nebula';
+import useStore from '../../../store/UseStore';
 
 async function createBeamWeapon(scene: THREE.Scene, texture: THREE.Texture) {
   const nebula = new Nebula();
@@ -70,6 +71,7 @@ interface Props {
     texture: THREE.Texture
 }
 export const BeamWeapon = ({ position, texture }: Props) => {
+  const setExplosions = useStore(state => state.setExplosions)
   const { scene } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>()
   const stopEmit = useRef(false)
@@ -104,6 +106,7 @@ export const BeamWeapon = ({ position, texture }: Props) => {
         particleSystem.sys.update();
         particleSystem.sys.destroy();
         delete particleSystem.sys
+        setExplosions(position, true)
 
       }
     };

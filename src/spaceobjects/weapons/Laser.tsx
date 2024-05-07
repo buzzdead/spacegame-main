@@ -3,10 +3,11 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import useStore from "../../store/UseStore";
 import Shader from "../../postprocessing/Shader";
+import { ObjectType } from "../../store/StoreState";
 
 interface Props {
   origin: any;
-  target: {pos: THREE.Vector3, objectType: "Ship" | "Construction"}
+  target: {pos: THREE.Vector3, objectType: ObjectType}
   color: string;
   laserSound: any;
   setFightDone: () => void;
@@ -38,7 +39,6 @@ const Laser = ({
   const [laserMeshes, setLaserMeshes] = useState<arr>([]);
   const laserGeometry = new THREE.BoxGeometry(0.2, 0.2, 5);
   const {vs, fs} = Shader("laser-cannon")
-  console.log(target)
   const gradientMaterial = new THREE.ShaderMaterial({
     uniforms: {
       color1: { value: new THREE.Color(color) }, // Use the provided color prop
@@ -87,7 +87,6 @@ const Laser = ({
       // Deal damage to the target
       if (mesh.position.z >= distance) {
         const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.pos, 5) : dealDamageToConstruction(target.pos, 5)
-        console.log(destroyed)
         scene.remove(mesh);
         mesh.removeFromParent();
         setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));

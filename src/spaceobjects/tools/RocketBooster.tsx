@@ -7,15 +7,17 @@ import { ParticleSystem } from "./particlesystem";
 
 interface Props {
   position: Vector3;
+  cruiser?: boolean
+  brake?: boolean;
   isHarvesting?: boolean;
 }
 
-const RocketBooster = ({ position, isHarvesting = false }: Props) => {
+const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser = false }: Props) => {
   const particleSystemRef = useRef<THREE.Points>(null);
   const [particlePositions, setParticlePositions] = useState<Float32Array>();
 
   const texture = useTexture(
-    isHarvesting ? "/assets/fire.jpg" : "/assets/fire.jpg"
+    isHarvesting ? "/assets/fire.jpg" : cruiser ? '/assets/particle.png' : "/assets/fire.jpg"
   );
 
   useEffect(() => {
@@ -37,9 +39,9 @@ const RocketBooster = ({ position, isHarvesting = false }: Props) => {
         for (let i = 0; i < positions.length; i += 3) {
           positions[i + 1] += isHarvesting ? 0.03 : 0.1;
 
-          const maxLimit = randomIntFromInterval(isHarvesting ? 25 :0, 100);
+          const maxLimit = randomIntFromInterval(isHarvesting ? 25 : 0, cruiser ? 200 : 100);
 
-          if (positions[i + 1] > maxLimit / (isHarvesting ? 40 : 5)) {
+          if ((positions[i + 1] > maxLimit / (isHarvesting ? 40 : 5)) || brake) {
             positions[i] = (Math.random() - 0.5) * 0.3;
             positions[i + 1] = 0;
             positions[i + 2] = (Math.random() - 0.5) * 0.2;

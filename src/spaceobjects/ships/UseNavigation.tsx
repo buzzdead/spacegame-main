@@ -22,13 +22,14 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     const [isFighting, setIsFighting] = useState(false)
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
-    const [shipsDestination, setShipsDestination] = useState<{pos: Vector3, objectType: "Ship" | "Construction"}>({pos: new Vector3(0,0,0), objectType: "Construction"});
+    const [shipsDestination, setShipsDestination] = useState<{pos: Vector3, objectType: "Ship" | "Construction" | "Planet"}>({pos: new Vector3(0,0,0), objectType: "Construction"});
     const isFighter = (shipType === "fighter" || shipType === "hawk")
 
     useEffect(() => {
       if (!isSelected) return;
       if (destination && destination.pos !== shipsDestination.pos) {
         if(isFighting) setIsFighting(false)
+          if(destination.type === "Travel") return
         setShipsDestination({pos: destination.pos, objectType: destination.objectType});
       }
       if (origin && origin !== shipsOrigin) {
@@ -90,7 +91,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           }
         }
     
-        const speedFactor = Math.max(15); // Adjust for sensitivity
+        const speedFactor = Math.max(55); // Adjust for sensitivity
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );

@@ -9,7 +9,7 @@ interface ShipProps {
 }
 
 const MemoizedShip = memo(({ ship }: ShipProps) => <EnemyShipScene ship={ship} />, (prevProps, nextProps) => {
-  return prevProps.ship.id === nextProps.ship.id && prevProps.ship.nearby === nextProps.ship.nearby
+  return prevProps.ship.id === nextProps.ship.id && prevProps.ship.nearby !== nextProps.ship.nearby
 });
 
 export const LoadEnemyShips = () => {
@@ -20,8 +20,8 @@ export const LoadEnemyShips = () => {
     if(enemyShips.length > 0) return
     addEnemyShip(new Vector3(35, 50, 675), 75)
     addEnemyShip(new Vector3(185, 55, 155), 100)
-    //addEnemyShip(new Vector3(215, 55, 255), 100)
-    //addEnemyShip(new Vector3(255, 85, 300), 100)
+    addEnemyShip(new Vector3(215, 55, 255), 100)
+    addEnemyShip(new Vector3(255, 85, 300), 100)
   }, [addEnemyShip]);
   return (
     <group>
