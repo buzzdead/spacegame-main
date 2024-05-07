@@ -91,7 +91,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           }
         }
     
-        const speedFactor = Math.max(55); // Adjust for sensitivity
+        const speedFactor = Math.max(isFighter ? 35 : 25); // Adjust for sensitivity
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );
