@@ -91,11 +91,10 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           }
         }
     
-        const speedFactor = Math.max(isFighter ? 35 : 25); // Adjust for sensitivity
+        const speedFactor = Math.max(isFighter ? 55 : 25); // Adjust for sensitivity
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );
-    
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
       };
 
@@ -113,6 +112,14 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     
           direction &&
             updateShipPosition(direction, targetQuaternion, targetPosition);
+        }
+        else if (isFighting) {
+          const { direction, targetQuaternion } =
+            calculateDirectionAndRotation(shipsDestination.pos);
+            const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
+            if(theAngle && theAngle > 0.01) {
+              meshRef.current.quaternion.slerp(targetQuaternion, 0.5);
+            }
         }
       });
 

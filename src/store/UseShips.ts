@@ -58,7 +58,7 @@ const useShips: StateCreator<
       const attackedShip = friend ? state.ships.find(e => e.meshRef.position === pos) : state.selectedEnemies?.find(e => e.position === pos)
       if (!attackedShip) {destroyed = "Not Found"; return friend ? { ships:[...state.ships] } : { selectedEnemies: [ ...state.selectedEnemies ] }}
       const newHull = attackedShip?.hull - n;
-      destroyed = newHull <= n ? "Destroyed" : "Hit";
+      destroyed = newHull <= 0 ? "Destroyed" : "Hit";
       attackedShip.hull = newHull
       const updatedShips = friend ? state.ships.map(s => s.id === attackedShip.id ? attackedShip : s)  : state.selectedEnemies.map(m => m.id === attackedShip.id ? attackedShip : m)
       return friend ? {ships: updatedShips as Ship[] } : { selectedEnemies: updatedShips as EnemyShip[] };

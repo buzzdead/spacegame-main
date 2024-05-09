@@ -15,7 +15,7 @@ export const EnemyShipSystem = ({ color, origin, nearby, currentPos, shipRef }: 
     const [nearbyEnemies, setNearbyEnemies] = useState<THREE.Vector3[]>([])
   return (
     <group>
-      {nearbyEnemies.length > 0 && <HeavyLaser shipRef={shipRef} color={color} origin={currentPos} target={nearbyEnemies[0]} />}
+      {nearbyEnemies.length > 0 && <HeavyLaser shipRef={shipRef} color={color} origin={currentPos} target={nearbyEnemies} />}
       <RadarScanner currentPos={currentPos} nearby={nearby} origin={origin} setNearbyEnemies={setNearbyEnemies}/>
     </group>
   );

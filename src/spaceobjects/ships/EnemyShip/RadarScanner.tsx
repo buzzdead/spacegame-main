@@ -23,7 +23,7 @@ export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Pr
 
     useEffect(() => {
         const checkForNearByShips = () => {
-        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75).map(e => e.meshRef.position)
+        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 60).map(e => e.meshRef.position)
         const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75).map(e => e.meshRef.position)
         const isNear = nearby2.length > 0
         toggleNearby(currentPos, isNear)
