@@ -43,10 +43,10 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
 
   const handleOnClick = (e: any) => {
     e.stopPropagation();
-    fighterSound?.stop()
-    fighterSound?.play()
     const a = setResources(x ? -5000 : -1500);
     if (!a) return;
+    fighterSound?.stop()
+    fighterSound?.play()
     setClicked(true);
     addShip(
       x ? "hawk" : "fighter",

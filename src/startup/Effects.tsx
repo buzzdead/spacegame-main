@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ShockWaveComponent from "../features/Shockwave";
 import useStore from "../store/UseStore";
 import { TextureLoader } from 'three'
-import BeamWeapon from "../spaceobjects/tools/test/test123";
+import ShipExplosion from "../spaceobjects/tools/test/ShipExplosion";
 import UseSoundEffect from "../hooks/SoundEffect";
 import { useThree } from "@react-three/fiber";
 
@@ -15,7 +15,7 @@ export const Effects = () => {
     UseSoundEffect({
       sfxPath: "/assets/sounds/narrative.mp3",
       scene: scene,
-      minVolume: 5,
+      minVolume: 3,
       camera: camera,
     });
     useEffect(() => {
@@ -24,6 +24,6 @@ export const Effects = () => {
   const texture = new TextureLoader().load(particle);
   return <group>
     {postProcessing && <ShockWaveComponent />}
-    {explosions.map((e, id) => <BeamWeapon texture={texture} key={id} position={e}/>)}
+    {explosions.map((e, id) => <ShipExplosion texture={texture} key={id} position={e}/>)}
     </group>;
 };

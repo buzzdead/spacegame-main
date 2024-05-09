@@ -20,8 +20,9 @@ import Nebula, {
   Radius,
 } from 'three-nebula';
 import useStore from '../../../store/UseStore';
+import UseSoundEffect from '../../../hooks/SoundEffect';
 
-async function createBeamWeapon(scene: THREE.Scene, texture: THREE.Texture) {
+async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture) {
   const nebula = new Nebula();
   function createSprite() {
     var material = new THREE.SpriteMaterial({
@@ -70,11 +71,19 @@ interface Props {
     position: THREE.Vector3
     texture: THREE.Texture
 }
-export const BeamWeapon = ({ position, texture }: Props) => {
+export const ShipExplosion = ({ position, texture }: Props) => {
   const setExplosions = useStore(state => state.setExplosions)
-  const { scene } = useThree();
+  const { scene, camera } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>()
   const stopEmit = useRef(false)
+  const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
+  UseSoundEffect({
+    sfxPath: "/assets/sounds/explo.mp3",
+    scene: scene,
+    minVolume: 0.75,
+    camera: camera,
+    autoPlay: true
+  });
 
   useFrame(() => {
     if (particleSystem) {
@@ -93,11 +102,17 @@ export const BeamWeapon = ({ position, texture }: Props) => {
   });
 
   useEffect(() => {
-    createBeamWeapon(scene, texture).then((nebulaSystem) => {
+    const distance = camera.position.distanceTo(scene.position);
+    calculateExplosionSound(distance);
+  }, [camera]);
+
+  useEffect(() => {
+    createShipExplosion(scene, texture).then((nebulaSystem) => {
       setParticleSystem(nebulaSystem)
       nebulaSystem.setPosition(position);
       nebulaSystem.setDirection(new THREE.Vector3(0, 0, 1));
     });
+    
     setTimeout(() => stopEmit.current = true, 1000)
     // Cleanup function to destroy the particle system when the component unmounts
     return () => {
@@ -115,4 +130,4 @@ export const BeamWeapon = ({ position, texture }: Props) => {
   return null;
 };
 
-export default BeamWeapon;
+export default ShipExplosion;

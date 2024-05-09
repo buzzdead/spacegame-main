@@ -3,7 +3,7 @@ import "./styles/theme.css";
 import AudioPlayer from "./features/AudioPlayer";
 import SpaceGame from "./startup/SpaceGame";
 import Menu from "./features/Menu";
-const gameMusic = require("./assets/sd.mp3");
+const gameMusic = require("./assets/sd2.mp3");
 
 const App: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false);

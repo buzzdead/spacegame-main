@@ -36,17 +36,6 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   const [fire, setFire] = useState(false);
   const texture = useTexture.preload("/assets/fire1.png");
   const [destroyed, setDestroyed] = useState(false);
-  const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
-    UseSoundEffect({
-      sfxPath: "/assets/sounds/explo.mp3",
-      scene: scene,
-      minVolume: 0.75,
-      camera: camera,
-    });
-  useEffect(() => {
-    const distance = camera.position.distanceTo(eScene.position);
-    calculateExplosionSound(distance);
-  }, [camera]);
 
   useEffect(() => {
     setEnemyShipRef(meshRef.current, shipId);
@@ -58,7 +47,6 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
     removeShip(shipId);
     scene.removeFromParent();
     setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)
-    explosionSound?.play();
     //setTimeout(() => {setDestroyed(false); setSelectedEnemies({ship: shipId, hull: 100})}, 10000)
   };
   const handleOnClick = (e: any) => {
