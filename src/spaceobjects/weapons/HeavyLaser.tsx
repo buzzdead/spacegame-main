@@ -29,7 +29,6 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
   const pos = shipRef.current?.position || origin;
 
   useEffect(() => {
-    console.log("RESETTING")
     resetsLaserRefs()
   }, [myTarget.length])
 
@@ -94,7 +93,7 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
       const report = dealDamageToEnemy(myTarget[id % TARGET_LENGTH], dst > 100 ? 0 : 17, true);
       goRef.current[id] = false;
       laserRef.scale.set(0, 0, 0);
-      if (id === 2) {
+      if (goRef.current.every(v => v === false)) {
         hit.current = true;
         if (report === "Destroyed" || report === "Not Found") return;
         setTimeout(() => {
@@ -103,6 +102,7 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
       }
     }
   };
+
 
   const resetsLaserRefs = () => {
     hit.current = false;
