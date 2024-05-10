@@ -42,7 +42,7 @@ const Construction: FC<Props> = ({ construction }) => {
   }
 
   const destroy = () => {
-    setExplosions(position)
+    setExplosions(position, "Big")
     removeConstruction(construction.id); scene.removeFromParent()
     explosionSound?.play()
   }

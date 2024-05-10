@@ -7,6 +7,7 @@ import {
   SelectedShip,
   Ship,
 } from "./SpaceGameStateUtils";
+import { ExplosionSize } from "./useEffects";
 
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
@@ -73,8 +74,9 @@ export type CelestialObjectState = {
   }
 
   export type EffectsState = {
-    explosions: Vector3[]
-    setExplosions: (newExplosion: Vector3, remove?: boolean) => void
+    explosions: {id: number; pos: Vector3, size: ExplosionSize}[]
+    setExplosions: (newExplosion: Vector3, size: ExplosionSize) => void
+    removeExplosion: (id: number) => void
   }
   
   export interface SpaceGameState

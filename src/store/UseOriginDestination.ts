@@ -1,6 +1,9 @@
 import { StateCreator } from "zustand";
 import { Vector3 } from 'three'
-import { DestinationType, LocationState, ObjectType } from "./StoreState";
+import { DestinationType, EnemyShip, LocationState, ObjectType } from "./StoreState";
+import { CelestialObject, Construction, Ship } from "./SpaceGameStateUtils";
+
+type ObjectLocation = Ship | EnemyShip | Construction | CelestialObject
 
 const useOriginDestination: StateCreator<
   LocationState,

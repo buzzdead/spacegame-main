@@ -37,7 +37,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   }, [meshRef]);
   useEffect(() => {
     if (destroyed){
-        setExplosions(meshRef.current?.position || position)
+        setExplosions(meshRef.current?.position || position, "Medium")
         removeShip(ship.id, true);
         scene.removeFromParent();
       }

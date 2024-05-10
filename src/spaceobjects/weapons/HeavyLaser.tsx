@@ -53,7 +53,7 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
   useFrame(({ clock }) => {
     laserRefs.current.forEach((laserRef, id) => {
       if (!goRef.current[id] || hit.current) return;
-      const currentTarget = myTarget[id % TARGET_LENGTH] ?? lastKnownTarget.current;
+      const currentTarget = myTarget[id % TARGET_LENGTH].clone() ?? lastKnownTarget.current;
       const lr = laserRef.current;
       if (lr && currentTarget) {
         lastKnownTarget.current = myTarget[id % TARGET_LENGTH]?.clone();
@@ -118,7 +118,7 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
   return (
     <group>
       {laserRefs.current.map((lr, id) => (
-        <mesh position={pos} ref={lr} scale={[3, 3, 3]}>
+        <mesh key={id} position={pos} ref={lr} scale={[3, 3, 3]}>
           <primitive object={laserMeshes[id]} />
         </mesh>
       ))}

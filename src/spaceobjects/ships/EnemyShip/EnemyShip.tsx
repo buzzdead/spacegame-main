@@ -43,7 +43,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
 
   const destroyShip = () => {
     setDestroyed(true);
-    setExplosions(meshRef.current?.position || position);
+    setExplosions(meshRef.current?.position || position, "Big");
     removeShip(shipId);
     scene.removeFromParent();
     setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)

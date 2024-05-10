@@ -3,8 +3,6 @@ import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
 import { DamageReport, EnemyShip, SpaceShipState } from "./StoreState";
 import { Vector3 } from 'three'
 
-
-
 const useShips: StateCreator<
   SpaceShipState,
   [],

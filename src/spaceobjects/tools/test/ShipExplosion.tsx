@@ -21,8 +21,9 @@ import Nebula, {
 } from 'three-nebula';
 import useStore from '../../../store/UseStore';
 import UseSoundEffect from '../../../hooks/SoundEffect';
+import { ExplosionSize } from '../../../store/useEffects';
 
-async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture) {
+async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture, size: ExplosionSize) {
   const nebula = new Nebula();
   function createSprite() {
     var material = new THREE.SpriteMaterial({
@@ -39,7 +40,7 @@ const zone = new PointZone(0, 0);
   .setInitializers([
     new Position(zone),
     new Mass(1),
-    new Radius(5, 12),
+    new Radius(size === "Big" ? 5 : 2.5, size ==="Big" ? 12 : 6),
     new Life(0.85),
     new Body(createSprite()),
     new RadialVelocity(13, new Vector3D(0, 1, 0), 360)
@@ -68,14 +69,15 @@ const zone = new PointZone(0, 0);
 
 // Usage in your React component
 interface Props {
-    position: THREE.Vector3
+    explosion: {pos: THREE.Vector3, size: ExplosionSize}
     texture: THREE.Texture
+    onEnd: () => void
 }
-export const ShipExplosion = ({ position, texture }: Props) => {
-  const setExplosions = useStore(state => state.setExplosions)
+export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   const { scene, camera } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>()
   const stopEmit = useRef(false)
+  const reallyStopEmit = useRef(false)
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/explo.mp3",
@@ -86,7 +88,7 @@ export const ShipExplosion = ({ position, texture }: Props) => {
   });
 
   useFrame(() => {
-    if (particleSystem) {
+    if (particleSystem && !reallyStopEmit.current) {
       if(stopEmit.current) {
         if(particleSystem.emitter.life > 100)
         particleSystem.emitter.life = 100
@@ -97,6 +99,7 @@ export const ShipExplosion = ({ position, texture }: Props) => {
       }
         
         particleSystem.update();
+        if(particleSystem.emitter.life < -1000) {onEnd(); reallyStopEmit.current = true}
       
     }
   });
@@ -107,9 +110,9 @@ export const ShipExplosion = ({ position, texture }: Props) => {
   }, [camera]);
 
   useEffect(() => {
-    createShipExplosion(scene, texture).then((nebulaSystem) => {
+    createShipExplosion(scene, texture, explosion.size).then((nebulaSystem) => {
       setParticleSystem(nebulaSystem)
-      nebulaSystem.setPosition(position);
+      nebulaSystem.setPosition(explosion.pos);
       nebulaSystem.setDirection(new THREE.Vector3(0, 0, 1));
     });
     
@@ -121,11 +124,10 @@ export const ShipExplosion = ({ position, texture }: Props) => {
         particleSystem.sys.update();
         particleSystem.sys.destroy();
         delete particleSystem.sys
-        setExplosions(position, true)
 
       }
     };
-  }, [scene, position]);
+  }, [scene, explosion.pos]);
 
   return null;
 };

@@ -29,15 +29,17 @@ export interface Ship {
     scale?: number
     meshRef?: any
 }
+let ship_id = 0
+let construction_id = 0
+let celestialObject_id = 0
 export type SelectedShip = Pick<Ship, 'assetId' | 'id' | 'position'>
 export type numberVector = [number, number, number]
 class SpaceGameStateUtils {
     static addShipToState(ships: Ship[], shipId: string, nv: numberVector, hull = 100, scale = 1): Ship[] {
         const position = createVector3(nv)
         const spaceShip = spaceShips.find(ship => ship.id === shipId)
-        const newShipId = ships.length + 1
         if (spaceShip) {
-            const newShip = { ...spaceShip, hull: hull, assetId: spaceShip.id, id: newShipId.toString(), position: position, scale: scale }
+            const newShip = { ...spaceShip, hull: hull, assetId: spaceShip.id, id: (ship_id++).toString(), position: position, scale: scale }
             return [...ships, newShip]
         }
         return [...ships]
@@ -46,9 +48,8 @@ class SpaceGameStateUtils {
     static addConstructionToState(currentConstructions: Construction[], constructionId: string, nv: numberVector, type: Construction["type"], scale = 1): Construction[] {
         const position = createVector3(nv)
         const construction = constructions.find(construction => construction.id === constructionId)
-        const newConstructionId = currentConstructions.length + 1
         if (construction) {
-            const newConstruction = { ...construction, assetId: construction.id, id: newConstructionId.toString(), position: position, scale: scale, hull: 100, type: type }
+            const newConstruction = { ...construction, assetId: construction.id, id: (construction_id++).toString(), position: position, scale: scale, hull: 100, type: type }
             return [...currentConstructions, newConstruction]
         }
         return [...currentConstructions]
@@ -57,9 +58,8 @@ class SpaceGameStateUtils {
     static addCelestialObjectToState(currentCelestialObjects: CelestialObject[], coId: string, nv: numberVector, scale = 1): CelestialObject[] {
         const position = createVector3(nv)
         const celestialObject = celestialObjects.find(co => co.id === coId)
-        const newCOId = currentCelestialObjects.length + 1
         if (celestialObject) {
-            const newCO = { ...celestialObject, assetId: celestialObject.id, id: newCOId.toString(), position: position, scale: scale }
+            const newCO = { ...celestialObject, assetId: celestialObject.id, id: (celestialObject_id++).toString(), position: position, scale: scale }
             return [...currentCelestialObjects, newCO]
         }
         return [...currentCelestialObjects]
