@@ -13,6 +13,7 @@ const MemoizedShip = memo(({ ship }: ShipProps) => <EnemyShipScene ship={ship} /
 });
 
 export const LoadEnemyShips = () => {
+  const developerMode = useStore((state) => state.developerMode)
   const addEnemyShip = useStore((state) => state.addEnemyShip)
   const enemyShips = useStore((state) => state.enemyShips)
   
@@ -22,6 +23,31 @@ export const LoadEnemyShips = () => {
     addEnemyShip(new Vector3(185, 55, 155), 300)
     addEnemyShip(new Vector3(215, 55, 255), 300)
     addEnemyShip(new Vector3(255, 85, 300), 300)
+    if(developerMode){
+    addEnemyShip(new Vector3(255, 85, 300), 300)
+    addEnemyShip(new Vector3(355, 85, 300), 300)
+    addEnemyShip(new Vector3(455, 85, 300), 300)
+    addEnemyShip(new Vector3(555, 85, 300), 300)
+    addEnemyShip(new Vector3(655, 85, 300), 300)
+    addEnemyShip(new Vector3(755, 85, 300), 300)
+    addEnemyShip(new Vector3(855, 85, 300), 300)
+    addEnemyShip(new Vector3(355, 185, 300), 300)
+    addEnemyShip(new Vector3(455, 285, 300), 300)
+    addEnemyShip(new Vector3(555, 385, 300), 300)
+    addEnemyShip(new Vector3(655, 485, 300), 300)
+    addEnemyShip(new Vector3(755, 585, 300), 300)
+    addEnemyShip(new Vector3(855, 685, 300), 300)
+    addEnemyShip(new Vector3(555, 85, 400), 300)
+    addEnemyShip(new Vector3(655, 85, 500), 300)
+    addEnemyShip(new Vector3(755, 85, 600), 300)
+    addEnemyShip(new Vector3(855, 85, 700), 300)
+    addEnemyShip(new Vector3(355, 185, 400), 300)
+    addEnemyShip(new Vector3(455, 285, 500), 300)
+    addEnemyShip(new Vector3(555, 385, 600), 300)
+    addEnemyShip(new Vector3(655, 485, 700), 300)
+    addEnemyShip(new Vector3(755, 585, 800), 300)
+    addEnemyShip(new Vector3(855, 685, 900), 300)
+  }
   }, [addEnemyShip]);
   return (
     <group>

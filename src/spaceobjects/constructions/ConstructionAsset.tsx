@@ -39,7 +39,7 @@ const ConstructionAsset = ({ shouldRender, glbPath, x, scale }: Props) => {
         position={[
           scene.position.x,
           scene.position.y + 5,
-          scene.position.z + (x ? -1 : 3),
+          scene.position.z 
         ]}
       >
         {x ? 5000 : 1500}

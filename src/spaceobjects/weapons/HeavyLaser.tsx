@@ -1,20 +1,21 @@
 import { useFrame } from "@react-three/fiber";
-import { createRef, useEffect, useRef } from "react";
+import { createRef, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import useStore from "../../store/UseStore";
 import Shader from "../../postprocessing/Shader";
 import { getDistance, getDistanceType, LaserRef, LaserTypes } from "./weaponTypes";
+import { ObjectLocation } from "../../store/UseOriginDestination";
 
 interface Props {
-  color: THREE.Color;
   origin: THREE.Vector3;
-  target: THREE.Vector3[];
+  target: ObjectLocation[];
   shipRef: any;
+  sound: THREE.PositionalAudio | undefined
 }
 
 const HLS = LaserTypes["HeavyLaser"]
 
-const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
+const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
   const TARGET_LENGTH = myTarget.length
   const dealDamageToEnemy = useStore((state) => state.dealDamageToEnemy);
   const hit = useRef(false);
@@ -24,13 +25,18 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
       createRef<LaserRef>()
     )
   );
-  const goRef = useRef<boolean[]>([true, TARGET_LENGTH === 2, TARGET_LENGTH === 3]);
+  const goRef = useRef<boolean[]>([true, (TARGET_LENGTH === 2 || TARGET_LENGTH === 3), TARGET_LENGTH === 3]);
   const laserGeometry = new THREE.BoxGeometry(0.11, 0.11, 2);
   const pos = shipRef.current?.position || origin;
 
   useEffect(() => {
     resetsLaserRefs()
   }, [myTarget.length])
+
+  useEffect(() => {
+    sound?.stop()
+    sound?.play()
+  }, [])
 
   const { vs, fs } = Shader("laser-cannon");
   const gradientMaterial = new THREE.ShaderMaterial({
@@ -53,14 +59,16 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
   useFrame(({ clock }) => {
     laserRefs.current.forEach((laserRef, id) => {
       if (!goRef.current[id] || hit.current) return;
-      const currentTarget = myTarget[id % TARGET_LENGTH].clone() ?? lastKnownTarget.current;
+      const currentTarget = myTarget[id % TARGET_LENGTH].meshRef.position.clone() ?? lastKnownTarget.current;
       const lr = laserRef.current;
       if (lr && currentTarget) {
-        lastKnownTarget.current = myTarget[id % TARGET_LENGTH]?.clone();
+        lastKnownTarget.current = myTarget[id % TARGET_LENGTH]?.meshRef.position.clone();
         if (laserMeshes[id].material.uniforms.time)
           laserMeshes[id].material.uniforms.time.value =
             clock.getElapsedTime() * 1.5;
             //could probably be extracted
+            //const newCurrentTarget = currentTarget.clone()
+            //newCurrentTarget.x -= 10
         const direction = new THREE.Vector3()
           .subVectors(currentTarget, origin)
           .normalize();
@@ -85,12 +93,11 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
 
     const dst = getDistance(laserRef.position, currentTarget);
     const distanceType = getDistanceType(dst, id);
-    if (distanceType === "fireNext") goRef.current[id + 1] = true;
+    if (distanceType === "fireNext" && ((id === 0 && TARGET_LENGTH === 1) || (id === 1 && TARGET_LENGTH !== 3)))  {goRef.current[id + 1] = true; !sound?.isPlaying && sound?.play()}
     if (distanceType === "dissipate")
       laserRef.scale.multiply(new THREE.Vector3(0.95, 0.95, 0.95));
     if (distanceType === "stop") {
-      //if (!myTarget) return;
-      const report = dealDamageToEnemy(myTarget[id % TARGET_LENGTH], dst > 100 ? 0 : 17, true);
+      const report = dealDamageToEnemy(myTarget[id % TARGET_LENGTH].id, dst > 100 ? 0 : 17, true);
       goRef.current[id] = false;
       laserRef.scale.set(0, 0, 0);
       if (goRef.current.every(v => v === false)) {
@@ -106,7 +113,7 @@ const HeavyLaser = ({ color, target: myTarget, origin, shipRef }: Props) => {
 
   const resetsLaserRefs = () => {
     hit.current = false;
-    goRef.current = [true, TARGET_LENGTH === 2, TARGET_LENGTH === 3];
+    goRef.current = [true, (TARGET_LENGTH === 2 || TARGET_LENGTH === 3), TARGET_LENGTH === 3];
     laserRefs.current.forEach((lr) => {
       const lrc = lr.current;
       if (!lrc) return;

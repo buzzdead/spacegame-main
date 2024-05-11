@@ -25,10 +25,10 @@ const useConstructions: StateCreator<
       set((state) => ({
          constructions: state.constructions.filter(c => c.id !== coId)
       })),
-    dealDamageToConstruction: (pos: Vector3, n: number ) => {
+    dealDamageToConstruction: (id: string, n: number ) => {
       let destroyed: DamageReport = "Hit";
       set((state) => {
-        const construction = state.constructions.find(c => c.position === pos)
+        const construction = state.constructions.find(c => c.id === id)
         if(!construction) {destroyed = "Not Found"; return { constructions: state.constructions}}
         construction.hull = construction.hull - n;
         destroyed = construction.hull <= 0 ? "Destroyed" : "Hit"

@@ -40,7 +40,8 @@ const zone = new PointZone(0, 0);
   .setInitializers([
     new Position(zone),
     new Mass(1),
-    new Radius(size === "Big" ? 5 : 2.5, size ==="Big" ? 12 : 6),
+    //new Radius(size === "Big" ? 5 : 2.5, size ==="Big" ? 12 : 6),
+    new Radius(5, 12),
     new Life(0.85),
     new Body(createSprite()),
     new RadialVelocity(13, new Vector3D(0, 1, 0), 360)

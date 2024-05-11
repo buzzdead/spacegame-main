@@ -34,9 +34,14 @@ export const constructions =  (<T>(p: readonly Asset<T>[]) => p)([
     { id: "spacestation7", glbPath: 'assets/constructions/spacestation7.glb'},
 ] as const)
 
+export const weapons = (<T>(p: readonly Asset<T>[]) => p)([
+    { id: 'fighter-missile', glbPath: 'assets/weapons/fighter_missile.glb'}
+] as const )
+
 export type CelestialObjectId = typeof celestialObjects[number]["id"]
 export type SpaceShipId = typeof spaceShips[number]["id"]
 export type ConstructionId = typeof constructions[number]["id"]
+export type WeaponId = typeof weapons[number]["id"]
 
 /* type Pair<K = string, P = number> = {
     key: K;

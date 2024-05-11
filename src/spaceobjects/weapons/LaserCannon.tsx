@@ -4,11 +4,12 @@ import Laser from "./Laser"
 import { Vector3 } from 'three'
 import { useThree } from "@react-three/fiber";
 import { ObjectType } from "../../store/StoreState";
+import { ObjectLocation } from "../../store/UseOriginDestination";
 
 interface Props {
     position: Vector3
     fire: boolean
-    target: {pos: Vector3, objectType: ObjectType}
+    target: {objectLocation: ObjectLocation, objectType: ObjectType} | undefined
     setFightDone: () => void
     color?: string
 }

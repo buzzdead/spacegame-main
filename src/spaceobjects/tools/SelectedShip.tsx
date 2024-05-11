@@ -28,7 +28,7 @@ export const SelectedShip = ({ shipId, onSelected, isFighter }: Props) => {
         <SelectedIcon
           color={0x00ff80}
           position={
-            isFighter ? new Vector3(-8, 2.5, -1.5) : new Vector3(0, 2.5, 2)
+            isFighter ? new Vector3(0, 2.5, 0) : new Vector3(0, 2.5, 2)
           }
         />
       )}

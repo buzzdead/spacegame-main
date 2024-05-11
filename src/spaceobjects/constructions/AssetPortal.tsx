@@ -34,7 +34,6 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
   });
   const auraMesh = new THREE.Mesh(auraGeometry, auraMaterial);
   auraMesh.position.copy(assetPosition);
-  auraMesh.position.z += x ? 0 : 3;
   auraMesh.scale.setScalar(1.2); // adjust the scale to fit your needs
 
   useFrame(() => {

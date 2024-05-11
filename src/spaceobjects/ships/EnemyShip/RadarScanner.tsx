@@ -4,9 +4,10 @@ import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
 import { SWave } from "./swave";
 import { useFrame } from "@react-three/fiber";
+import { ObjectLocation } from "../../../store/UseOriginDestination";
 
 interface Props {
-    setNearbyEnemies: (n: Vector3[]) => void
+    setNearbyEnemies: (n: ObjectLocation[]) => void
     origin: Vector3
     nearby: boolean
     currentPos: Vector3
@@ -23,8 +24,8 @@ export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Pr
 
     useEffect(() => {
         const checkForNearByShips = () => {
-        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 60).map(e => e.meshRef.position)
-        const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75).map(e => e.meshRef.position)
+        const nearby = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 65)
+        const nearby2 = ships.filter(e => e.meshRef?.position?.distanceTo(currentPos) <= 75)
         const isNear = nearby2.length > 0
         toggleNearby(currentPos, isNear)
         setNearbyEnemies(nearby)

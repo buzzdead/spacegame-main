@@ -8,15 +8,22 @@ interface Props {
 }
 
 export const Options = ({onClose, visible}: Props) => {
-    const { postProcessing, setPostProcessing } = useShallowStore([
+    const { postProcessing, setPostProcessing, developerMode, setDeveloperMode, setResources } = useShallowStore([
         "postProcessing",
         "setPostProcessing",
+        "developerMode",
+        "setDeveloperMode",
+        "setResources"
       ]);
+      
     const [enablePostprocessing, setEnablePostProcessing] =
     useState(postProcessing);
+    const [enableDeveloperMode, setEnableDeveloperMode] = useState(developerMode)
 
   const handleModalOk = () => {
     if (postProcessing !== enablePostprocessing) setPostProcessing();
+    if (developerMode !== enableDeveloperMode) setDeveloperMode()
+    if (enableDeveloperMode) setResources(9999999999)
     onClose();
   };
   return (
@@ -31,6 +38,9 @@ export const Options = ({onClose, visible}: Props) => {
           checked={enablePostprocessing}
         >
           <p style={{userSelect: 'none'}}>Postprocessing enabled (may degrade performance)</p>
+        </Checkbox>
+        <Checkbox onClick={() => setEnableDeveloperMode(!enableDeveloperMode)}>
+        <p style={{userSelect: 'none'}}>Developer mode enabled (restart required)</p>
         </Checkbox>
       </Modal>
   )

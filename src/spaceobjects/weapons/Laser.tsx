@@ -4,10 +4,11 @@ import { useFrame, useThree } from "@react-three/fiber";
 import useStore from "../../store/UseStore";
 import Shader from "../../postprocessing/Shader";
 import { ObjectType } from "../../store/StoreState";
+import { ObjectLocation } from "../../store/UseOriginDestination";
 
 interface Props {
   origin: any;
-  target: {pos: THREE.Vector3, objectType: ObjectType}
+  target: {objectLocation: ObjectLocation, objectType: ObjectType} | undefined
   color: string;
   laserSound: any;
   setFightDone: () => void;
@@ -52,9 +53,9 @@ const Laser = ({
   });
  
   const laserMesh = new THREE.Mesh(laserGeometry, gradientMaterial);
-  laserMesh.position.x -= second ? 10.8 : 5;
+  laserMesh.position.x -= second ? -2.85 : 2.85;
   laserMesh.position.z += 3;
-  const distance = origin.distanceTo(target.pos);
+  const distance = target ? origin.distanceTo(target?.objectLocation.meshRef?.position || target.objectLocation.position) : new THREE.Vector3(0,0,0);
   useEffect(() => {
     if (!fire) return;
   
@@ -74,6 +75,7 @@ const Laser = ({
   }, [fire, autoAttack]);
 
   useFrame(({clock}) => {
+    if(!target) return
     laserMeshes.forEach((mesh) => {
       if (mesh.material.uniforms.time) {
         mesh.material.uniforms.time.value = clock.getElapsedTime() * 2;
@@ -86,7 +88,7 @@ const Laser = ({
 
       // Deal damage to the target
       if (mesh.position.z >= distance) {
-        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.pos, 5) : dealDamageToConstruction(target.pos, 5)
+        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 5) : dealDamageToConstruction(target.objectLocation.id, 5)
         scene.remove(mesh);
         mesh.removeFromParent();
         setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));

@@ -8,6 +8,7 @@ import {
   Ship,
 } from "./SpaceGameStateUtils";
 import { ExplosionSize } from "./useEffects";
+import { ObjectLocation } from "./UseOriginDestination";
 
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
@@ -36,7 +37,7 @@ export type CelestialObjectState = {
     toggleNearby: (pos: Vector3, n: boolean) => void
     setShipRef: (ref: any, shipId: string) => void
     setEnemyShipRef: (ref: any, shipId: string) => void
-    dealDamageToEnemy: (pos: Vector3, n: number, friend?: boolean) => DamageReport;
+    dealDamageToEnemy: (id: string, n: number, friend?: boolean) => DamageReport;
     selected: SelectedShip[];
     setSelected: (id: string) => void;
     selectedEnemies: EnemyShip[];
@@ -53,14 +54,14 @@ export type CelestialObjectState = {
       scale?: number
     ) => void;
     removeConstruction: (coId: string) => void
-    dealDamageToConstruction: (pos: Vector3, n: number) => DamageReport
+    dealDamageToConstruction: (id: string, n: number) => DamageReport
   };
   
   export type LocationState = {
-    origin: Vector3 | undefined;
-    destination: {pos: Vector3, type: DestinationType, objectType: ObjectType} | undefined;
-    setOrigin: (pos: Vector3 | undefined) => void;
-    setDestination: (pos: Vector3, type: DestinationType, objectType: ObjectType) => void;
+    origin: ObjectLocation | undefined;
+    destination: {objectLocation: ObjectLocation | undefined, type: DestinationType, objectType: ObjectType} | undefined;
+    setOrigin: (pos: ObjectLocation | undefined) => void;
+    setDestination: (pos: ObjectLocation, type: DestinationType, objectType: ObjectType) => void;
   };
   
   export type ResourceState = {
@@ -70,6 +71,8 @@ export type CelestialObjectState = {
 
   export type OptionsState = {
     postProcessing: boolean
+    developerMode: boolean
+    setDeveloperMode: () => void
     setPostProcessing: () => void
   }
 

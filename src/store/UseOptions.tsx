@@ -8,10 +8,14 @@ const useOptions: StateCreator<
   [],
   OptionsState
 > = (set) => ({
-  postProcessing: false,
+  postProcessing: true,
+  developerMode: false,
   setPostProcessing: () => {
     set((state) => ({postProcessing: !state.postProcessing}))
   },
+  setDeveloperMode: () => {
+    set((state) => ({developerMode: !state.developerMode}))
+  }
 })
 
 

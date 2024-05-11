@@ -34,9 +34,9 @@ const Construction: FC<Props> = ({ construction }) => {
   const handleClick = (e: any) => {
     e.stopPropagation()
     construction.type === "Refinary" ?
-    origin === position ? setOrigin(undefined) : setOrigin(position)
+    origin?.position === position ? setOrigin(undefined) : setOrigin(construction)
     : 
-    construction.type === "Enemy" ? setDestination(position, "Attack", "Construction")
+    construction.type === "Enemy" ? setDestination(construction, "Attack", "Construction")
     :
     menu.current = !menu.current
   }
@@ -50,7 +50,7 @@ const Construction: FC<Props> = ({ construction }) => {
   return (
     <Suspense fallback={null}>  
       <mesh ref={meshRef} position={position}>
-      {origin === position && <SelectedIcon color={'yellow'} position={new Vector3(0,4,0)} /> }
+      {origin?.position === position && <SelectedIcon color={'yellow'} position={new Vector3(0,4,0)} /> }
       <ConstructionMenu menu={menu} />
         <primitive onClick={handleClick} object={scene} />
         <ConstructionHull destroyShip={destroy} id={construction.id}/>

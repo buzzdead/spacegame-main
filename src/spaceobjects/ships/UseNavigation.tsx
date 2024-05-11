@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Vector3, Quaternion } from 'three'
 import { useShallowStore } from "../../store/UseStore";
 import { SpaceShipId } from "../../store/StoreAssets";
@@ -7,6 +7,8 @@ import ShipSound from "./ShipSound";
 import { LaserCannon } from "../weapons/LaserCannon";
 import { Ignition } from "../tools/Ignition";
 import { HarvestLaser } from "../tools/HarvestLaser";
+import { ObjectType } from "../../store/StoreState";
+import { ObjectLocation } from "../../store/UseOriginDestination";
 
 interface Props {
   shipType: SpaceShipId
@@ -22,18 +24,23 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     const [isFighting, setIsFighting] = useState(false)
     const [isHarvesting, setIsHarvesting] = useState(false);
     const [shipsOrigin, setShipsOrigin] = useState<Vector3>();
-    const [shipsDestination, setShipsDestination] = useState<{pos: Vector3, objectType: "Ship" | "Construction" | "Planet"}>({pos: new Vector3(0,0,0), objectType: "Construction"});
+    const [shipsDestination, setShipsDestination] = useState<{objectLocation: ObjectLocation, objectType: ObjectType}>();
     const isFighter = (shipType === "fighter" || shipType === "hawk")
+
+    const shipsDestinationPos = useMemo(() => {
+      return shipsDestination?.objectLocation?.meshRef?.position || shipsDestination?.objectLocation.position
+    }, [shipsDestination])
 
     useEffect(() => {
       if (!isSelected) return;
-      if (destination && destination.pos !== shipsDestination.pos) {
+      const abc = destination?.objectLocation?.meshRef?.position || destination?.objectLocation?.position
+      if (destination && abc !== shipsDestinationPos) {
         if(isFighting) setIsFighting(false)
           if(destination.type === "Travel") return
-        setShipsDestination({pos: destination.pos, objectType: destination.objectType});
+        abc && destination.objectLocation && setShipsDestination({objectLocation: destination.objectLocation, objectType: destination.objectType});
       }
-      if (origin && origin !== shipsOrigin) {
-        setShipsOrigin(origin);
+      if (origin && origin.meshRef.position !== shipsOrigin) {
+        setShipsOrigin(origin.meshRef.position);
       }
       if(isFighter) setShipsOrigin(meshRef.current.position)
     }, [destination, origin]);
@@ -106,16 +113,16 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           (isTraveling || isReturning)
         ) {
           if(!meshRef.current.name) {meshRef.current.name = shipId}
-          const targetPosition = isTraveling ? shipsDestination.pos : shipsOrigin;
+          const targetPosition = isTraveling && shipsDestination ? shipsDestinationPos : shipsOrigin;
           const { direction, targetQuaternion } =
             calculateDirectionAndRotation(targetPosition);
     
           direction &&
             updateShipPosition(direction, targetQuaternion, targetPosition);
         }
-        else if (isFighting) {
+        else if (isFighting && shipsDestination) {
           const { direction, targetQuaternion } =
-            calculateDirectionAndRotation(shipsDestination.pos);
+            calculateDirectionAndRotation(shipsDestinationPos);
             const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
             if(theAngle && theAngle > 0.01) {
               meshRef.current.quaternion.slerp(targetQuaternion, 0.5);

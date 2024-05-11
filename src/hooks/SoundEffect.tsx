@@ -16,9 +16,10 @@ interface Props {
         manual?: boolean | undefined; }
     minVolume?: number
     autoPlay?: boolean
+    detune?: number
 }
 
-const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = false}: Props) => {
+const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = false, detune}: Props) => {
     const [sound, setSound] = useState<PositionalAudio>()
     useEffect(() => {
         const listener = new AudioListener();
@@ -32,6 +33,7 @@ const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = fal
         scene.add(sound)
         sound.autoplay = autoPlay
         camera.add(listener)
+        if(detune) sound.detune = detune
         sound.setRefDistance(20);
         sound.setRolloffFactor(1);
       }, [])

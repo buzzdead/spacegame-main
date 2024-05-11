@@ -1,9 +1,14 @@
 import { StateCreator } from "zustand";
-import { Vector3 } from 'three'
-import { DestinationType, EnemyShip, LocationState, ObjectType } from "./StoreState";
+import { Vector3 } from "three";
+import {
+  DestinationType,
+  EnemyShip,
+  LocationState,
+  ObjectType,
+} from "./StoreState";
 import { CelestialObject, Construction, Ship } from "./SpaceGameStateUtils";
 
-type ObjectLocation = Ship | EnemyShip | Construction | CelestialObject
+export type ObjectLocation = Ship | EnemyShip | Construction | CelestialObject;
 
 const useOriginDestination: StateCreator<
   LocationState,
@@ -13,8 +18,18 @@ const useOriginDestination: StateCreator<
 > = (set) => ({
   origin: undefined,
   destination: undefined,
-  setOrigin: (m: Vector3 | undefined) => set((state) => ({ origin: m })),
-  setDestination: (m: Vector3, type: DestinationType, objectType: ObjectType) => set((state) => ({ destination: m === state.destination?.pos ? undefined : { pos: m, type: type, objectType}})),
-})
+  setOrigin: (m: ObjectLocation | undefined) => set((state) => ({ origin: m })),
+  setDestination: (
+    objectLocation: ObjectLocation,
+    type: DestinationType,
+    objectType: ObjectType
+  ) =>
+    set((state) => ({
+      destination:
+        objectLocation.position === state.destination?.objectLocation?.position
+          ? undefined
+          : { objectLocation: objectLocation, type: type, objectType },
+    })),
+});
 
 export default useOriginDestination;

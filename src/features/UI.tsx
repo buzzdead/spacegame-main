@@ -69,7 +69,7 @@ const UI = () => {
           </span>
         ))}
       </Typography>
-      <Typography style={{ color: "yellowgreen" }}>Origin: {origin}</Typography>
+      <Typography style={{ color: "yellowgreen" }}>Origin: {origin?.position}</Typography>
       <Typography style={{ color: "lightblue" }}>
         Resources: {resources}
       </Typography>

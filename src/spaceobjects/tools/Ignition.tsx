@@ -9,13 +9,13 @@ export const Ignition = ({type, brake = false}: Props) => {
   const isHawk = type === "hawk"
   const rocketEngineLeft = 
   {
-    x: isFighter ?  -6 : 1.04 / 100,
+    x: isFighter ?  1.85 : 1.04 / 100,
     y: 0.75 / 100,
     z: isFighter ? -7.5 : isHawk ? -5 : -0.3
   }
   const rocketEngineRight = 
   {
-    x: isFighter ? -9.6 : 1.04 / 100,
+    x: isFighter ? -1.86 : 1.04 / 100,
     y:  0.75 / 100,
     z: isFighter ? -7.5 : isHawk ? -6 : -0
   }

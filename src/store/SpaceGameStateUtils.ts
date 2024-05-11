@@ -7,6 +7,7 @@ export interface CelestialObject {
     id: string;
     glbPath: string
     position: Vector3
+    meshRef?: any
     scale?: number
 }
 
@@ -16,6 +17,7 @@ export interface Construction {
     glbPath: string
     position: Vector3
     scale?: number
+    meshRef?: any
     hull: number
     type: "Refinary" | "Construction" | "Enemy"
 }

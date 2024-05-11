@@ -53,7 +53,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
     e.stopPropagation();
     if (e.ctrlKey) setFire(!fire);
     setDestination(
-      meshRef?.current?.position || new Vector3(0, 0, 0),
+      enemyShip,
       "Attack",
       "Ship"
     );
@@ -82,7 +82,6 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
         shipRef={meshRef}
         currentPos={meshRef.current?.position || position}
         nearby={nearby}
-        color={new Color("green")}
         origin={position}
       />
     </group>

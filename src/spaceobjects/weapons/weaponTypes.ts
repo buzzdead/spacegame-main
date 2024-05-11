@@ -1,21 +1,21 @@
 import * as THREE from 'three'
 
 export type LaserType = {
-    speed: number;
-    color: string;
-  };
+  speed: number;
+  color: string;
+};
 type LaserNames = "HeavyLaser" | "LightLaser"
-  export const LaserTypes: Record<LaserNames, LaserType> = {
-    HeavyLaser: {
-      speed: 25,
-      color: '#edcf09',
-    },
-    LightLaser: {
-      speed: 75,
-      color: '#00ff00',
-    },
-  };
-  
+export const LaserTypes: Record<LaserNames, LaserType> = {
+  HeavyLaser: {
+    speed: 25,
+    color: '#edcf09',
+  },
+  LightLaser: {
+    speed: 75,
+    color: '#00ff00',
+  },
+};
+
 export type LaserRef = THREE.Mesh<
   THREE.BoxGeometry,
   THREE.MeshBasicMaterial,
