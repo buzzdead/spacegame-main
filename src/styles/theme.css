@@ -74,8 +74,8 @@ body {
   background-color: #1677ff;
 }
 .ant-btn-text {
-  background-color: white !important;
-  color: green !important;
+  background-color: #1677ff !important;
+  color: white !important;
   font-weight: bold;
 }
 

@@ -1,0 +1,97 @@
+.checkmark {
+    width: 35px; /* Adjust the width to fit inside the button */
+    height: 35px; /* Adjust the height to fit inside the button */
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+  }
+  
+  .path {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 0;
+    animation: load 3s linear infinite, spin 3s linear infinite;
+    transform-origin: 50% 50%;
+  }
+  
+  .path-complete {
+    animation-play-state: paused;
+  }
+  
+  .check {
+    stroke-dasharray: 110;
+    stroke-dashoffset: -110;
+    stroke-width: 0;
+  }
+  
+  .check-complete {
+    animation: check 1s ease-in forwards;
+    stroke-width: 15;
+    stroke-dashoffset: 0;
+  }
+  
+  .fill {
+    stroke-dasharray: 285;
+    stroke-dashoffset: -257;
+    animation: spin-fill 3s cubic-bezier(0.700, 0.465, 0.120, 0.600) infinite forwards;
+    transform-origin: 50% 50%;
+  }
+  
+  .fill-complete {
+    animation: fill 1s ease-out forwards;
+  }
+  
+  @keyframes load {
+    0% {
+      stroke-dashoffset: 285;
+      animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);
+    }
+    50% {
+      stroke-dashoffset: 0;
+      animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    100% {
+      stroke-dashoffset: -285;
+    }
+  }
+  
+  @keyframes check {
+    0% {
+      stroke-dashoffset: -110;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes spin-fill {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(720deg);
+    }
+  }
+  
+  @keyframes fill {
+    0% {
+      stroke-dashoffset: 285;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  .success {
+    stroke: #004300;
+    transition: stroke .6s;
+  }

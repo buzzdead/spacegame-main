@@ -3,6 +3,7 @@ import { useShallowStore } from "../store/UseStore";
 import { useEffect, useState } from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { Options } from "./Options";
+import Checkmark from "./Checkmark";
 
 const UI = () => {
   const [showOptions, setShowOptions] = useState(false);

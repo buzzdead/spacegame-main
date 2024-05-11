@@ -8,6 +8,7 @@ import {
   SecurityScanOutlined
 } from "@ant-design/icons";
 import { useState } from "react";
+import Checkmark from "./Checkmark";
 
 interface PlayerInfo {
     username: string;
@@ -21,7 +22,9 @@ interface PlayerInfo {
 
 export const Login = ({setGameStarted, setShowOptions}: Props) => {
     const [failed, setFailed] = useState(false)
+    const [registering, setRegistering] = useState(false)
     const onFinish = async (values: PlayerInfo) => {
+      setRegistering(true)
         console.log(values)
         try {
           const response = await fetch('/.netlify/functions/login', {
@@ -46,7 +49,7 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
           console.error('Failed to login:', error);
           onFinishFailed(error);
           if(failed) setGameStarted(true)
-          else setFailed(true)
+            else {setFailed(true); setTimeout(() => setRegistering(false), 10000)}
         }
       };
     
@@ -95,7 +98,7 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
           <Button
             type="default"
             onClick={setShowOptions}
-            style={{ width: "120px" }}
+            style={{ width: "120px", height: '40px' }}
           >
             Options
             <SettingFilled
@@ -110,12 +113,12 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
             />
           </Button>
           <Form.Item>
-            <Button
+          <Button
               type={failed ? "text" : "primary"}
               htmlType="submit"
-              style={{ width: "120px" }}
+              style={{ width: "120px", height: '40px' }}
             >
-              Start Game
+              {<div>{registering ? <div style={{position: 'relative', left: '25px', bottom: '2.5px'}}><Checkmark shouldComplete={failed} /></div> : "Start Game"} </div>}
             </Button>
           </Form.Item>
         </Flex>

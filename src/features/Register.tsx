@@ -8,6 +8,7 @@ import {
   SafetyCertificateOutlined
 } from "@ant-design/icons";
 import { useRef, useState } from "react";
+import Checkmark from "./Checkmark";
 
 interface PlayerInfo {
     username: string;
@@ -23,8 +24,10 @@ interface PlayerInfo {
 
 export const Register = ({setGameStarted, setShowOptions}: Props) => {
     const [failed, setFailed] = useState(false)
+    const [registering, setRegistering] = useState(false)
     const solarSystemRef = useRef('')
     const onFinish = async (values: PlayerInfo) => {
+        setRegistering(true)
         console.log(values)
         console.log(solarSystemRef.current)
         const ss = solarSystemRef.current.replaceAll(' ', '_').replaceAll('-', '_')
@@ -55,7 +58,7 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
           console.error('Failed to create player:', error);
           onFinishFailed(error);
           if(failed) setGameStarted(true)
-          else setFailed(true)
+          else {setFailed(true); setTimeout(() => setRegistering(false), 10000)}
         }
       };
     
@@ -139,7 +142,7 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
           <Button
             type="default"
             onClick={setShowOptions}
-            style={{ width: "120px" }}
+            style={{ width: "120px", height: '40px' }}
           >
             Options
             <SettingFilled
@@ -157,9 +160,9 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
             <Button
               type={failed ? "text" : "primary"}
               htmlType="submit"
-              style={{ width: "120px" }}
+              style={{ width: "120px", height: '40px' }}
             >
-              Start Game
+              {<div>{registering ? <div style={{position: 'relative', left: '25px', bottom: '2.5px'}}><Checkmark shouldComplete={failed} /></div> : "Start Game"} </div>}
             </Button>
           </Form.Item>
         </Flex>
