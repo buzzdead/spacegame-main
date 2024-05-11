@@ -45,6 +45,44 @@ body {
     box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
   }
 
-  
+  /* theme.css or your custom stylesheet */
+
+/* Style for the non-active tab labels */
+.ant-tabs-tab:not(.ant-tabs-tab-active) {
+  color: white; /* Make non-selected tab labels white */
+}
+
+/* Style for the tab labels to take full width */
+.ant-tabs-nav-list {
+  width: 100%;
+}
+
+/* Style for each tab to take equal width */
+.ant-tabs-tab {
+  flex: 1; /* Distribute space equally among tabs */
+  justify-content: center; /* Center the tab label */
+  text-align: center; /* Center the text inside the tab label */
+}
+.ant-tabs-tab:hover {
+  color: rgb(141, 166, 174); /* Light blue color on hover */
+}
   /* Add more theme overrides as needed */
-  
+  .ant-btn-primary {
+    background-color: #1677ff;
+}
+.ant-btn-primary.ant-btn:focus {
+  background-color: #1677ff;
+}
+.ant-btn-text {
+  background-color: white !important;
+  color: green !important;
+  font-weight: bold;
+}
+
+  .ant-btn-default.ant-btn:focus {
+    background-color: white;
+}
+
+.ant-tabs-tab {
+  user-select: none; /* Prevent text selection */
+}

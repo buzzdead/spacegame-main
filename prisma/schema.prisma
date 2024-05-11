@@ -10,9 +10,9 @@ datasource db {
 }
 
 enum SolarSystem {
-  SOLAR_SYSTEM_A
-  SOLAR_SYSTEM_B
-  SOLAR_SYSTEM_C
+  Alpha_Centauri
+  Sol
+  Kepler_186f
 }
 
 model Player {
