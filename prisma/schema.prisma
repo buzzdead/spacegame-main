@@ -1,0 +1,24 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SolarSystem {
+  SOLAR_SYSTEM_A
+  SOLAR_SYSTEM_B
+  SOLAR_SYSTEM_C
+}
+
+model Player {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  homebase    String
+  solarSystem SolarSystem
+  password    String
+}
