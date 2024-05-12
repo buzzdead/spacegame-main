@@ -25,7 +25,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
       createRef<LaserRef>()
     )
   );
-  const goRef = useRef<boolean[]>([true, (TARGET_LENGTH === 2 || TARGET_LENGTH === 3), TARGET_LENGTH === 3]);
+  const goRef = useRef<boolean[]>([true, (TARGET_LENGTH >= 2), TARGET_LENGTH >= 3]);
   const laserGeometry = new THREE.BoxGeometry(0.11, 0.11, 2);
   const pos = shipRef.current?.position || origin;
 
@@ -93,7 +93,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
 
     const dst = getDistance(laserRef.position, currentTarget);
     const distanceType = getDistanceType(dst, id);
-    if (distanceType === "fireNext" && ((id === 0 && TARGET_LENGTH === 1) || (id === 1 && TARGET_LENGTH !== 3)))  {goRef.current[id + 1] = true; !sound?.isPlaying && sound?.play()}
+    if (distanceType === "fireNext" && ((id === 0 && TARGET_LENGTH === 1) || (id === 1 && TARGET_LENGTH < 3)))  {goRef.current[id + 1] = true; !sound?.isPlaying && sound?.play()}
     if (distanceType === "dissipate")
       laserRef.scale.multiply(new THREE.Vector3(0.95, 0.95, 0.95));
     if (distanceType === "stop") {
@@ -103,9 +103,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
       if (goRef.current.every(v => v === false)) {
         hit.current = true;
         if (report === "Destroyed" || report === "Not Found") return;
-        setTimeout(() => {
-          resetsLaserRefs();
-        }, 250);
+        resetsLaserRefs()
       }
     }
   };
@@ -113,7 +111,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
 
   const resetsLaserRefs = () => {
     hit.current = false;
-    goRef.current = [true, (TARGET_LENGTH === 2 || TARGET_LENGTH === 3), TARGET_LENGTH === 3];
+    goRef.current = [true, (TARGET_LENGTH >= 2), TARGET_LENGTH >= 3];
     laserRefs.current.forEach((lr) => {
       const lrc = lr.current;
       if (!lrc) return;

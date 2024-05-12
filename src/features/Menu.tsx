@@ -35,7 +35,6 @@ const Menu = ({ setGameStarted }: Props) => {
 
   ]
   const onChange = (key: string) => {
-    console.log(key);
   };
   return (
     <Suspense fallback={<div style={{ fontSize: 100 }}>Loading</div>}>

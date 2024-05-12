@@ -1,7 +1,8 @@
 import { StateCreator } from "zustand";
 import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
-import { DamageReport, EnemyShip, SpaceShipState } from "./StoreState";
+import { DamageReport, EnemyShip, ShipShift, SpaceShipState } from "./StoreState";
 import { Vector3 } from 'three'
+import { ElementRef } from "react";
 
 const useShips: StateCreator<
   SpaceShipState,
@@ -22,15 +23,23 @@ const useShips: StateCreator<
     })),
     removeShip: (id: string, friend = false) => set((state) =>
     {
-      if(friend) return {ships: [...state.ships.filter(s => s.id !== id)]}
+      if(friend) return {selected: state.selected.filter(s => s.id !== id), ships: [...state.ships.filter(s => s.id !== id)]}
       else return { enemyShips: [...state.enemyShips.filter(e => e.id !== id)]}
     }),
-    setEnemyShipRef: (shipRef: any, shipId: string) => 
+    setEnemyShipRef: (shipRef: ElementRef<"mesh"> & ShipShift, shipId: string) => 
       set((state) => {
         const ship = state.enemyShips.find(es => es.id === shipId)
         const newShip = {...(ship as EnemyShip & { meshRef: any }), meshRef: shipRef}
         return { enemyShips: ship ? state.enemyShips.map(es => es.id === shipId ? newShip : es) : state.enemyShips}
       }),
+      setShipShift: (ships: Ship[]) => 
+        set((state) => {
+          const updatedShips = state.ships.map(ship => {
+            const updatedShip = ships.find(s => s.id === ship.id);
+            return updatedShip || ship;
+          });
+          return { ...state, ships: updatedShips };
+        }),
     setShipRef: (shipRef: any, shipId: string) => 
       set((state) => {
         const ship = state.ships.find(s => s.id === shipId)
@@ -64,9 +73,9 @@ const useShips: StateCreator<
     return destroyed;
   },
   selected: [],
-  setSelected: (id: string) =>
+  setSelected: (id: string, removeAll?: boolean) =>
     set((state) => ({
-      selected: SpaceGameStateUtils.addToSelected(
+      selected: removeAll ? [] : SpaceGameStateUtils.addToSelected(
         state.ships,
         state.selected,
         id

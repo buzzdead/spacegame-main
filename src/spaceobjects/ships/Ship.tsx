@@ -12,9 +12,8 @@ interface Props {
 }
 
 const Ship: FC<Props> = ({ ship, scene }) => {
-  const { setSelected, setShipRef, removeShip, setExplosions } = useShallowStore([
+  const { setSelected, removeShip, setExplosions } = useShallowStore([
     "setSelected",
-    "setShipRef",
     "removeShip",
     "setExplosions"
   ]);
@@ -32,9 +31,6 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     setSelected(ship.id);
   };
 
-  useEffect(() => {
-    setShipRef(meshRef.current, ship.id);
-  }, [meshRef]);
   useEffect(() => {
     if (destroyed){
         setExplosions(meshRef.current?.position || position, "Medium")
@@ -61,7 +57,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         <Navigation
           shipId={ship.id}
           isSelected={isSelected}
-          meshRef={meshRef}
+          meshRef={ship.meshRef || meshRef}
           shipType={ship.assetId}
         />
         <primitive object={scene} />

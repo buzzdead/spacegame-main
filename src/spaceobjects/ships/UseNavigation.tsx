@@ -4,6 +4,7 @@ import { useShallowStore } from "../../store/UseStore";
 import { SpaceShipId } from "../../store/StoreAssets";
 import { useFrame } from "@react-three/fiber";
 import ShipSound from "./ShipSound";
+import * as THREE from 'three'
 import { LaserCannon } from "../weapons/LaserCannon";
 import { Ignition } from "../tools/Ignition";
 import { HarvestLaser } from "../tools/HarvestLaser";
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
-    const { destination, setResources, origin, setSelected} = useShallowStore(["destination", "setResources", "origin", "setSelected"])
+    const { destination, setResources, origin, setShipRef, setSelected} = useShallowStore(["destination", "setResources", "origin", "setShipRef", "setSelected"])
     const [isTraveling, setIsTraveling] = useState(false);
     const [isReturning, setIsReturning] = useState(false);
     const [isFighting, setIsFighting] = useState(false)
@@ -30,6 +31,10 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     const shipsDestinationPos = useMemo(() => {
       return shipsDestination?.objectLocation?.meshRef?.position || shipsDestination?.objectLocation.position
     }, [shipsDestination])
+
+    useEffect(() => {
+      setShipRef(meshRef.current, shipId);
+    }, []);
 
     useEffect(() => {
       if (!isSelected) return;
@@ -48,17 +53,29 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     useEffect(() => {
       if (shipsOrigin && shipsDestination) {
         setIsTraveling(true);
-        setSelected(shipId);
+        
       }
 
     }, [shipsOrigin, shipsDestination]);
 
     const calculateDirectionAndRotation = (targetPosition: Vector3) => {
         if (!meshRef.current) return {};
+        const distance = meshRef.current.position.distanceTo(targetPosition);
         const direction = new Vector3()
           .subVectors(targetPosition, meshRef.current.position)
           .normalize();
-    
+          if(meshRef.current.shipShift){
+            
+            const shipShift = meshRef.current.shipShift
+          const shiftToLeft = shipShift.shift
+          const shiftAngleRadians = THREE.MathUtils.degToRad(45 * shipShift.multiplyer *(distance < 150 ? 0.8 : distance < 100 ? 0.6 : distance < 50 ? 0.4 : distance < 25 ? 0.2 : distance < 12.5 ? 0 : 1));
+          const rotationAxis = new Vector3(0, 1, 0);
+          const shiftQuaternion = new THREE.Quaternion().setFromAxisAngle(
+            rotationAxis,
+            shiftToLeft === "right" ? shiftAngleRadians : -shiftAngleRadians
+          );
+          direction.applyQuaternion(shiftQuaternion);
+        }
         const targetQuaternion = new Quaternion().setFromUnitVectors(
           new Vector3(0, 0, 1), // Assuming front of your ship is along +Z
           direction

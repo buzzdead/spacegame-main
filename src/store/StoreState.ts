@@ -9,11 +9,13 @@ import {
 } from "./SpaceGameStateUtils";
 import { ExplosionSize } from "./useEffects";
 import { ObjectLocation } from "./UseOriginDestination";
+import { ElementRef } from "react";
 
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
 export type DestinationType = "Harvest" | "Attack" | "Travel"
 export type ObjectType = "Ship" | "Construction" | "Planet"
 export type DamageReport = "Destroyed" | "Hit" | "Not Found"
+export type ShipShift = {shift: "left" | "right", multiplyer: number}
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -35,11 +37,12 @@ export type CelestialObjectState = {
     enemyShips: EnemyShip[]
     addEnemyShip: (pos: Vector3, hull: number) => void
     toggleNearby: (pos: Vector3, n: boolean) => void
-    setShipRef: (ref: any, shipId: string) => void
+    setShipRef: (ref: null | ElementRef<"mesh"> & Partial<ShipShift>, shipId: string) => void
+    setShipShift: (ships: Ship[]) => void
     setEnemyShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (id: string, n: number, friend?: boolean) => DamageReport;
     selected: SelectedShip[];
-    setSelected: (id: string) => void;
+    setSelected: (id: string, removeAll?: boolean) => void;
     selectedEnemies: EnemyShip[];
     setSelectedEnemies: (a: EnemyShip, remove?: boolean) => void;
     removeShip: (id: string, friend?: boolean) => void

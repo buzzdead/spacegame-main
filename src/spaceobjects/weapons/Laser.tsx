@@ -55,6 +55,7 @@ const Laser = ({
   const laserMesh = new THREE.Mesh(laserGeometry, gradientMaterial);
   laserMesh.position.x -= second ? -2.85 : 2.85;
   laserMesh.position.z += 3;
+  
   const distance = target ? origin.distanceTo(target?.objectLocation.meshRef?.position || target.objectLocation.position) : new THREE.Vector3(0,0,0);
   useEffect(() => {
     if (!fire) return;
@@ -85,7 +86,7 @@ const Laser = ({
         mesh.geometry.scale(0.9, 0.9, 0.9);
       }
       mesh.position.z += 1;
-
+      
       // Deal damage to the target
       if (mesh.position.z >= distance) {
         const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 5) : dealDamageToConstruction(target.objectLocation.id, 5)

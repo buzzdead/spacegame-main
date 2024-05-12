@@ -25,7 +25,6 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
     const [registering, setRegistering] = useState(false)
     const onFinish = async (values: PlayerInfo) => {
       setRegistering(true)
-        console.log(values)
         try {
           const response = await fetch('/.netlify/functions/login', {
             method: 'POST',
@@ -43,7 +42,6 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
           }
       
           const data = await response.json();
-          console.log('Player logged in');
           setGameStarted(true);
         } catch (error) {
           console.error('Failed to login:', error);

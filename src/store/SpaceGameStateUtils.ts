@@ -2,6 +2,8 @@
 import { Vector3 } from 'three';
 import { CelestialObjectId, celestialObjects, ConstructionId, constructions, SpaceShipId, spaceShips } from './StoreAssets';
 import Construction from '../spaceobjects/constructions/Construction';
+import { ElementRef } from 'react';
+import { ShipShift } from './StoreState';
 export interface CelestialObject {
     assetId: CelestialObjectId
     id: string;
@@ -29,12 +31,12 @@ export interface Ship {
     position: Vector3
     hull: number
     scale?: number
-    meshRef?: any
+    meshRef?: ElementRef<"mesh"> & {shipShift: Partial<ShipShift>}
 }
 let ship_id = 0
 let construction_id = 0
 let celestialObject_id = 0
-export type SelectedShip = Pick<Ship, 'assetId' | 'id' | 'position'>
+export type SelectedShip = Ship
 export type numberVector = [number, number, number]
 class SpaceGameStateUtils {
     static addShipToState(ships: Ship[], shipId: string, nv: numberVector, hull = 100, scale = 1): Ship[] {
@@ -69,7 +71,7 @@ class SpaceGameStateUtils {
 
     static addToSelected(ships: Ship[], selected: SelectedShip[], id: string): SelectedShip[] {
         const selectedShip = ships.find(e => e.id === id) as SelectedShip
-        return selectedShip ? selected.includes(selectedShip) ? [...selected.filter(e => e !== selectedShip)] : [...selected, selectedShip] : [...selected]
+        return selectedShip ? selected.find(s => s.id === id) ? [...selected.filter(e => e !== selectedShip)] : [...selected, selectedShip] : [...selected]
     }
 }
 

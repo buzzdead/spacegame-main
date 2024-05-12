@@ -4,6 +4,7 @@ import useStore from "../store/UseStore";
 import { ShipScene } from "../spaceobjects/ships/ShipScene";
 import { LoadEnemyShips } from "./LoadEnemyShips";
 import { Ship } from "../store/SpaceGameStateUtils";
+import { ShipShifter } from "./ShipShifter";
 
 interface Props {
   startShip: SpaceShipId;
@@ -32,7 +33,9 @@ export const LoadShips = ({ startShip }: Props) => {
     <group>
       {ships.map((ship) => (
         <MemoizedShip key={ship.id} ship={ship} />
+        
       ))}
+      <ShipShifter />
     </group>
   );
 };

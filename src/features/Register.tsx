@@ -28,10 +28,7 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
     const solarSystemRef = useRef('')
     const onFinish = async (values: PlayerInfo) => {
         setRegistering(true)
-        console.log(values)
-        console.log(solarSystemRef.current)
         const ss = solarSystemRef.current.replaceAll(' ', '_').replaceAll('-', '_')
-        console.log(ss)
         try {
           const response = await fetch('/.netlify/functions/register', {
             method: 'POST',
