@@ -18,6 +18,13 @@ const ThreeSetup = ({ children }: Props) => {
   const bottom = -frustumHeight;
   return (
     <Canvas
+    gl={{
+      antialias: true,
+    alpha: false,
+    powerPreference: "high-performance",
+    stencil: true,
+    depth: true,
+    }}
       camera={{
         left: left,
         right: right,
