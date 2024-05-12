@@ -36,13 +36,13 @@ async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture, s
 }
 const zone = new PointZone(0, 0);
   const emitter = new Emitter()
-  .setRate(new Rate(new Span(3, 6), new Span(0.3)))
+  .setRate(new Rate(new Span(size === "Small" ? 1 : 3, size === "Small" ? 3 : 6), new Span(size === "Small" ? 0.01  : 0.5)))
   .setInitializers([
     new Position(zone),
     new Mass(1),
     //new Radius(size === "Big" ? 5 : 2.5, size ==="Big" ? 12 : 6),
     new Radius(5, 12),
-    new Life(0.85),
+    new Life(size === "Small" ? .75 : 0.85),
     new Body(createSprite()),
     new RadialVelocity(13, new Vector3D(0, 1, 0), 360)
   ])

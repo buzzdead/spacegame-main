@@ -8,17 +8,22 @@ export const ExplosionEffects = () => {
   const particle = useMemo(() => {
     return require("./explosion00.png");
   }, []);
+  const texture2 = useMemo(() => {
+    const p = require('./flame_04.png')
+    return new TextureLoader().load(p);
+  }, [])
 
   const texture = useMemo(() => {
     return new TextureLoader().load(particle);
   }, []);
+
 
   return (
     <group>
       {explosions.map((e) => (
         <ShipExplosion
           onEnd={() => removeExplosion(e.id)}
-          texture={texture}
+          texture={e.size === "Small" ? texture2 : texture}
           key={e.id}
           explosion={e}
         />

@@ -81,7 +81,7 @@ export type CelestialObjectState = {
 
   export type EffectsState = {
     explosions: {id: number; pos: Vector3, size: ExplosionSize}[]
-    setExplosions: (newExplosion: Vector3, size: ExplosionSize) => void
+    setExplosions: (newExplosion: Vector3, size?: ExplosionSize) => void
     removeExplosion: (id: number) => void
   }
   

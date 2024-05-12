@@ -27,6 +27,7 @@ export const LoadShips = ({ startShip }: Props) => {
     addShip(startShip, [8, 1, 0], 100, 0.014);
     addShip(startShip, [10, 2, 12], 100, 0.014);
     addShip(startShip, [12, 3, 24], 100, 0.014);
+    addShip("fighter", [55, 15, 55], 100, 20)
   }, [addShip, startShip, ships.length]);
 
   return (
