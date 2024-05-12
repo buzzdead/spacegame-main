@@ -44,9 +44,11 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           if(destination.type === "Travel") return
         abc && destination.objectLocation && setShipsDestination({objectLocation: destination.objectLocation, objectType: destination.objectType});
       }
-      if (origin && origin.meshRef.position !== shipsOrigin) {
+      console.log(origin)
+      if (origin && origin?.meshRef?.position && origin.meshRef.position !== shipsOrigin) {
         setShipsOrigin(origin.meshRef.position);
       }
+      else if (origin?.position && origin?.position !== shipsOrigin) {shipType === "cargo" && setSelected("5", true); setShipsOrigin(origin.position)};
       if(isFighter) setShipsOrigin(meshRef.current.position)
     }, [destination, origin]);
   
