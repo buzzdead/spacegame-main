@@ -35,18 +35,18 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [fire, setFire] = useState(false);
   const texture = useTexture.preload("/assets/fire1.png");
-  const [destroyed, setDestroyed] = useState(false);
 
   useEffect(() => {
     setEnemyShipRef(meshRef.current, shipId);
   }, []);
 
   const destroyShip = () => {
-    setDestroyed(true);
     setExplosions(meshRef.current?.position || position, "Big");
-    removeShip(shipId);
-    scene.removeFromParent();
-    setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)
+    setTimeout(() => {
+      removeShip(shipId);
+      scene.removeFromParent();
+      setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)
+    }, 150)
     //setTimeout(() => {setDestroyed(false); setSelectedEnemies({ship: shipId, hull: 100})}, 10000)
   };
   const handleOnClick = (e: any) => {

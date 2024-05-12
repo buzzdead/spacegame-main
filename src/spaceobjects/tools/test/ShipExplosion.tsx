@@ -81,7 +81,7 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   const reallyStopEmit = useRef(false)
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
-    sfxPath: "/assets/sounds/explo.mp3",
+    sfxPath: explosion.size === "Small" ? "/assets/sounds/missile-explosion.mp3" : "/assets/sounds/explo.mp3",
     scene: scene,
     minVolume: 0.75,
     camera: camera,

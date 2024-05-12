@@ -43,8 +43,11 @@ const Construction: FC<Props> = ({ construction }) => {
 
   const destroy = () => {
     setExplosions(position, "Big")
-    removeConstruction(construction.id); scene.removeFromParent()
-    explosionSound?.play()
+    setTimeout(() => {
+      removeConstruction(construction.id); scene.removeFromParent()
+      explosionSound?.play()
+    }, 150)
+   
   }
 
   return (

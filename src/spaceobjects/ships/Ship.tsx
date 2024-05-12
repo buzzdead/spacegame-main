@@ -1,8 +1,7 @@
 import { FC, ElementRef, Suspense, useRef, useEffect, useState } from "react";
-import { Vector3, Group, Object3DEventMap } from "three";
+import { Group, Object3DEventMap } from "three";
 import { SGS, useShallowStore } from "../../store/UseStore";
 import { ShipHull } from "./EnemyShip/ShipHull";
-import Explosion from "../tools/Explosion";
 import { SelectedShip } from "../tools/SelectedShip";
 import Navigation from "./UseNavigation";
 
@@ -23,6 +22,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const [destroyed, setDestroyed] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
 
+
   const isFighter = ship.assetId === "fighter";
   const isHawk = ship.assetId === "hawk";
 
@@ -34,8 +34,10 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   useEffect(() => {
     if (destroyed){
         setExplosions(meshRef.current?.position || position, "Medium")
-        removeShip(ship.id, true);
-        scene.removeFromParent();
+        setTimeout(() => {
+          removeShip(ship.id, true);
+          scene.removeFromParent();
+        }, 150)
       }
   }, [destroyed]);
  
