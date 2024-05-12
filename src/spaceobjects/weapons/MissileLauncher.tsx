@@ -16,9 +16,9 @@ interface Props {
 export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Props) => {
     const missileRef = useRef<THREE.Mesh>(null)
     const setExplosions = useStore((state) => state.setExplosions)
-    const stopRef = useRef(false)
+    const stopRef = useRef(true)
     useEffect(() => {
-      stopRef.current = false
+      setTimeout(() => stopRef.current = false, Math.random() * 500)
     }, [target])
     const setTheExplosion = () => {
       if(!missileRef.current) return
@@ -26,8 +26,8 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
       thePos.x += posX * 1.5
       thePos.z += 1
       const currentPos = missileRef.current.position.clone()
-      if(target?.objectLocation.meshRef.position)
-      setExplosions(target.objectLocation.meshRef.position.clone().add(thePos), "Small")
+      if((target?.objectType === "Ship" && target?.objectLocation.meshRef.position )|| target?.objectType === "Construction" && target?.objectLocation.position)
+      setExplosions(target.objectType === "Ship" ? target.objectLocation.meshRef.position.clone().add(thePos) : target.objectLocation.position.clone().add(thePos), target.objectType === "Construction" ? "Medium" : "Small")
     }
     missile.rotation.x = 1.55
     useFrame(() => {

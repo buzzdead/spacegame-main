@@ -100,7 +100,7 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
       }
         
         particleSystem.update();
-        if(particleSystem.emitter.life < -1000) {onEnd(); reallyStopEmit.current = true}
+        if(particleSystem.emitter.life < -500) {onEnd(); reallyStopEmit.current = true}
       
     }
   });

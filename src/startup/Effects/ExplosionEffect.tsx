@@ -16,8 +16,6 @@ export const ExplosionEffects = () => {
   const texture = useMemo(() => {
     return new TextureLoader().load(particle);
   }, []);
-
-
   return (
     <group>
       {explosions.map((e) => (

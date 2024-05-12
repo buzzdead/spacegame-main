@@ -32,7 +32,7 @@ const useEffects: StateCreator<
     explosions: [],
     setExplosions: (pos: Vector3, size: ExplosionSize = "Medium") => {
       const explosion: Explosion = { id: nextId++, pos, size };
-      set((state) => ({ explosions: [...state.explosions, explosion] }));
+      set((state) => { const currentExplosions = state.explosions.filter(s => s.pos.distanceTo(pos) < 1 && s.size === size); return currentExplosions.length >= 2 ? state : {explosions: [...state.explosions, explosion]} });
     },
     removeExplosion: (id: number) => {
       removalQueue.push(id); // Add the explosion ID to the removal queue

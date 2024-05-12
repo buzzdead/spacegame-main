@@ -23,7 +23,7 @@ const Construction: FC<Props> = ({ construction }) => {
   const ships = spaceShips;
   const fighter = ships.find((e) => e.id === "fighter");
   const constructionAsset = useAsset(fighter?.glbPath || "", 8)
-  const menu = useRef(false)
+  const menu = useRef(construction.type === "Construction" ? true : false)
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/explo.mp3",
