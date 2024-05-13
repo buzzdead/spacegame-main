@@ -29,7 +29,7 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     );
     const angle = shipRef.current.quaternion.angleTo(targetQuaternion);
     lookingAtTarget.current = angle < 0.25
-    shipRef.current.quaternion.slerp(targetQuaternion, 0.005);
+    shipRef.current.quaternion.slerp(targetQuaternion, 0.008);
     })
     const { sound: laserSound, calculateVolume: calculateLaserSound } =
   UseSoundEffect({
