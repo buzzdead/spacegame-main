@@ -27,6 +27,7 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
     minVolume: 0.75,
     camera: camera,
   });
+  const distance = target?.objectLocation ? target.objectType === "Ship" ? o.distanceTo(target?.objectLocation.meshRef?.position) : o.distanceTo(target.objectLocation.position) : 100;
     useEffect(() => {
       setTimeout(() => stopRef.current = false, Math.random() * 500)
     }, [target])
@@ -52,7 +53,7 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
         const mr = missileRef.current
         if(mr) {
             mr.position.z += 0.2
-            if(mr.position.z > 50) {
+            if(mr.position.z >= distance) {
                 missile.scale.set(0,0,0)
                 setTheExplosion()
                 stopRef.current = true

@@ -9,6 +9,8 @@ import { EnemyShipSystem } from "./EnemyShipSystem";
 import { EnemyNavigation } from "./Navigation";
 import { EnemyShip as ES } from "../../../store/StoreState";
 import { Ignition } from "../../tools/Ignition";
+import { ShipBeam } from "../../tools/test/ShipExplosion";
+import { TheBeam } from "../../weapons/TheBeam";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -69,7 +71,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
     <mesh position={position} ref={meshRef} onClick={handleOnClick}>
       <ShipHull shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
-     
+      
       <EnemyNavigation
         nearby={nearby}
         origin={origin}

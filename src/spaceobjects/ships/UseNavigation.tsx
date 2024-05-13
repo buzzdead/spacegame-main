@@ -93,7 +93,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
         const distance = meshRef.current.position.distanceTo(targetPosition);
         const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
     
-        if (distance < (isReturning ? 12 : isFighter ? 50 : 12) && theAngle < 0.05) {
+        if (distance < (isReturning ? 12 : isFighter ? 70 : 12) && theAngle < 0.05) {
           if (isTraveling) {
             if(isFighter)
               { 
