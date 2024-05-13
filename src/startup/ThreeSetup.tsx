@@ -1,5 +1,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
+import { ACESFilmicToneMapping } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Environment } from "@react-three/drei";
 
@@ -18,8 +19,11 @@ const ThreeSetup = ({ children }: Props) => {
   const bottom = -frustumHeight;
   return (
     <Canvas
+    onCreated={({ gl }) => {
+      gl.toneMapping = ACESFilmicToneMapping;
+    }}
     gl={{
-      antialias: true,
+      antialias: false,
     alpha: false,
     powerPreference: "high-performance",
     stencil: true,

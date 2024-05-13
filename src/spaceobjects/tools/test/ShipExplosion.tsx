@@ -82,27 +82,28 @@ async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
       map: texture,
       color: 'red',
       blending: THREE.AdditiveBlending,
-      transparent: true
+      blendEquation: THREE.MaxEquation,
+      blendSrc: THREE.OneFactor,
+      fog: true
     });
     return new THREE.Sprite(material);
   }
   
   const zone = new PointZone(0, 0, 0);
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(1, 1), new Span(0.01, 0.05)))
+    .setRate(new Rate(new Span(1, 1), new Span(0.001, 0.05)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(1.8, 2.25),
+      new Life(1.4, 1.95),
       new Body(createSprite()),
-      new Radius(4.5, 5.5),
+      new Radius(3.5, 4.5),
       new RadialVelocity(35, new Vector3D(0, 0, 1), 1)
     ])
     .setBehaviours([
-      new Alpha(1, 0),
+      new Alpha(11, 24),
       new Color(new THREE.Color("#FF5F1F"), new THREE.Color("#1B03A3")),
       new Scale(1, 1),
-      new Rotate("random", "random"),
       
     ])
     .emit();
