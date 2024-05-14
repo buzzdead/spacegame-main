@@ -21,7 +21,7 @@ export const Effects = () => {
   }, [narrative]);
   return (
     <group>
-      {postProcessing && <ShockWaveComponent />}
+     {/*  {postProcessing && <ShockWaveComponent />} */}
       <ExplosionEffects />
     </group>
   );

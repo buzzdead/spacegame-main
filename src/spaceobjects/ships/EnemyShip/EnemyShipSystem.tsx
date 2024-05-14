@@ -39,6 +39,14 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     camera: camera,
     detune: -550
   });
+  const { sound: beamSound, calculateVolume: calculateBeamSound } =
+  UseSoundEffect({
+    sfxPath: "/assets/sounds/beam.mp3",
+    scene: scene,
+    minVolume: 0.15,
+    camera: camera,
+    detune: -550
+  });
   useEffect(() => {
     const distance = camera.position.distanceTo(currentPos)
     calculateLaserSound(distance)
@@ -47,7 +55,7 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     <group>
       {nearbyEnemies.length > 0 && <HeavyLaser sound={laserSound} shipRef={shipRef} origin={currentPos} target={nearbyEnemies} />}
       <RadarScanner currentPos={currentPos} nearby={nearby} origin={origin} setNearbyEnemies={setNearbyEnemies}/>
-      {nearby && <TheBeam nearbyRef={lookingAtTarget} position={shipRef.current?.position || origin} rotation={shipRef.current?.rotation || new THREE.Vector3(0,0,0)}/>}
+      {nearby && <TheBeam sound={beamSound} nearbyRef={lookingAtTarget} position={shipRef.current?.position || origin} rotation={shipRef.current?.rotation || new THREE.Vector3(0,0,0)}/>}
     </group>
   );
 };

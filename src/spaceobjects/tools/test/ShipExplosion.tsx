@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from 'three';
-import System, { BoxZone, CrossZone, LineZone, RandomDrift } from 'three-nebula';
 import Nebula, {
   SpriteRenderer,
   Emitter,
@@ -13,17 +12,12 @@ import Nebula, {
   Color,
   Life,
   Scale,
-  BodySprite,
   PointZone,
   Alpha,
   Body,
   Mass,
   Radius,
-  Rotate,
-  Force,
-  Velocity,
 } from 'three-nebula';
-import useStore from '../../../store/UseStore';
 import UseSoundEffect from '../../../hooks/SoundEffect';
 import { ExplosionSize } from '../../../store/useEffects';
 import { Particle } from 'three-nebula-types';
@@ -80,11 +74,11 @@ async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
   function createSprite() {
     var material = new THREE.SpriteMaterial({
       map: texture,
-      color: 'red',
       blending: THREE.AdditiveBlending,
-      blendEquation: THREE.MaxEquation,
+      blendEquation: THREE.AddEquation,
+      blendDst: THREE.OneMinusConstantAlphaFactor,
       blendSrc: THREE.OneFactor,
-      fog: true
+      blendEquationAlpha: THREE.CustomBlending,
     });
     return new THREE.Sprite(material);
   }
@@ -95,15 +89,16 @@ async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(1.4, 1.95),
+      new Life(3.45, 3.85),
       new Body(createSprite()),
-      new Radius(3.5, 4.5),
-      new RadialVelocity(35, new Vector3D(0, 0, 1), 1)
+      new Radius(2, 2),
+      new RadialVelocity(20, new Vector3D(0, 0, 10), 1),
     ])
     .setBehaviours([
-      new Alpha(11, 24),
-      new Color(new THREE.Color("#FF5F1F"), new THREE.Color("#1B03A3")),
+      new Alpha(24, 12),
+      new Color(new THREE.Color("red"), new THREE.Color("#FF3131")),
       new Scale(1, 1),
+      
       
     ])
     .emit();

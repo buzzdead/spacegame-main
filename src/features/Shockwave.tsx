@@ -27,7 +27,7 @@ export const ShockWaveComponent = () => {
       ref.current.speed = length === 1 ? 2 : 1.25;
       ref.current.explode();
       explodeRef.current = false;
-      setTimeout(() => (explodeRef.current = true), 1500);
+      setTimeout(() => (explodeRef.current = true), 4500);
     }
   });
   if (!positions || positions.length === 0) return null;
