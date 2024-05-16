@@ -4,6 +4,7 @@ import { SGS, useShallowStore } from "../../store/UseStore";
 import { ShipHull } from "./EnemyShip/ShipHull";
 import { SelectedShip } from "../tools/SelectedShip";
 import Navigation from "./UseNavigation";
+import { useKeyboard } from "../../hooks/Keys";
 
 interface Props {
   ship: SGS["Ship"];
@@ -21,6 +22,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [destroyed, setDestroyed] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  const keyMap = useKeyboard();
 
 
   const isFighter = ship.assetId === "fighter";
@@ -40,10 +42,19 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         }, 150)
       }
   }, [destroyed]);
+
+  const handleOver = () => {
+    if (keyMap && keyMap['KeyS']) {
+      setSelected(ship.id)
+    }
+    if(keyMap && keyMap['KeyD'])
+      setSelected(ship.id, true)
+    
+  }
  
   return (
     <Suspense fallback={null}>
-      <mesh onClick={handleOnClick} ref={meshRef} position={position}>
+      <mesh onPointerEnter={handleOver} onClick={handleOnClick} ref={meshRef} position={position}>
         <ShipHull
           friend
           destroyShip={() => {

@@ -85,19 +85,19 @@ async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
   
   const zone = new PointZone(0, 0, 0);
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(1, 1), new Span(0.001, 0.05)))
+    .setRate(new Rate(new Span(1, 1), new Span(0.01, 0.01)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(3.45, 3.85),
+      new Life(2.95, 3.15),
       new Body(createSprite()),
-      new Radius(2, 2),
-      new RadialVelocity(20, new Vector3D(0, 0, 10), 1),
+      new Radius(1.282, 1.282),
+      new RadialVelocity(22.5, new Vector3D(0, 0, 1), 1),
     ])
     .setBehaviours([
-      new Alpha(24, 12),
+      new Alpha(9, 19),
       new Color(new THREE.Color("red"), new THREE.Color("#FF3131")),
-      new Scale(1, 1),
+      new Scale(1.25),
       
       
     ])

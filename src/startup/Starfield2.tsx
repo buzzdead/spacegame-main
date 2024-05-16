@@ -1,9 +1,11 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Center, Text } from '@react-three/drei'
 import { Mesh, SphereGeometry, MeshBasicMaterial } from 'three'
 
 export const Starfield2 = () => {
   const { camera, scene, gl } = useThree();
+  const textRef = useRef<any>()
   const [stars, setStars] = useState<Mesh[]>([]);
   const starCount = 1000;
 
@@ -28,6 +30,9 @@ export const Starfield2 = () => {
   }, []);
 
   useFrame(() => {
+    if (textRef.current) {
+    }
+
     camera.position.z = 50;
     stars.forEach((star, index) => {
       star.position.z -= 1;
@@ -47,6 +52,19 @@ export const Starfield2 = () => {
           <meshBasicMaterial color={'#ffffff'} />
         </mesh>
       ))}
+      <Text
+      ref={textRef}
+        font='./assets/AGENTORANGE.TTF'
+        fontSize={10}
+        lineHeight={2}
+        rotation={[0, 2.9 ,0]}
+        position={[0, 0, 255]}
+        color={'green'}
+      >
+        Tips:{'\n'}
+        You can hold S button on your keyboard while{'\n'} hovering over ships to select them.{'\n'}
+        Similarily you can hold D button on your keyboard{'\n'} while hovering over ships to deselect them.
+      </Text>
     </group>
   );
 };

@@ -10,6 +10,7 @@ import { Collisions } from "./OrbitControls";
 import useStore from "../store/UseStore";
 import { Effects } from "./Effects";
 import { LoadEnemyShips } from "./LoadEnemyShips";
+import { KeyboardProvider } from "../hooks/Keys";
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
   startShip: "hullspaceship" | "spaceship-evil" | "cargo";
@@ -20,6 +21,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />
       <ThreeSetup>
+        <KeyboardProvider>
         <Suspense fallback={<Starfield2 />}>
           <Collisions />
           <LoadCelestialObjects startPlanet={startPlanet} />
@@ -28,6 +30,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
           <LoadEnemyShips />
           <Effects />
         </Suspense>
+        </KeyboardProvider>
       </ThreeSetup>
     </div>
   );

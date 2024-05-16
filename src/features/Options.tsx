@@ -34,10 +34,11 @@ export const Options = ({onClose, visible}: Props) => {
         styles={{body: {height: 100}}}
       >
         <Checkbox
+          disabled
           onClick={() => setEnablePostProcessing(!enablePostprocessing)}
           checked={enablePostprocessing}
         >
-          <p style={{userSelect: 'none'}}>Postprocessing enabled (may degrade performance)</p>
+          <p style={{userSelect: 'none', textDecoration: 'line-through'}}>Postprocessing enabled (may degrade performance)</p>
         </Checkbox>
         <Checkbox onClick={() => setEnableDeveloperMode(!enableDeveloperMode)}>
         <p style={{userSelect: 'none'}}>Developer mode enabled (restart required)</p>

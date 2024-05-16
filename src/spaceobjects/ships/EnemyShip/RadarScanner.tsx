@@ -33,7 +33,7 @@ export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Pr
         setHasNearby(nearby.length > 0)
         }
         checkForNearByShips()
-        setTimeout(() => setScan(!scan), 2000)
+        setTimeout(() => setScan(!scan), 1200)
     }, [scan])
     return null
     return (<group ref={groupRef}>{hasNearby && <EffectComposer><SWave pos={origin} scan={scan}/></EffectComposer>}</group>)

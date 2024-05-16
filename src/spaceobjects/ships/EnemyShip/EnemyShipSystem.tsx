@@ -45,10 +45,11 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     scene: scene,
     minVolume: 0.15,
     camera: camera,
-    detune: -550
+    detune: 300
   });
   useEffect(() => {
     const distance = camera.position.distanceTo(currentPos)
+    calculateBeamSound(distance)
     calculateLaserSound(distance)
   }, [camera, calculateLaserSound])
   return (

@@ -3,14 +3,12 @@ import { useEffect, useRef, useState } from "react"
 import {Vector3} from 'three'
 import { BlendFunction, BlendMode } from 'postprocessing'
 import { useThree, useFrame } from "@react-three/fiber";
-import useKeyboard from "../../../hooks/Keys";
 interface Props {
     pos: Vector3
     scan?: boolean
 }
 export const SWave = ({pos, scan = false}: Props) => {
     const { camera, scene } = useThree()
-    const keyMap = useKeyboard()
     const explodeRef = useRef(false)
     const [exploding, setExploding] = useState(true)
     const shockWaveRef = useRef<any>(null)
