@@ -35,12 +35,9 @@ const useEffects: StateCreator<
       set((state) => { const currentExplosions = state.explosions.filter(s => s.pos.distanceTo(pos) < 1 && s.size === size); return currentExplosions.length >= 2 ? state : {explosions: [...state.explosions, explosion]} });
     },
     removeExplosion: (id: number) => {
-      removalQueue.push(id); // Add the explosion ID to the removal queue
-
-      // If there's no pending timeout, set one to process the queue after a delay
-      if (!removalTimeout) {
-        removalTimeout = window.setTimeout(processRemovalQueue, 100); // 100ms delay, adjust as needed
-      }
+     set((state) => ({
+      explosions: [...state.explosions.filter(e => e.id !== id)]
+     }))
     }
   };
 };

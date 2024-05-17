@@ -152,7 +152,7 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
       }
         
         particleSystem.update();
-        if(particleSystem.emitter.life < -500) {onEnd(); reallyStopEmit.current = true}
+        if(particleSystem.emitter.life < -125) {onEnd(); reallyStopEmit.current = true}
       
     }
   });
@@ -170,7 +170,7 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
       nebulaSystem.setDirection(new THREE.Vector3(0, 0, 1));
     });
     
-    setTimeout(() => stopEmit.current = true, 1000)
+    setTimeout(() => stopEmit.current = true, 1250)
     // Cleanup function to destroy the particle system when the component unmounts
     return(() => {
       const emitter = psRef.current.emitter

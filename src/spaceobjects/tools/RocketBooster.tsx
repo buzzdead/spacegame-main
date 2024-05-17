@@ -22,8 +22,8 @@ const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser 
 
   useEffect(() => {
     const initializeParticles = () => {
-      const positions = new Float32Array(1000 * 3);
-      for (let i = 0; i < 500; i++) {
+      const positions = new Float32Array(100 * 3);
+      for (let i = 0; i < 100; i++) {
         positions[i] = (Math.random() - 0.5) * 0.3;
       }
       setParticlePositions(positions);
