@@ -6,6 +6,7 @@ import { ObjectType } from "../../store/StoreState";
 import useStore from "../../store/UseStore";
 import RocketBooster from "../tools/RocketBooster";
 import UseSoundEffect from "../../hooks/SoundEffect";
+import { findAndClonePosition } from "../../util";
 
 interface Props {
   missile: THREE.Group<THREE.Object3DEventMap>;
@@ -19,6 +20,7 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
     const missileRef = useRef<THREE.Mesh>(null)
     const setExplosions = useStore((state) => state.setExplosions)
     const stopRef = useRef(true)
+    const dPos = new THREE.Vector3(posX, -1, 1)
     const { scene, camera } = useThree()
     const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
@@ -42,9 +44,8 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
       const thePos = new THREE.Vector3(0,0,0)
       thePos.x += posX * 1.5
       thePos.z += 1
-      const currentPos = missileRef.current.position.clone()
       if((target?.objectType === "Ship" && target?.objectLocation.meshRef.position )|| target?.objectType === "Construction" && target?.objectLocation.position)
-      setExplosions(target.objectType === "Ship" ? target.objectLocation.meshRef.position.clone().add(thePos) : target.objectLocation.position.clone().add(thePos), target.objectType === "Construction" ? "Medium" : "Small")
+      setExplosions(target.objectType === "Ship" ? findAndClonePosition(target.objectLocation.meshRef).clone().add(thePos) : findAndClonePosition(target).clone().add(thePos), target.objectType === "Construction" ? "Medium" : "Small")
     }
     missile.rotation.x = 1.55
     useFrame(() => {
@@ -60,10 +61,11 @@ export const MissileLauncher = ({ missile, posX, target, fire = false, o }: Prop
             }
         }
     })
+  
   return (
-    <mesh position={new THREE.Vector3(posX, -1, 1)} ref={missileRef}>
+    <mesh position={dPos.clone()} ref={missileRef}>
       <primitive object={missile} />
-      {<RocketBooster brake={stopRef.current} isHarvesting position={missileRef.current?.position.sub(new THREE.Vector3(posX, -1, 1)) || new THREE.Vector3(posX, -1, 1)}/>}
+      {fire && <RocketBooster brake={stopRef.current} isHarvesting position={new THREE.Vector3(0,0,0)}/>}
     </mesh>
   );
 };

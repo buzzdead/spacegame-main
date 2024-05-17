@@ -120,7 +120,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );
-        meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
+        meshRef.current.quaternion.slerp(targetQuaternion, 0.5);
       };
 
       useFrame(() => {
@@ -143,7 +143,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
             calculateDirectionAndRotation(shipsDestinationPos);
             const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
             if(theAngle && theAngle > 0.01) {
-              meshRef.current.quaternion.slerp(targetQuaternion, 0.5);
+              meshRef.current.quaternion.slerp(targetQuaternion, 0.01);
             }
         }
       });
