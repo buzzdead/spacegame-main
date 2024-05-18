@@ -10,14 +10,15 @@ interface Props {
   cruiser?: boolean
   brake?: boolean;
   isHarvesting?: boolean;
+  type?: "default" | "smoke"
 }
 
-const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser = false }: Props) => {
+const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser = false, type = "default" }: Props) => {
   const particleSystemRef = useRef<THREE.Points>(null);
   const [particlePositions, setParticlePositions] = useState<Float32Array>();
 
   const texture = useTexture(
-    isHarvesting ? "/assets/fire.jpg" : cruiser ? '/assets/particle.png' : "/assets/fire.jpg"
+    type === "smoke" ? "/assets/smoke1.png" : isHarvesting ? "/assets/fire.jpg" : cruiser ? '/assets/particle.png' : "/assets/fire.jpg"
   );
 
   useEffect(() => {
@@ -39,9 +40,9 @@ const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser 
         for (let i = 0; i < positions.length; i += 3) {
           positions[i + 1] += isHarvesting ? 0.03 : 0.1;
 
-          const maxLimit = randomIntFromInterval(isHarvesting ? 25 : 0, cruiser ? 200 : 100);
+          const maxLimit = randomIntFromInterval(isHarvesting ? 25 : 0, cruiser ? 300 : 100);
 
-          if ((positions[i + 1] > maxLimit / (isHarvesting ? 40 : 5)) || brake) {
+          if ((positions[i + 1] > maxLimit / (isHarvesting ? 40 : 55)) || brake) {
             positions[i] = (Math.random() - 0.5) * 0.3;
             positions[i + 1] = 0;
             positions[i + 2] = (Math.random() - 0.5) * 0.2;
@@ -57,7 +58,7 @@ const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser 
 
   return (
     <group position={position} rotation={[-1.55, 0, 0]}>
-      <points scale={isHarvesting ? 0.6 : 0.9} ref={particleSystemRef}>
+      <points scale={type === "smoke" ? 2 : isHarvesting ? 0.6 : 1.25} ref={particleSystemRef}>
         <bufferGeometry attach="geometry">
           <bufferAttribute
             attach="attributes-position"
@@ -69,8 +70,8 @@ const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser 
 
         <pointsMaterial
           attach={"material"}
-          color={isHarvesting ? '#FF5F1F' : 'default'}
-          size={isHarvesting ? 0.2 : 3.5}
+          color={type === "smoke" ? "#F5F5F5" : isHarvesting ? '#FF5F1F' : 'default'}
+          size={isHarvesting ? 0.2 : cruiser ? 5.5 : 3.5}
           clipShadows
           opacity={isHarvesting ? 0.25 : 0.05}
           map={texture}

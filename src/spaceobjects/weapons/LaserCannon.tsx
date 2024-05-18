@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { ElementRef, useEffect, useMemo, useRef, useState } from "react"
 import UseSoundEffect from "../../hooks/SoundEffect"
 import Laser from "./Laser"
 import { Vector3 } from 'three'
@@ -21,6 +21,8 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   const { scene, camera } = useThree()
   const missilePath = weapons.find(e => e.id === "fighter-missile")?.glbPath
   const {scene: missileScene} = useGLTF(missilePath || "")
+  const rr = useRef<ElementRef<"group">>(null)
+
   useEffect(() => {
     missileScene.scale.set(0.75,0.75,0.75)
   })
@@ -33,12 +35,20 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
     minVolume: 0.15,
     camera: camera,
   });
+  const { sound: missileSound, calculateVolume: calculateMissileSound } =
+  UseSoundEffect({
+    sfxPath: "/assets/sounds/missile-launch.mp3",
+    scene: scene,
+    minVolume: 0.75,
+    camera: camera,
+  });
   useEffect(() => {
     const distance = camera.position.distanceTo(position)
     calculateLaserSound(distance)
+    calculateMissileSound(distance)
   }, [camera, calculateLaserSound])
     return (
-        <group>
+        <group ref={rr}>
         <Laser
           color={color}
           setFightDone={setFightDone}
@@ -56,8 +66,8 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
           origin={position}
           target={target}
         />
-        <MissileLauncher o={position} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
-        <MissileLauncher o={position} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
+        <MissileLauncher sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
+        <MissileLauncher sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
       </group>
     )
 }
