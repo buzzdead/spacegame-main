@@ -15,7 +15,7 @@ interface Props {
   shipType: SpaceShipId
   shipId: string
   meshRef: any
-  isSelected: boolean
+  isSelected: any
 }
 
 const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
@@ -37,7 +37,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     }, []);
 
     useEffect(() => {
-      if (!isSelected) return;
+      if (!isSelected.current) return;
       const abc = destination?.objectLocation?.meshRef?.position || destination?.objectLocation?.position
       if (destination && abc !== shipsDestinationPos) {
         if(isFighting) setIsFighting(false)

@@ -21,7 +21,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const { position } = ship;
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [destroyed, setDestroyed] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
+  const isSelected = useRef(false)
   const keyMap = useKeyboard();
 
 
@@ -65,7 +65,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         <SelectedShip
           shipId={ship.id}
           isFighter={isFighter}
-          onSelected={(b) => setIsSelected(b)}
+          onSelected={(b) => isSelected.current = b}
         />
         <Navigation
           shipId={ship.id}
