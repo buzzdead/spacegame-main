@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { ObjectLocation } from "../../store/UseOriginDestination";
 import { ObjectType } from "../../store/StoreState";
-import useStore from "../../store/UseStore";
+import useStore, { useShallowStore } from "../../store/UseStore";
 import RocketBooster from "../tools/RocketBooster";
 import UseSoundEffect from "../../hooks/SoundEffect";
 import { findAndClonePosition } from "../../util";
@@ -18,6 +18,7 @@ interface Props {
   o: THREE.Vector3;
   rr?: any
   sound: any
+  setFightDone: () => void;
 }
 
 export const MissileLauncher = ({
@@ -27,10 +28,11 @@ export const MissileLauncher = ({
   fire = false,
   o,
   rr,
-  sound
+  sound,
+  setFightDone
 }: Props) => {
   const missileRef = useRef<THREE.Mesh>(null);
-  const setExplosions = useStore((state) => state.setExplosions);
+  const { setExplosions, dealDamageToConstruction, dealDamageToEnemy } = useShallowStore(["dealDamageToConstruction", "dealDamageToEnemy", "setExplosions"])
   const [stop, setStop] = useState(true);
   const dPos = new THREE.Vector3(posX, -1, 1);
   const { scene, camera } = useThree();
@@ -71,6 +73,7 @@ export const MissileLauncher = ({
   };
   missile.rotation.x = 1.55;
   useFrame(() => {
+    if(!target) return
     if (!fire || stop) return;
     const mr = missileRef.current;
     if (mr && rr.current) {
@@ -106,6 +109,8 @@ export const MissileLauncher = ({
         mr.position.set(dPos.x, dPos.y, dPos.z)
         mr.rotation.set(0,0 ,0)
         setTheExplosion();
+        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 10) : dealDamageToConstruction(target.objectLocation.id, 10)
+        if(destroyed === "Destroyed" || destroyed === "Not Found") setFightDone()
         setStop(true);
       }
     }

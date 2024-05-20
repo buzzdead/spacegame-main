@@ -1,19 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TextureLoader, Vector3 } from "three";
 import { ShipBeam } from "../tools/test/ShipExplosion";
 import { useFrame } from "@react-three/fiber";
+import useStore from "../../store/UseStore";
+import { ObjectLocation } from "../../store/UseOriginDestination";
 
 interface Props {
   position: Vector3;
   rotation: Vector3 | any;
   nearbyRef: any;
-  sound: any
+  sound: any;
+  target: ObjectLocation;
 }
 
-export const TheBeam = ({ position, rotation, nearbyRef, sound }: Props) => {
+export const TheBeam = ({ position, rotation, nearbyRef, sound, target }: Props) => {
   const [shouldBeam, setShouldBeam] = useState(false);
+  const dealDamageToEnemy = useStore(state => state.dealDamageToEnemy)
+  const beamDamageRef = useRef(0)
   useFrame(() => {
     if (nearbyRef.current !== shouldBeam) setShouldBeam(nearbyRef.current);
+    if(shouldBeam) {
+      beamDamageRef.current += 1
+      if(beamDamageRef.current >= 100) {dealDamageToEnemy(target.id, 15, true); beamDamageRef.current = 0}
+    }
+
   });
   const particle = useMemo(() => {
     return require("./explosion00.png");

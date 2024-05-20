@@ -5,6 +5,7 @@ import { ShipHull } from "./EnemyShip/ShipHull";
 import { SelectedShip } from "../tools/SelectedShip";
 import Navigation from "./UseNavigation";
 import { useKeyboard } from "../../hooks/Keys";
+import { InfoBox } from "../tools/InfoBox";
 
 interface Props {
   ship: SGS["Ship"];
@@ -22,7 +23,9 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [destroyed, setDestroyed] = useState(false);
   const isSelected = useRef(false)
+  const [showInfo, setShowInfo] = useState(false)
   const keyMap = useKeyboard();
+  const hullRef = useRef(ship.hull)
 
 
   const isFighter = ship.assetId === "fighter";
@@ -30,7 +33,8 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 
   const handleOnClick = (e: any) => {
     e.stopPropagation();
-    setSelected(ship.id);
+    if(e.ctrlKey) setShowInfo(!showInfo)
+    else setSelected(ship.id, isSelected.current);
   };
 
   useEffect(() => {
@@ -54,13 +58,14 @@ const Ship: FC<Props> = ({ ship, scene }) => {
  
   return (
     <Suspense fallback={null}>
-      <mesh onPointerEnter={handleOver} onClick={handleOnClick} ref={meshRef} position={position}>
+      <mesh onPointerEnter={handleOver} onPointerDown={handleOnClick} ref={meshRef} position={position}>
         <ShipHull
           friend
           destroyShip={() => {
             setDestroyed(true);
           }}
           shipId={ship.id}
+          hullRef={hullRef}
         />
         <SelectedShip
           shipId={ship.id}
@@ -74,7 +79,9 @@ const Ship: FC<Props> = ({ ship, scene }) => {
           shipType={ship.assetId}
         />
         <primitive object={scene} />
+       
       </mesh>
+      {showInfo && <InfoBox type={isFighter ? "Fighter" : "Cargo"} hullRef={hullRef} position={meshRef.current?.position || ship.position}/>}
     </Suspense>
   );
 };

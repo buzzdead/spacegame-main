@@ -89,7 +89,7 @@ const Laser = ({
       
       // Deal damage to the target
       if (mesh.position.z >= distance) {
-        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 5) : dealDamageToConstruction(target.objectLocation.id, 5)
+        const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 2.5) : dealDamageToConstruction(target.objectLocation.id, 2.5)
         scene.remove(mesh);
         mesh.removeFromParent();
         setLaserMeshes((prevMeshes) => prevMeshes.filter((m) => m !== mesh));

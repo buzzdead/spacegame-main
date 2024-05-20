@@ -56,7 +56,7 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     <group>
       {nearbyEnemies.length > 0 && <HeavyLaser sound={laserSound} shipRef={shipRef} origin={currentPos} target={nearbyEnemies} />}
       <RadarScanner currentPos={currentPos} nearby={nearby} origin={origin} setNearbyEnemies={setNearbyEnemies}/>
-      {nearby && <TheBeam sound={beamSound} nearbyRef={lookingAtTarget} position={shipRef.current?.position || origin} rotation={shipRef.current?.rotation || new THREE.Vector3(0,0,0)}/>}
+      {nearby && <TheBeam target={nearbyEnemies[0]} sound={beamSound} nearbyRef={lookingAtTarget} position={shipRef.current?.position || origin} rotation={shipRef.current?.rotation || new THREE.Vector3(0,0,0)}/>}
     </group>
   );
 };

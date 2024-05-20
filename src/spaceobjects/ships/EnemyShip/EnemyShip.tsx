@@ -11,6 +11,7 @@ import { EnemyShip as ES } from "../../../store/StoreState";
 import { Ignition } from "../../tools/Ignition";
 import { ShipBeam } from "../../tools/test/ShipExplosion";
 import { TheBeam } from "../../weapons/TheBeam";
+import { InfoBox } from "../../tools/InfoBox";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -20,6 +21,7 @@ interface Props {
 export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   const { id: shipId, position: origin, nearby } = enemyShip
   const position = enemyShip.meshRef?.position || origin
+  const hullRef = useRef(enemyShip.hull)
   const {
     setDestination,
     setSelectedEnemies,
@@ -36,6 +38,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   const { camera, scene } = useThree();
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [fire, setFire] = useState(false);
+  const [showInfo, setShowInfo] = useState(false)
   const texture = useTexture.preload("/assets/fire1.png");
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   };
   const handleOnClick = (e: any) => {
     e.stopPropagation();
-    if (e.ctrlKey) setFire(!fire);
+    if (e.ctrlKey) {setShowInfo(!showInfo); return;}
     setDestination(
       enemyShip,
       "Attack",
@@ -68,10 +71,10 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
   };
   return (
     <group>
-    <mesh position={position} ref={meshRef} onClick={handleOnClick}>
-      <ShipHull shipId={shipId} destroyShip={destroyShip} />
+    <mesh position={position} ref={meshRef} onPointerDown={handleOnClick}>
+      <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
-      
+        
       <EnemyNavigation
         nearby={nearby}
         origin={origin}
@@ -86,6 +89,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
         nearby={nearby}
         origin={position}
       />
+      {showInfo && <InfoBox type="Cruiser" hullRef={hullRef} position={meshRef.current?.position || position} />}
     </group>
   );
 };

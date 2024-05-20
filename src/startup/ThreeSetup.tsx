@@ -53,7 +53,7 @@ const ThreeSetup = ({ children }: Props) => {
           luminanceThreshold={0.98}
           luminanceSmoothing={0.85}
         />
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
       </EffectComposer>
       {children}

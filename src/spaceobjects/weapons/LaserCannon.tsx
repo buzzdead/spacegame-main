@@ -66,8 +66,8 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
           origin={position}
           target={target}
         />
-        <MissileLauncher sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
-        <MissileLauncher sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
+        <MissileLauncher setFightDone={setFightDone} sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
+        <MissileLauncher setFightDone={setFightDone} sound={missileSound} rr={rr} o={position} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
       </group>
     )
 }

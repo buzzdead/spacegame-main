@@ -47,11 +47,17 @@ const UI = () => {
   }, [ships]);
 
   return (
+    <div style={{
+      position: "absolute",
+      width: '100%',
+      height: '100%',
+      zIndex: 8123781237812,
+      pointerEvents: 'none',
+      userSelect: 'none'
+    }}>
     <div
       style={{
-        userSelect: "none",
-        position: "absolute",
-        zIndex: 8123781237812,
+        position: 'relative',
         top: 25,
         left: 25,
         display: "flex",
@@ -60,21 +66,20 @@ const UI = () => {
       }}
     >
       <Options visible={showOptions} onClose={() => setShowOptions(false)} />
-      <SettingOutlined onClick={() => setShowOptions(true)} />
-      <Typography style={{ color: "green" }}>
-        Selected:{" "}
-        {selected.map((s, id) => (
-          <span key={id}>
-            {s.assetId}
-            {s.id},{" "}
-          </span>
-        ))}
-      </Typography>
+      <SettingOutlined style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowOptions(true)} />
       <Typography style={{ color: "yellowgreen" }}>Origin: {origin?.position}</Typography>
       <Typography style={{ color: "lightblue" }}>
         Resources: {resources}
       </Typography>
       <Typography style={{ color: "white" }}>{helperUi}</Typography>
+    </div>
+    <div style={{position: 'absolute', bottom: 15, width: '100%'}}>
+      <div style={{position: 'relative', justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+      {selected.map(s => {
+        return <img key={s.id} style={{padding: 2.5, border: `1px solid ${s.hull < 30 ? '#ff000030' : s.hull < 50 ? '#0000ff45' : '#00ff0030'}`}} width='40px' height={'25px'} src={s.assetId === "fighter" ? '/assets/fightert.png' : '/assets/cargoship.png'} />
+      })}
+      </div>
+    </div>
     </div>
   );
 };
