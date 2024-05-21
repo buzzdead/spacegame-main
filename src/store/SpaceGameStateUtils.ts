@@ -39,14 +39,14 @@ let celestialObject_id = 0
 export type SelectedShip = Ship
 export type numberVector = [number, number, number]
 class SpaceGameStateUtils {
-    static addShipToState(ships: Ship[], shipId: string, nv: numberVector, hull = 100, scale = 1): Ship[] {
+    static addShipToState(ships: Ship[], shipId: string, nv: numberVector, hull = 100, scale = 1): {ships: Ship[], ship: Ship | null} {
         const position = createVector3(nv)
         const spaceShip = spaceShips.find(ship => ship.id === shipId)
         if (spaceShip) {
             const newShip = { ...spaceShip, hull: hull, assetId: spaceShip.id, id: (ship_id++).toString(), position: position, scale: scale }
-            return [...ships, newShip]
+            return {ships: [...ships, newShip], ship: newShip}
         }
-        return [...ships]
+        return {ships: [...ships], ship: null}
     }
 
     static addConstructionToState(currentConstructions: Construction[], constructionId: string, nv: numberVector, type: Construction["type"], scale = 1): Construction[] {

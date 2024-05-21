@@ -16,7 +16,7 @@ export const ShipScene: React.FC<Props> = ({ship}) => {
     
     scene.children[0].rotation.y = -55;
   }
-  if(ship.assetId === "hawk") {
+  if(ship.assetId === "hawk" || ship.assetId === "hullspaceship") {
     scene.rotation.set(0, 3.11, 0)
   }
     return ( 

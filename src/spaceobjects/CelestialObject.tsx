@@ -1,4 +1,4 @@
-import { FC, ElementRef } from 'react';
+import { FC, ElementRef, useEffect } from 'react';
 import { Suspense, useRef } from 'react';
 import { Color, ShaderMaterial, AdditiveBlending } from 'three'
 import useStore, { SGS } from '../store/UseStore';
@@ -16,9 +16,13 @@ const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => {
   const scene = useAsset(glbPath, scale || 1)
 
 const handleSetDestination = () => {
-  const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : "Harvest"
-  setDestination(celestialObject, type, "Planet")
+  const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : celestialObject.assetId.includes("sphere") ? "Collect" : "Harvest"
+  setDestination(celestialObject, type, celestialObject.assetId.includes("sphere") ? "MissionItem" : "Planet")
 }
+
+useEffect(() => {
+  if(celestialObject.assetId === "sphere") handleSetDestination()
+}, [])
 
   return (
     <Suspense fallback={null}>

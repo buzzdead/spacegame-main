@@ -16,10 +16,11 @@ interface Props {
   shipId: string
   meshRef: any
   isSelected: any
+
 }
 
 const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
-    const { destination, setResources, origin, setShipRef, setSelected} = useShallowStore(["destination", "setResources", "origin", "setShipRef", "setSelected"])
+    const { destination, setResources, origin, setShipRef, setSelected, setMissionComplete} = useShallowStore(["destination", "setResources", "origin", "setShipRef", "setSelected", "setMissionComplete"])
     const [isTraveling, setIsTraveling] = useState(false);
     const [isReturning, setIsReturning] = useState(false);
     const [isFighting, setIsFighting] = useState(false)
@@ -37,7 +38,9 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
     }, []);
 
     useEffect(() => {
-      if (!isSelected.current) return;
+      if (!isSelected.current && shipType !== "hullspaceship") return;
+      if(destination?.objectType === "MissionItem" && shipType !== "hullspaceship") return
+      if(shipType === "hullspaceship" && destination?.objectType !== "MissionItem") return
       const abc = destination?.objectLocation?.meshRef?.position || destination?.objectLocation?.position
       if (destination && abc !== shipsDestinationPos) {
         if(isFighting) setIsFighting(false)
@@ -48,7 +51,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
         setShipsOrigin(origin.meshRef.position);
       }
       else if (origin?.position && origin?.position !== shipsOrigin) {shipType === "cargo" && setSelected(shipId); setShipsOrigin(origin.position)};
-      if(isFighter) setShipsOrigin(meshRef.current.position)
+      if(isFighter || shipType === "hullspaceship") setShipsOrigin(meshRef.current.position)
     }, [destination, origin]);
   
     useEffect(() => {
@@ -93,11 +96,15 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
         const distance = meshRef.current.position.distanceTo(targetPosition);
         const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion)
     
-        if (distance < (isReturning ? 12 : isFighter ? 70 : 12) && theAngle < 0.05) {
+        if (distance < (isReturning ? 12 : isFighter ? 70 : shipType === "hullspaceship" ? 30 : 12) && theAngle < 0.05) {
           if (isTraveling) {
             if(isFighter)
               { 
                 setIsFighting(true)
+                setIsTraveling(false)
+              }
+              else if (shipType === "hullspaceship") {
+                setMissionComplete("mission1")
                 setIsTraveling(false)
               }
               else {
@@ -116,7 +123,7 @@ const Navigation = ({shipId, meshRef, shipType, isSelected}: Props) => {
           }
         }
     
-        const speedFactor = Math.max(isFighter ? 55 : 25); // Adjust for sensitivity
+        const speedFactor = Math.max(isFighter ? 55 : shipType === "hullspaceship" ? 100 : 25); // Adjust for sensitivity
         meshRef.current.position.add(
           direction.multiplyScalar((55 * speedFactor) / 5000)
         );

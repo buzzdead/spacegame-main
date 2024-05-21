@@ -9,18 +9,26 @@ const useShips: StateCreator<
   [],
   [],
   SpaceShipState
-> = (set) => ({
+> = (set, get) => ({
   ships: [],
-  addShip: (shipId, position, hull, scale) =>
-    set((state) => ({
-      ships: SpaceGameStateUtils.addShipToState(
+  addShip: (shipId, position, hull, scale) =>{
+    let shipReturn = null
+    set((state) => {
+      const { ships, ship } = SpaceGameStateUtils.addShipToState(
         state.ships,
         shipId,
         position,
         hull,
         scale
-      ),
-    })),
+      );
+      shipReturn = ship
+      return { ships: ships }
+      
+    }); return shipReturn },
+    findShip: (id: string) => {
+      const state = get();
+      return state.ships.find(s => s.id === id);
+    },
     removeShip: (id: string, friend = false) => set((state) =>
     {
       if(friend) return {selected: state.selected.filter(s => s.id !== id), ships: [...state.ships.filter(s => s.id !== id)]}

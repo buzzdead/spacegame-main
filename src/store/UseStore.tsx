@@ -13,6 +13,7 @@ import useResources from "./UseResources";
 import useShips from "./UseShips";
 import useOptions from './UseOptions'
 import useEffects from "./useEffects";
+import useMissions from "./useMissions";
 
 export type SGS = {
   CO: CelestialObject;
@@ -28,7 +29,8 @@ const useStore = create<SpaceGameState>()((...a) => ({
   ...useResources(...a),
   ...useShips(...a),
   ...useOptions(...a),
-  ...useEffects(...a)
+  ...useEffects(...a),
+  ...useMissions(...a)
 }))
 
 export const useShallowStore = <T extends (keyof SpaceGameState)[]>(

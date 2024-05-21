@@ -14,7 +14,7 @@ export const SWave = ({pos, scan = false}: Props) => {
     const shockWaveRef = useRef<any>(null)
 
     useFrame(() => {
-        if(explodeRef.current) {shockWaveRef.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 750)}
+        if(explodeRef.current) {shockWaveRef.current.explode(); explodeRef.current = false; setTimeout(() => explodeRef.current = true, 1500)}
     })
 
     useEffect(() => {
@@ -30,13 +30,11 @@ export const SWave = ({pos, scan = false}: Props) => {
         coordinateSystem={2001}
         castShadow
         ref={shockWaveRef}
-        speed={2.5}
-        blendFunction={BlendFunction.NORMAL}
-        blendMode={new BlendMode(BlendFunction.MULTIPLY)}
-        opacity={0.5}
-        maxRadius={15.0}
-        waveSize={.2}
-        amplitude={.05}
+        speed={55.5}
+        opacity={1}
+        maxRadius={1955.0}
+        waveSize={2.5}
+        amplitude={.5}
       /> as any
     )
    

@@ -12,7 +12,8 @@ export const celestialObjects = (<T>(p: readonly Asset<T>[]) => p)([
     { id: "asteroid", glbPath: '/assets/celestialobjects/asteroid.glb'},
     { id: "asteroid-minerals", glbPath: '/assets/celestialobjects/asteroid-minerals.glb'},
     { id: "blackhole", glbPath: '/assets/celestialobjects/blackhole.glb'},
-    { id: "sun1", glbPath: '/assets/celestialObjects/sun1.glb'}
+    { id: "sun1", glbPath: '/assets/celestialObjects/sun1.glb'},
+    { id: "sphere", glbPath: '/assets/celestialobjects/sphere.glb'}
 ] as const)
 
 export const spaceShips =  (<T>(p: readonly Asset<T>[]) => p)([

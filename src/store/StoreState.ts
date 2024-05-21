@@ -12,8 +12,8 @@ import { ObjectLocation } from "./UseOriginDestination";
 import { ElementRef } from "react";
 
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
-export type DestinationType = "Harvest" | "Attack" | "Travel"
-export type ObjectType = "Ship" | "Construction" | "Planet"
+export type DestinationType = "Harvest" | "Attack" | "Travel" | "Collect"
+export type ObjectType = "Ship" | "Construction" | "Planet" | "MissionItem"
 export type DamageReport = "Destroyed" | "Hit" | "Not Found"
 export type ShipShift = {shift: "left" | "right", multiplyer: number}
 
@@ -33,7 +33,8 @@ export type CelestialObjectState = {
       position: numberVector,
       hull: number,
       scale?: number
-    ) => void;
+    ) => Ship | null;
+    findShip: (id: string) => void;
     enemyShips: EnemyShip[]
     addEnemyShip: (pos: Vector3, hull: number) => void
     toggleNearby: (pos: Vector3, n: boolean) => void
@@ -84,6 +85,11 @@ export type CelestialObjectState = {
     setExplosions: (newExplosion: Vector3, size?: ExplosionSize) => void
     removeExplosion: (id: number) => void
   }
+
+  export type MissionState = {
+    missions: {name: string; completed: boolean}[];
+    setMissionComplete: (name: string) => void;
+  }
   
   export interface SpaceGameState
     extends CelestialObjectState,
@@ -92,5 +98,6 @@ export type CelestialObjectState = {
       LocationState,
       ResourceState,
       OptionsState,
-      EffectsState
+      EffectsState,
+      MissionState
       {}
