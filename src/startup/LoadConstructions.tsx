@@ -16,6 +16,7 @@ export const LoadConstructions = () => {
   const addConstruction = useStore((state) => state.addConstruction);
   useEffect(() => {
     addConstruction("spacestation6", [100, 50, 750], "Enemy", 2.5)
+    addConstruction("spacestation6", [400, 50, 750], "Enemy", 2.5)  
     addConstruction("spacestation4", [4, 0, 64], "Construction", .031);
     addConstruction("spacestation5", [64, 6, 18], "Refinary", 2.5);
   }, [addConstruction]);

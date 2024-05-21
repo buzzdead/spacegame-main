@@ -21,7 +21,7 @@ export const LoadCelestialObjects = ({ startPlanet }: Props) => {
   const addCelestialObject = useStore((state) => state.addCelestialObject);
   useEffect(() => {
     addCelestialObject(startPlanet, [-305, 0, -80], 125);
-    addCelestialObject("planet5", [100, 50, 1000], 125)
+    addCelestialObject("planet5", [100, 50, 1000], 65)
     addCelestialObject("asteroid-minerals", [34, 5, 3], 3.5);
     addCelestialObject("asteroid-minerals", [34, 5, 12], 3.5);
     addCelestialObject("asteroid-minerals", [34, 5, 20], 3.5);

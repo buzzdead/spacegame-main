@@ -53,7 +53,7 @@ class SpaceGameStateUtils {
         const position = createVector3(nv)
         const construction = constructions.find(construction => construction.id === constructionId)
         if (construction) {
-            const newConstruction = { ...construction, assetId: construction.id, id: (construction_id++).toString(), position: position, scale: scale, hull: 100, type: type }
+            const newConstruction = { ...construction, assetId: construction.id, id: (construction_id++).toString(), position: position, scale: scale, hull: 500, type: type }
             return [...currentConstructions, newConstruction]
         }
         return [...currentConstructions]

@@ -19,10 +19,11 @@ export const LoadEnemyShips = () => {
   
   useEffect(() => {
     if(enemyShips.length > 0) return
-    addEnemyShip(new Vector3(35, 50, 675), 300)
-    addEnemyShip(new Vector3(185, 55, 155), 300)
-    addEnemyShip(new Vector3(215, 55, 255), 300)
-    addEnemyShip(new Vector3(255, 85, 300), 300)
+    addEnemyShip(new Vector3(35, 50, 675), 350)
+    addEnemyShip(new Vector3(335, 50, 675), 350)
+    addEnemyShip(new Vector3(55, 85, 675), 350)
+    addEnemyShip(new Vector3(355, 85, 675), 350)
+    addEnemyShip(new Vector3(100, 50, 250), 350)
     if(developerMode){
     addEnemyShip(new Vector3(255, 85, 300), 300)
     addEnemyShip(new Vector3(355, 85, 300), 300)

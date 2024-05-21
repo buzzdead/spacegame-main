@@ -64,7 +64,7 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
     );
     setSelectedEnemies({
       id: shipId,
-      hull: 300,
+      hull: 350,
       position: meshRef?.current?.position || new Vector3(0, 0, 0),
       nearby: false,
     });

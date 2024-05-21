@@ -33,9 +33,9 @@ export const InfoBox = ({ position, hullRef, type }: Props) => {
 
   return (
     <mesh ref={ref}>
-      <Plane args={[10, 10]} position={[0, 5, 0]} receiveShadow>
+      <Plane args={[10, 10]} position={[0, type === "Cruiser" ? 10 : 5, 0]} receiveShadow>
         <meshStandardMaterial
-          opacity={0.3}
+          opacity={0.01}
           transparent
           color={"black"}
           attach={"material"}
@@ -43,8 +43,8 @@ export const InfoBox = ({ position, hullRef, type }: Props) => {
         <Text
           ref={textRef}
           font="./assets/LondrinaShadow-Regular.TTF"
-          fontSize={1.25}
-          position={[0, 3.5, 0]}
+          fontSize={type === "Cruiser" ? 2.5 : 1.25}
+          position={[0, type === "Cruiser" ? 6.5 : 3.5, 0]}
           lineHeight={2}
           color={"red"}
         >
@@ -53,13 +53,13 @@ export const InfoBox = ({ position, hullRef, type }: Props) => {
         <Text
           ref={textRef}
           font="./assets/LondrinaShadow-Regular.TTF"
-          fontSize={1.25}
+          fontSize={type === "Cruiser" ? 2.5 : 1.25}
           position={[0, 0, 0]}
           lineHeight={2}
           color={"#42a8bd"}
         >
           {type} Ship{"\n"}
-          Hull: {hullState}\{type === "Cruiser" ? 300 : 100}
+          Hull: {hullState}\{type === "Cruiser" ? 350 : 100}
         </Text>
       </Plane>
     </mesh>

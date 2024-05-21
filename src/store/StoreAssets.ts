@@ -16,7 +16,7 @@ export const celestialObjects = (<T>(p: readonly Asset<T>[]) => p)([
 ] as const)
 
 export const spaceShips =  (<T>(p: readonly Asset<T>[]) => p)([
-    { id: "hullspaceship", glbPath: '/assets/spaceships/hullspaceship.glb'},
+    { id: "hullspaceship", glbPath: '/assets/spaceships/mothershipp.glb'},
     { id: "spaceship-evil", glbPath: '/assets/spaceships/spaceship-evil.glb'},
     { id: "cargo", glbPath: '/assets/spaceships/cargo.glb'},
     { id: "cruiser", glbPath: '/assets/spaceships/cruiser.glb'},

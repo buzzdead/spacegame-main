@@ -6,7 +6,8 @@ import {
   Group,
   Camera,
   Object3DEventMap,
-  Scene
+  Scene,
+  Vector3
 } from "three";
 
 interface Props {
@@ -17,9 +18,10 @@ interface Props {
     minVolume?: number
     autoPlay?: boolean
     detune?: number
+    position?: Vector3
 }
 
-const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = false, detune}: Props) => {
+const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = false, detune, position}: Props) => {
     const [sound, setSound] = useState<PositionalAudio>()
     useEffect(() => {
         const listener = new AudioListener();
@@ -32,6 +34,7 @@ const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = fal
         setSound(sound)
         scene.add(sound)
         sound.autoplay = autoPlay
+        if(position) sound.position.set(position.x, position.y, position.z)
         camera.add(listener)
         if(detune) sound.detune = detune
         sound.setRefDistance(20);
