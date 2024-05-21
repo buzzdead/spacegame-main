@@ -43,12 +43,16 @@ const Menu = ({ setGameStarted }: Props) => {
       <div>
         <Starfield />
         <div className="start-page-container">
+        <h2 style={{justifyContent: 'center', display: 'flex', fontSize: 12}}>
+            Alpha 1.0
+          </h2>
           <h1
             style={{ textAlign: "center", paddingBottom: 15 }}
             className="game-title"
           >
             Space Game
           </h1>{" "}
+          
           <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
         </div>
       </div>
