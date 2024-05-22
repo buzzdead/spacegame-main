@@ -126,7 +126,7 @@ interface Props {
     onEnd: () => void
 }
 export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
-  const { scene, camera } = useThree();
+  const { scene } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>()
   const psRef = useRef<any>()
   const stopEmit = useRef(false)
@@ -134,9 +134,7 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
     sfxPath: explosion.size === "Small" ? "/assets/sounds/missile-explosion.mp3" : "/assets/sounds/explo.mp3",
-    scene: scene,
     minVolume: 0.75,
-    camera: camera,
     autoPlay: true
   });
 
@@ -158,9 +156,8 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   });
 
   useEffect(() => {
-    const distance = camera.position.distanceTo(scene.position);
-    calculateExplosionSound(distance);
-  }, [camera]);
+    calculateExplosionSound(scene.position);
+  }, []);
 
   useEffect(() => {
     createShipExplosion(scene, texture, explosion.size).then((nebulaSystem) => {

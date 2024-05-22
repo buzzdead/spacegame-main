@@ -4,7 +4,6 @@ import { Vector3 } from 'three'
 import { SGS, useShallowStore } from '../../store/UseStore';
 import SelectedIcon from '../tools/pyramidMesh';
 import { useAsset } from '../../hooks/Asset';
-import { useThree } from "@react-three/fiber";
 import { ConstructionMenu } from './ConstructionMenu';
 import { spaceShips } from '../../store/StoreAssets';
 import { ConstructionHull } from './ConstructionHull';
@@ -19,7 +18,6 @@ const Construction: FC<Props> = ({ construction }) => {
   const { glbPath, position, scale } = construction;
   const meshRef = useRef<ElementRef<'mesh'>>(null);
   const scene = useAsset(glbPath, scale || 1)
-  const { camera } = useThree()
   const ships = spaceShips;
   const fighter = ships.find((e) => e.id === "fighter");
   const constructionAsset = useAsset(fighter?.glbPath || "", 8)
@@ -27,12 +25,12 @@ const Construction: FC<Props> = ({ construction }) => {
   const { sound: explosionSound, calculateVolume: calculateExplosionSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/explo.mp3",
-    scene: scene,
     minVolume: 0.75,
-    camera: camera,
   });
   const handleClick = (e: any) => {
     e.stopPropagation()
+    destroy()
+    return;
     construction.type === "Refinary" ?
     origin?.position === position ? setOrigin(undefined) : setOrigin(construction)
     : 

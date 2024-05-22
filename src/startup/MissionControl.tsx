@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react"
 import useStore, { useShallowStore } from "../store/UseStore"
 import UseSoundEffect from "../hooks/SoundEffect"
-import { useThree, useFrame } from '@react-three/fiber'
+import { useThree, useFrame, useLoader } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { AudioLoader, Vector3 } from "three"
 import { EffectComposer, ShockWave } from "@react-three/postprocessing"
 import { SWave } from "../spaceobjects/ships/EnemyShip/swave"
+import { useAsset } from "../hooks/Asset"
 
 export const MissionControl = () => {
-    const {scene, camera} = useThree()
+    const {camera} = useThree()
     const { constructions, addShip, addCelestialObject, setDestination, findShip, missions } = useShallowStore(["addShip", "constructions", "addCelestialObject", "setDestination", "findShip", "missions"])
     const [missionCompleted, setMissionCompleted] = useState(false)
     const [blastShockWave, setBlastShockWave] = useState(false)
     const [hullShip, setHullShip] = useState<any>(null)
-    const t = useGLTF("/assets/spaceships/mothershipp.glb")
-    const t2 = useGLTF("/assets/celestialobjects/sphere.glb")
+    useAsset("/assets/spaceships/mothershipp.glb", 1, true)
+    useAsset("/assets/celestialobjects/sphere.glb", 1, true)
     const { sound: missionCompletedSound, calculateVolume: calculateMissionCompletedSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/scientist-discovery.mp3",
-      scene: scene,
       minVolume: 4,
-      camera: camera,
       position: new Vector3(400, 50, 750),
     });
     const handleTheTimeout = () => {
@@ -52,8 +51,7 @@ export const MissionControl = () => {
     }, [missionCompleted])
     useEffect(() => {
         if(!hullShip?.meshRef?.position) return
-          const distance = camera.position?.distanceTo(hullShip?.meshRef?.position || hullShip.position);
-          calculateMissionCompletedSound(distance);
+          calculateMissionCompletedSound(hullShip?.meshRef?.position || hullShip.position);
         
       }, [camera.position, constructions, hullShip]);
 

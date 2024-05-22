@@ -1,28 +1,23 @@
 import { useState, useEffect } from "react";
+import { useThree } from '@react-three/fiber'
 import {
   PositionalAudio,
   AudioListener,
   AudioLoader,
-  Group,
-  Camera,
-  Object3DEventMap,
-  Scene,
   Vector3
 } from "three";
 
 interface Props {
     sfxPath: string
-    scene: Group<Object3DEventMap> | Scene
-    camera: Camera & {
-        manual?: boolean | undefined; }
     minVolume?: number
     autoPlay?: boolean
     detune?: number
     position?: Vector3
 }
 
-const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = false, detune, position}: Props) => {
+const UseSoundEffect = ({sfxPath, minVolume = 0.1, autoPlay = false, detune, position}: Props) => {
     const [sound, setSound] = useState<PositionalAudio>()
+    const { scene, camera } = useThree()
     useEffect(() => {
         const listener = new AudioListener();
         const audioLoader = new AudioLoader();
@@ -41,9 +36,10 @@ const UseSoundEffect = ({sfxPath, scene, minVolume = 0.1, camera, autoPlay = fal
         sound.setRolloffFactor(1);
       }, [])
 
-      function calculateVolume(distance: number) {
+      function calculateVolume(position: Vector3) {
         // Adjust these parameters based on your desired sound behavior
         const maxDistance = 75;
+        const distance = camera.position.distanceTo(position)
     
         let volume = 0.15 - Math.min(1, distance / maxDistance); // Linear decrease
         volume = Math.max(minVolume, volume); // Clamp to a minimum

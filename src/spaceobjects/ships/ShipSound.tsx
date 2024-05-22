@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import UseSoundEffect from "../../hooks/SoundEffect";
 import { useThree } from "@react-three/fiber";
 
@@ -10,20 +10,15 @@ interface Props {
 }
 
 const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, meshRef }) => {
-    const { camera, scene } = useThree()
     const { sound: miningSound, calculateVolume: calculateMiningSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/mining.mp3",
-      scene: scene,
       minVolume: 0.04,
-      camera: camera,
     });
   const { sound: motorSound, calculateVolume: calculateMotorSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/sc.mp3",
-      scene: scene,
       minVolume: 0.15,
-      camera: camera,
     });
 
   useEffect(() => {
@@ -39,13 +34,12 @@ const ShipSound: React.FC<Props> = ({ isHarvesting, isTraveling, isReturning, me
 
   useEffect(() => {
     if (meshRef.current && (isTraveling || isReturning)) {
-      const distance = camera.position.distanceTo(meshRef.current.position);
-      calculateMiningSound(distance);
-      calculateMotorSound(distance);
+      calculateMiningSound(meshRef.current.position);
+      calculateMotorSound(meshRef.current.position);
     }
-  }, [camera, isTraveling, isReturning]);
+  }, [isTraveling, isReturning]);
 
-  return null; // This component doesn't render anything, it just handles sound effects
+  return null;
 };
 
 export default ShipSound;

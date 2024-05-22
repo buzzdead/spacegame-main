@@ -2,7 +2,6 @@ import { ElementRef, useEffect, useRef, useState } from "react"
 import UseSoundEffect from "../../hooks/SoundEffect"
 import Laser from "./Laser"
 import { Vector3 } from 'three'
-import { useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { ObjectType } from "../../store/StoreState";
 import { ObjectLocation } from "../../store/UseOriginDestination";
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export const LaserCannon = ({fire, position, target, color = 'red', setFightDone}: Props) => {
-  const { scene, camera } = useThree()
   const missilePath = weapons.find(e => e.id === "fighter-missile")?.glbPath
   const {scene: missileScene} = useGLTF(missilePath || "")
   const meshRef = useRef<ElementRef<"group">>(null)
@@ -27,22 +25,17 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   const { sound: laserSound, calculateVolume: calculateLaserSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/laser.mp3",
-    scene: scene,
     minVolume: 0.15,
-    camera: camera,
   });
   const { sound: missileSound, calculateVolume: calculateMissileSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/missile-launch.mp3",
-    scene: scene,
     minVolume: 0.75,
-    camera: camera,
   });
   useEffect(() => {
-    const distance = camera.position.distanceTo(position)
-    calculateLaserSound(distance)
-    calculateMissileSound(distance)
-  }, [camera, calculateLaserSound])
+    calculateLaserSound(position)
+    calculateMissileSound(position)
+  }, [calculateLaserSound])
     return (
         <group ref={meshRef}>
         <Laser

@@ -1,16 +1,12 @@
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useShallowStore } from "../../../store/UseStore";
-import { Vector3, Color, Group, Object3DEventMap } from "three";
+import { Vector3, Group, Object3DEventMap } from "three";
 import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import UseSoundEffect from "../../../hooks/SoundEffect";
 import { ShipHull } from "./ShipHull";
 import { EnemyShipSystem } from "./EnemyShipSystem";
 import { EnemyNavigation } from "./Navigation";
 import { EnemyShip as ES } from "../../../store/StoreState";
-import { Ignition } from "../../tools/Ignition";
-import { ShipBeam } from "../../tools/test/ShipExplosion";
-import { TheBeam } from "../../weapons/TheBeam";
 import { InfoBox } from "../../tools/InfoBox";
 
 interface Props {

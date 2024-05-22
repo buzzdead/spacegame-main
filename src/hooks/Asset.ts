@@ -1,9 +1,8 @@
 import { useGLTF } from '@react-three/drei';
 import { useMemo } from 'react';
 
-export const useAsset = (glbPath: string, scale: number) => {
-    const { scene } = useGLTF(glbPath)
+export const useAsset = (glbPath: string, scale: number, noClone = false) => {
+    const { scene } = useGLTF(glbPath, true, true)
     scene.scale.set(scale, scale, scale)
-    const clone = scene.clone()
-    return clone
+    return noClone ? scene : scene.clone()
 }

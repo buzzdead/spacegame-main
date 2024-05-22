@@ -17,7 +17,7 @@ interface Props {
 export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) => {
     const [nearbyEnemies, setNearbyEnemies] = useState<ObjectLocation[]>([])
     const lookingAtTarget = useRef(false)
-    const { camera, scene } = useThree()
+    const { camera } = useThree()
     useFrame(() => {
       if(!nearby || !nearbyEnemies[0]?.meshRef?.position) return
       const direction = new THREE.Vector3()
@@ -34,23 +34,18 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     const { sound: laserSound, calculateVolume: calculateLaserSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/laser.mp3",
-    scene: scene,
     minVolume: 0.15,
-    camera: camera,
     detune: -550
   });
   const { sound: beamSound, calculateVolume: calculateBeamSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/beam.mp3",
-    scene: scene,
     minVolume: 0.15,
-    camera: camera,
     detune: 300
   });
   useEffect(() => {
-    const distance = camera.position.distanceTo(currentPos)
-    calculateBeamSound(distance)
-    calculateLaserSound(distance)
+    calculateBeamSound(currentPos)
+    calculateLaserSound(currentPos)
   }, [camera, calculateLaserSound])
   return (
     <group>

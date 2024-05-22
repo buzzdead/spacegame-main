@@ -12,6 +12,7 @@ import { Effects } from "./Effects";
 import { LoadEnemyShips } from "./LoadEnemyShips";
 import { KeyboardProvider } from "../hooks/Keys";
 import { MissionControl } from "./MissionControl";
+
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
   startShip: "hullspaceship" | "spaceship-evil" | "cargo";
