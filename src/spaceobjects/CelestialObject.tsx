@@ -1,12 +1,21 @@
 import { FC, ElementRef, useEffect } from 'react';
 import { Suspense, useRef } from 'react';
-import { Color, ShaderMaterial, AdditiveBlending } from 'three'
 import useStore, { SGS } from '../store/UseStore';
 import { useAsset } from '../hooks/Asset';
-import { DestinationType } from '../store/StoreState';
+import { DestinationType, ObjectType } from '../store/StoreState';
 
 interface CelestialObjectProps {
   celestialObject: SGS['CO'];
+}
+
+const setDestinationAndObjectType = (assetId: string): {type: DestinationType, objectType: ObjectType} => {
+  const type = assetId.includes("planet") 
+  ? "Travel" 
+  : assetId.includes("sphere") 
+  ? "Collect" 
+  : "Harvest"
+  const objectType = assetId.includes("sphere") ? "MissionItem" : "Planet"
+  return {type, objectType}
 }
 
 const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => { 
@@ -16,8 +25,8 @@ const CelestialObject: FC<CelestialObjectProps> = ({ celestialObject }) => {
   const scene = useAsset(glbPath, scale || 1)
 
 const handleSetDestination = () => {
-  const type: DestinationType = celestialObject.assetId.includes("planet") ? "Travel" : celestialObject.assetId.includes("sphere") ? "Collect" : "Harvest"
-  setDestination(celestialObject, type, celestialObject.assetId.includes("sphere") ? "MissionItem" : "Planet")
+  const {type, objectType} = setDestinationAndObjectType(celestialObject.assetId)
+  setDestination(celestialObject, type, objectType)
 }
 
 useEffect(() => {

@@ -87,13 +87,3 @@ const Ship: FC<Props> = ({ ship, scene }) => {
 };
 
 export default Ship;
-
-/*   const glowMaterial = new ShaderMaterial({
-    uniforms: {
-      glowColor: { value: new Color(0x00ff80) }, // Neon green color
-      glowStrength: { value: 1.0 },
-    },
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    transparent: true, // Important for blend effects like glows
-  }); */

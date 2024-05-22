@@ -1,4 +1,4 @@
-import { FC, ElementRef, useState } from 'react';
+import { FC, ElementRef } from 'react';
 import { Suspense, useRef } from 'react';
 import { Vector3 } from 'three'
 import { SGS, useShallowStore } from '../../store/UseStore';

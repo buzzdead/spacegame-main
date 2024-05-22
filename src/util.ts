@@ -1,22 +1,11 @@
 import { Vector3 } from 'three'
 
-export const findAndClonePosition = function<T>(obj: any, property = "position"): any | undefined {
-  if (obj == null || typeof obj !== 'object') {
-    return undefined;
-  }
+export const getTargetPos = (target: any) => {
+  const targetPos = target ? target.objectType === "Ship"
+  ? target.objectLocation.meshRef?.position
+  : target.objectType === "Construction"
+  ? target.objectLocation.position
+  : null : null;
 
-  if (property in obj && obj[property] != null) {
-    return obj.position;
-  }
-
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const result = findAndClonePosition(obj[key]);
-      if (result != null && result instanceof Vector3) {
-        return result.clone();
-      }
-    }
-  }
-
-  return undefined;
+  return targetPos
 }

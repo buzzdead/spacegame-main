@@ -59,13 +59,11 @@ const Laser = ({
   const distance = target ? origin.distanceTo(target?.objectLocation.meshRef?.position || target.objectLocation.position) : new THREE.Vector3(0,0,0);
   useEffect(() => {
     if (!fire) return;
-  
-    // Create a new material instance for each clone
     const newMaterial = gradientMaterial.clone();
     newMaterial.uniforms = THREE.UniformsUtils.clone(gradientMaterial.uniforms);
   
     const mesh = laserMesh.clone();
-    mesh.material = newMaterial; // Assign the new material to the clone
+    mesh.material = newMaterial;
     setLaserMeshes([...laserMeshes, mesh]);
     laserSound.stop();
     laserSound.play();
@@ -81,13 +79,10 @@ const Laser = ({
       if (mesh.material.uniforms.time) {
         mesh.material.uniforms.time.value = clock.getElapsedTime() * 2;
       }
-      // Check for exceeding z limit and remove the mesh
       if (mesh.position.z >= distance - 10) {
         mesh.geometry.scale(0.9, 0.9, 0.9);
       }
       mesh.position.z += 1;
-      
-      // Deal damage to the target
       if (mesh.position.z >= distance) {
         const destroyed = target.objectType === "Ship" ? dealDamageToEnemy(target.objectLocation.id, 2.5) : dealDamageToConstruction(target.objectLocation.id, 2.5)
         scene.remove(mesh);
