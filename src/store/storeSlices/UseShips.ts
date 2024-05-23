@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
-import SpaceGameStateUtils, { Ship } from "./SpaceGameStateUtils";
-import { DamageReport, EnemyShip, ShipShift, SpaceShipState } from "./StoreState";
+import SpaceGameStateUtils, { Ship } from "../SpaceGameStateUtils";
+import { DamageReport, EnemyShip, ShipShift, SpaceShipState } from "../StoreState";
 import { Vector3 } from 'three'
 import { ElementRef } from "react";
 

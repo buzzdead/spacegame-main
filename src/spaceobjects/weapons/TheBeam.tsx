@@ -3,7 +3,7 @@ import { TextureLoader, Vector3 } from "three";
 import { ShipBeam } from "../tools/test/ShipExplosion";
 import { useFrame } from "@react-three/fiber";
 import useStore from "../../store/UseStore";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 
 interface Props {
   position: Vector3;

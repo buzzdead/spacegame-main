@@ -4,7 +4,7 @@ import Laser from "./Laser"
 import { Vector3 } from 'three'
 import { useGLTF } from "@react-three/drei";
 import { ObjectType } from "../../store/StoreState";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 import { weapons } from "../../store/StoreAssets";
 import { MissileLauncher } from "./MissileLauncher";
 

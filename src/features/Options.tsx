@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useShallowStore } from "../store/UseStore";
 import { Checkbox, Flex, Modal, Typography } from "antd";
+import { useShallowStore } from "../store/UseStore";
 
 interface Props {
     onClose: () => void

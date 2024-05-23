@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -17,6 +17,42 @@ const ThreeSetup = ({ children }: Props) => {
   const right = frustumWidth;
   const top = frustumHeight;
   const bottom = -frustumHeight;
+  const [webglSupported, setWebglSupported] = useState(true);
+
+  useEffect(() => {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl', { failIfMajorPerformanceCaveat: true }) || 
+               canvas.getContext('experimental-webgl', { failIfMajorPerformanceCaveat: true });
+
+    if (!gl) {
+      setWebglSupported(false);
+    }
+  }, []);
+  const handleEnableAcceleration = () => {
+    alert("To enable hardware acceleration, follow these steps:\n\n" +
+          "For Chrome:\n" +
+          "1. Go to Settings > Advanced > System\n" +
+          "2. Toggle 'Use graphics acceleration when available' to ON\n" +
+          "3. Restart Chrome\n\n" +
+          "For Firefox:\n" +
+          "1. Go to Options > General > Performance\n" +
+          "2. Uncheck 'Use recommended performance settings'\n" +
+          "3. Check 'Use hardware acceleration when available'\n" +
+          "4. Restart Firefox\n\n" +
+          "For Edge:\n" +
+          "1. Go to Settings > System\n" +
+          "2. Toggle 'Use graphics acceleration when available' to ON\n" +
+          "3. Restart Edge");
+  };
+  if (!webglSupported) {
+    return (
+      <div style={{width: '100%', height: '100%', position: 'absolute', zIndex: 1892732922222237, backgroundColor: 'black'}}>
+        <p>Graphics acceleration is disabled or not supported.</p>
+        <p>Please enable it for a better experience.</p>
+        <button onClick={handleEnableAcceleration}>How to Enable Hardware Acceleration</button>
+      </div>
+    );
+  }
   return (
     <Canvas
     onCreated={({ gl }) => {
@@ -28,6 +64,7 @@ const ThreeSetup = ({ children }: Props) => {
     powerPreference: "high-performance",
     stencil: true,
     depth: true,
+    failIfMajorPerformanceCaveat: true
     }}
       camera={{
         left: left,

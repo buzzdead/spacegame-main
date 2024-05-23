@@ -4,7 +4,7 @@ import { Vector3 } from 'three'
 import { EffectComposer } from "@react-three/postprocessing";
 import { SWave } from "./swave";
 import { useFrame } from "@react-three/fiber";
-import { ObjectLocation } from "../../../store/UseOriginDestination";
+import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 
 interface Props {
     setNearbyEnemies: (n: ObjectLocation[]) => void

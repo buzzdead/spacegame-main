@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { ResourceState } from "./StoreState";
+import { ResourceState } from "../StoreState";
 
 const useResources: StateCreator<
   ResourceState,

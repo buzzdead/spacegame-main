@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 import { ObjectType } from "../../store/StoreState";
 import { useShallowStore } from "../../store/UseStore";
 import RocketBooster from "../tools/RocketBooster";

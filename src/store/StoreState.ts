@@ -7,8 +7,8 @@ import {
   SelectedShip,
   Ship,
 } from "./SpaceGameStateUtils";
-import { ExplosionSize } from "./useEffects";
-import { ObjectLocation } from "./UseOriginDestination";
+import { ExplosionSize } from "./storeSlices/useEffects";
+import { ObjectLocation } from "./storeSlices/UseOriginDestination";
 import { ElementRef } from "react";
 
 export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any }
@@ -90,6 +90,16 @@ export type CelestialObjectState = {
     missions: {name: string; completed: boolean}[];
     setMissionComplete: (name: string) => void;
   }
+
+  export type UserType = {  homebase: string
+    name: string
+    solarSystem: string}
+
+  export type UserState = {
+    isLoggedIn: boolean
+    user: UserType
+    logIn: (user: UserType) => void
+  }
   
   export interface SpaceGameState
     extends CelestialObjectState,
@@ -99,5 +109,6 @@ export type CelestialObjectState = {
       ResourceState,
       OptionsState,
       EffectsState,
-      MissionState
+      MissionState,
+      UserState
       {}

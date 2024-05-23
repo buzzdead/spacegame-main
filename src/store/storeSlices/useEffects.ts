@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { Vector3 } from 'three';
-import { EffectsState } from "./StoreState";
+import { EffectsState } from "../StoreState";
 
 export type ExplosionSize = "Big" | "Medium" | "Small";
 

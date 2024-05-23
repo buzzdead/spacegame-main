@@ -4,7 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import useStore from "../../store/UseStore";
 import Shader from "../../postprocessing/Shader";
 import { ObjectType } from "../../store/StoreState";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 
 interface Props {
   origin: any;

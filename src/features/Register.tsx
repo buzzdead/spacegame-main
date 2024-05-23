@@ -9,6 +9,8 @@ import {
 } from "@ant-design/icons";
 import { useRef, useState } from "react";
 import Checkmark from "./Checkmark";
+import useStore from "../store/UseStore";
+
 
 interface PlayerInfo {
     username: string;
@@ -21,8 +23,10 @@ interface PlayerInfo {
     setGameStarted: (b: boolean) => void;
     setShowOptions: () => void
   }
-
+  const SECRET_KEY = 'your_secret_key';
+  const TOKEN_EXPIRY = '1h'; // Token expiry time
 export const Register = ({setGameStarted, setShowOptions}: Props) => {
+    const logIn = useStore((state) => state.logIn)
     const [failed, setFailed] = useState(false)
     const [registering, setRegistering] = useState(false)
     const solarSystemRef = useRef('')
@@ -49,6 +53,9 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
       
           const data = await response.json();
           console.log('Player created with ID:', data.id);
+          logIn({name: values.username, homebase: values.homebase, solarSystem: values.solarSystem})
+          //const token = jwt.sign({ userId: values.username }, SECRET_KEY, { expiresIn: TOKEN_EXPIRY });
+          //localStorage.setItem('token', token);
           setFailed(false)
           setGameStarted(true);
         } catch (error) {

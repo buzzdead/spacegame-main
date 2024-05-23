@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import Checkmark from "./Checkmark";
+import useStore from "../store/UseStore";
 
 interface PlayerInfo {
     username: string;
@@ -22,6 +23,7 @@ interface PlayerInfo {
 
 export const Login = ({setGameStarted, setShowOptions}: Props) => {
     const [failed, setFailed] = useState(false)
+    const logIn = useStore((state) => state.logIn)
     const [registering, setRegistering] = useState(false)
     const onFinish = async (values: PlayerInfo) => {
       setRegistering(true)
@@ -42,6 +44,7 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
           }
       
           const data = await response.json();
+          logIn({name: values.username, homebase: "loggedin", solarSystem: "reallyLoggedIn"})
           setGameStarted(true);
         } catch (error) {
           console.error('Failed to login:', error);

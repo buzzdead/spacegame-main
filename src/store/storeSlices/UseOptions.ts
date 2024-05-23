@@ -1,6 +1,6 @@
 import {StateCreator} from "zustand";
-import SpaceGameStateUtils from "./SpaceGameStateUtils";
-import { OptionsState } from "./StoreState";
+import SpaceGameStateUtils from "../SpaceGameStateUtils";
+import { OptionsState } from "../StoreState";
 
 const useOptions: StateCreator<
   OptionsState,

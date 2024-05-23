@@ -1,8 +1,8 @@
 import {StateCreator} from "zustand";
-import SpaceGameStateUtils from "./SpaceGameStateUtils";
-import { ConstructionState, DamageReport } from "./StoreState";
+import SpaceGameStateUtils from "../SpaceGameStateUtils";
+import { ConstructionState, DamageReport } from "../StoreState";
 import { Vector3 } from 'three'
-import { constructions } from "./StoreAssets";
+import { constructions } from "../StoreAssets";
 
 const useConstructions: StateCreator<
   ConstructionState,

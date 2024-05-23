@@ -5,8 +5,8 @@ import {
   EnemyShip,
   LocationState,
   ObjectType,
-} from "./StoreState";
-import { CelestialObject, Construction, Ship } from "./SpaceGameStateUtils";
+} from "../StoreState";
+import { CelestialObject, Construction, Ship } from "../SpaceGameStateUtils";
 
 export type ObjectLocation = Ship | EnemyShip | Construction | CelestialObject;
 

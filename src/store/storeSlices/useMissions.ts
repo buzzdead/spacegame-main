@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
-import SpaceGameStateUtils from "./SpaceGameStateUtils";
-import { MissionState } from "./StoreState";
+import SpaceGameStateUtils from "../SpaceGameStateUtils";
+import { MissionState } from "../StoreState";
 
 const useMissions: StateCreator<
     MissionState,

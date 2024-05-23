@@ -1,11 +1,5 @@
 import "../styles/theme.css";
-import { Form, Input, Select, Button, Flex, Tabs } from "antd";
-import {
-  UserOutlined,
-  HomeOutlined,
-  RocketOutlined,
-  SettingFilled,
-} from "@ant-design/icons";
+import { Tabs } from "antd";
 import Starfield from "../startup/Starfield";
 import AudioPlayer from "./AudioPlayer";
 import { Suspense, useState } from "react";
@@ -13,6 +7,7 @@ import { Options } from "./Options";
 import type { TabsProps } from 'antd';
 import { Register } from "./Register";
 import { Login } from "./Login";
+import useStore from "../store/UseStore";
 const menuMusic = require("../assets/coddy.mp3");
 
 interface PlayerInfo {
@@ -26,7 +21,6 @@ interface Props {
 }
 
 const Menu = ({ setGameStarted }: Props) => {
-
   const [showOptions, setShowOptions] = useState(false);
 
   const items: TabsProps['items'] = [
@@ -56,6 +50,7 @@ const Menu = ({ setGameStarted }: Props) => {
           <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
         </div>
       </div>
+      <p style={{fontSize: 14, color: 'grey', position: 'absolute', bottom: 5, right: 15}}>Contact Me</p>
     </Suspense>
   );
 };

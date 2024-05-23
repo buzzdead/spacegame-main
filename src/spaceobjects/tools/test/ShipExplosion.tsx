@@ -19,7 +19,7 @@ import Nebula, {
   Radius,
 } from 'three-nebula';
 import UseSoundEffect from '../../../hooks/SoundEffect';
-import { ExplosionSize } from '../../../store/useEffects';
+import { ExplosionSize } from '../../../store/storeSlices/useEffects';
 import { Particle } from 'three-nebula-types';
 
 async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture, size: ExplosionSize) {

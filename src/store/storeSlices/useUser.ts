@@ -1,0 +1,23 @@
+import {StateCreator} from "zustand";
+import SpaceGameStateUtils from "../SpaceGameStateUtils";
+import { UserState, UserType } from "../StoreState";
+
+const useUser: StateCreator<
+  UserState,
+  [],
+  [],
+  UserState
+> = (set) => ({
+  isLoggedIn: false,
+  user: {
+    homebase: '',
+    solarSystem: '',
+    name: ''
+  },
+  logIn: (user: UserType) => set((state) => ({
+    user: user, isLoggedIn: true
+  })),
+})
+
+
+export default useUser;

@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
-import SpaceGameStateUtils from "./SpaceGameStateUtils";
-import { CelestialObjectState } from "./StoreState";
+import SpaceGameStateUtils from "../SpaceGameStateUtils";
+import { CelestialObjectState } from "../StoreState";
 const useCelestialObjects: StateCreator<
 CelestialObjectState,
   [],

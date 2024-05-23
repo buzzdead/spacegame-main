@@ -4,7 +4,7 @@ import * as THREE from "three";
 import useStore from "../../store/UseStore";
 import Shader from "../../postprocessing/Shader";
 import { getDistance, getDistanceType, LaserRef, LaserTypes } from "./weaponTypes";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 
 interface Props {
   origin: THREE.Vector3;

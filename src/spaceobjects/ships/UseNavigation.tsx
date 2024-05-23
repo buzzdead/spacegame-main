@@ -9,7 +9,7 @@ import { LaserCannon } from "../weapons/LaserCannon";
 import { Ignition } from "../tools/Ignition";
 import { HarvestLaser } from "../tools/HarvestLaser";
 import { ObjectType } from "../../store/StoreState";
-import { ObjectLocation } from "../../store/UseOriginDestination";
+import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 
 interface Props {
   shipType: SpaceShipId;

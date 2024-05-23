@@ -3,7 +3,7 @@ import HeavyLaser from "../../weapons/HeavyLaser";
 import { RadarScanner } from "./RadarScanner";
 import * as THREE from "three";
 import { useThree, useFrame } from '@react-three/fiber'
-import { ObjectLocation } from "../../../store/UseOriginDestination";
+import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 import UseSoundEffect from "../../../hooks/SoundEffect";
 import { TheBeam } from "../../weapons/TheBeam";
 
