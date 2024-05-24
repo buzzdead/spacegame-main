@@ -10,6 +10,7 @@ import {
 import { useRef, useState } from "react";
 import Checkmark from "./Checkmark";
 import useStore from "../store/UseStore";
+import { createJWT, decodeJWT } from "../util";
 
 
 interface PlayerInfo {
@@ -54,8 +55,9 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
           const data = await response.json();
           console.log('Player created with ID:', data.id);
           logIn({name: values.username, homebase: values.homebase, solarSystem: values.solarSystem})
-          //const token = jwt.sign({ userId: values.username }, SECRET_KEY, { expiresIn: TOKEN_EXPIRY });
-          //localStorage.setItem('token', token);
+          const token = await createJWT({ name: values.username, homebase: values.homebase, solarSystem: values.solarSystem });
+          localStorage.setItem('token', token);
+   
           setFailed(false)
           setGameStarted(true);
         } catch (error) {
@@ -132,7 +134,7 @@ export const Register = ({setGameStarted, setShowOptions}: Props) => {
               }}
             />
             <Select onChange={(e) => solarSystemRef.current = e}>
-              <Select.Option value="sol">
+              <Select.Option value="Sol">
                 Sol (Our Solar System)
               </Select.Option>
               <Select.Option value="Alpha Centauri">

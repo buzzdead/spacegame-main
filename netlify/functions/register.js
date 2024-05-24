@@ -7,13 +7,14 @@ exports.handler = async function(event) {
   }
 
   const { name, homebase, solarSystem, password } = JSON.parse(event.body);
+  const SolarSystem = solarSystem
 
   try {
     const player = await prisma.player.create({
       data: {
         name,
         homebase,
-        solarSystem,
+        solarSystem: SolarSystem,
         password, // In production, use bcrypt to hash the password before storing it
       },
     });

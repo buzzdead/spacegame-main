@@ -7,7 +7,8 @@ import { Options } from "./Options";
 import type { TabsProps } from 'antd';
 import { Register } from "./Register";
 import { Login } from "./Login";
-import useStore from "../store/UseStore";
+import useStore, { useShallowStore } from "../store/UseStore";
+import { LoggedIn } from "./LoggedIn";
 const menuMusic = require("../assets/coddy.mp3");
 
 interface PlayerInfo {
@@ -22,6 +23,7 @@ interface Props {
 
 const Menu = ({ setGameStarted }: Props) => {
   const [showOptions, setShowOptions] = useState(false);
+  const { isLoggedIn, user } = useShallowStore(["isLoggedIn", "user"])
 
   const items: TabsProps['items'] = [
     {key: '1', label: 'Register', children: <Register setGameStarted={setGameStarted} setShowOptions={() => setShowOptions(true)}/>,},
@@ -45,9 +47,9 @@ const Menu = ({ setGameStarted }: Props) => {
             className="game-title"
           >
             Space Game
-          </h1>{" "}
+          </h1>{" "}  
+          {isLoggedIn ? <LoggedIn setGameStarted={setGameStarted} /> : <Tabs defaultActiveKey="1" items={items} onChange={onChange} />}
           
-          <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
         </div>
       </div>
       <p style={{fontSize: 14, color: 'grey', position: 'absolute', bottom: 5, right: 15}}>Contact Me</p>

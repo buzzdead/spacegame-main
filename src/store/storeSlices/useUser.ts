@@ -14,8 +14,8 @@ const useUser: StateCreator<
     solarSystem: '',
     name: ''
   },
-  logIn: (user: UserType) => set((state) => ({
-    user: user, isLoggedIn: true
+  logIn: (user: UserType, logOut?: boolean) => set((state) => ({
+    user: user, isLoggedIn: logOut ? false : true
   })),
 })
 

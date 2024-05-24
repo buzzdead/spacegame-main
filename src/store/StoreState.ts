@@ -98,7 +98,7 @@ export type CelestialObjectState = {
   export type UserState = {
     isLoggedIn: boolean
     user: UserType
-    logIn: (user: UserType) => void
+    logIn: (user: UserType, logOut?: boolean) => void
   }
   
   export interface SpaceGameState

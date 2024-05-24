@@ -19,7 +19,7 @@ exports.handler = async function(event) {
     if (player && player.password === password) { // In production, use bcrypt to compare the hashed password
       return {
         statusCode: 200,
-        body: JSON.stringify({ message: 'Login successful' }),
+        body: JSON.stringify({ message: 'Login successful', player: player }),
       };
     } else {
       return {

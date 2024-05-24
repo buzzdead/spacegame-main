@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import Checkmark from "./Checkmark";
 import useStore from "../store/UseStore";
+import { createJWT, decodeJWT } from "../util";
 
 interface PlayerInfo {
     username: string;
@@ -44,7 +45,22 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
           }
       
           const data = await response.json();
+
           logIn({name: values.username, homebase: "loggedin", solarSystem: "reallyLoggedIn"})
+          const prevToken = localStorage.getItem("token")
+          let shouldSetToken = false
+          if(prevToken) {
+            const res = await decodeJWT(prevToken)
+            if(!res) shouldSetToken = true
+            if(res?.exp && res?.exp <= 0) shouldSetToken = true
+          }
+          else {
+            shouldSetToken = true
+          }
+          if(shouldSetToken){
+            const b = data.player
+          const token = await createJWT({ name: b.name, solarSystem: b.solarSystem, homebase: b.homebase });
+          localStorage.setItem('token', token);}
           setGameStarted(true);
         } catch (error) {
           console.error('Failed to login:', error);

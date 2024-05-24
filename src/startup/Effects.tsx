@@ -14,7 +14,6 @@ export const Effects = () => {
       minVolume: 3,
     });
   useEffect(() => {
-    //console.log(isLoggedIn)
 
     !isLoggedIn && narrative?.play();
   }, [narrative]);
