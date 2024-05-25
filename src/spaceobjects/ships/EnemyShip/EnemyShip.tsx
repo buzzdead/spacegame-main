@@ -9,6 +9,7 @@ import { EnemyNavigation } from "./Navigation";
 import { EnemyShip as ES } from "../../../store/StoreState";
 import { InfoBox } from "../../tools/InfoBox";
 import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
+import { functions } from "../../../util";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -66,9 +67,12 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
       nearby: false,
     });
   };
+  
+  
+
   return (
     <group>
-    <mesh position={position} ref={meshRef} onPointerDown={handleOnClick}>
+    <mesh {...functions} position={position} ref={meshRef} onPointerDown={handleOnClick}>
       <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
       <EnemyNavigation

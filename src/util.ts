@@ -33,3 +33,16 @@ export const getTargetPos = (target: any) => {
       return null;
     }
   }
+
+  const handleEnter = (e: any) => {
+    e.stopPropagation()
+    document.body.style.cursor = "pointer"
+    
+  }
+
+  const handleLeave = (e: any) => {
+    e.stopPropagation()
+    document.body.style.cursor = "grab"
+  }
+
+  export const functions = { onPointerLeave: handleLeave, onPointerEnter: handleEnter }

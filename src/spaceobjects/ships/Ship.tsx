@@ -6,6 +6,7 @@ import { SelectedShip } from "../tools/SelectedShip";
 import Navigation from "./UseNavigation";
 import { useKeyboard } from "../../hooks/Keys";
 import { InfoBox } from "../tools/InfoBox";
+import { functions } from "../../util";
 
 interface Props {
   ship: SGS["Ship"];
@@ -47,7 +48,8 @@ const Ship: FC<Props> = ({ ship, scene }) => {
       }
   }, [destroyed]);
 
-  const handleOver = () => {
+  const handleOver = (e: any) => {
+  
     if (keyMap && keyMap['KeyS']) {
       setSelected(ship.id)
     }
@@ -55,10 +57,12 @@ const Ship: FC<Props> = ({ ship, scene }) => {
       setSelected(ship.id, true)
     
   }
+
+  
  
   return (
     <Suspense fallback={null}>
-      <mesh onPointerEnter={handleOver} onPointerDown={handleOnClick} ref={meshRef} position={position}>
+      <mesh {...functions} onPointerDown={handleOnClick} onPointerOver={handleOver} ref={meshRef} position={position}>
         <ShipHull
           friend
           destroyShip={() => {

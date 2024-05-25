@@ -3,6 +3,7 @@ import { useShallowStore } from "../../store/UseStore";
 import * as THREE from 'three'
 import { useFrame } from "@react-three/fiber";
 import UseSoundEffect from "../../hooks/SoundEffect";
+import { functions } from "../../util";
 
 interface Props {
     assetPosition: THREE.Vector3
@@ -54,6 +55,6 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
   };
 
   return (
-        <primitive onClick={handleOnClick} object={auraMesh} />
+        <primitive {...functions} onClick={handleOnClick} object={auraMesh} />
   )
 };

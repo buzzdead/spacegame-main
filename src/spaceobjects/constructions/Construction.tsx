@@ -8,6 +8,7 @@ import { ConstructionMenu } from './ConstructionMenu';
 import { spaceShips } from '../../store/StoreAssets';
 import { ConstructionHull } from './ConstructionHull';
 import UseSoundEffect from '../../hooks/SoundEffect';
+import { functions } from '../../util';
 
 interface Props {
   construction: SGS['Construction'];
@@ -46,9 +47,15 @@ const Construction: FC<Props> = ({ construction }) => {
    
   }
 
+  const bool = construction.type === "Refinary" || construction.type === "Enemy"
+
+  const returnFunctions = () => {
+    return bool ? functions : {}
+  }
+
   return (
     <Suspense fallback={null}>  
-      <mesh ref={meshRef} position={position}>
+      <mesh {...returnFunctions()} ref={meshRef} position={position}>
       {origin?.position === position && <SelectedIcon color={'yellow'} position={new Vector3(0,4,0)} /> }
       <ConstructionMenu menu={menu} />
         <primitive onClick={handleClick} object={scene} />
