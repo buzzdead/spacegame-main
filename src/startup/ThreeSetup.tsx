@@ -86,7 +86,7 @@ const ThreeSetup = ({ children }: Props) => {
       />
       <EffectComposer>
         <Bloom
-          intensity={0.75}
+          intensity={0.3}
           luminanceThreshold={0.098}
           luminanceSmoothing={0.085}
         />

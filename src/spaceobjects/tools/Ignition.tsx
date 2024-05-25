@@ -7,11 +7,12 @@ interface Props { type: SpaceShipId, brake?: boolean }
 export const Ignition = ({type, brake = false}: Props) => {
   const isFighter = type === "fighter"
   const isHawk = type === "hawk"
+  const isCargo = type === "cargo"
   const rocketEngineLeft = 
   {
     x: isFighter ?  1.85 : 1.04 / 100,
     y: 0.75 / 100,
-    z: isFighter ? -7.5 : isHawk ? -5 : -0.3
+    z: isFighter ? -7.5 : isHawk ? -5 : isCargo ? -4.5 : -0.3
   }
   const rocketEngineRight = 
   {

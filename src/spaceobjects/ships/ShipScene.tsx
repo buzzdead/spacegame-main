@@ -11,7 +11,7 @@ export const ShipScene: React.FC<Props> = ({ship}) => {
     const { glbPath, position, scale } = ship;
     const scene = useAsset(glbPath, scale || 1);
   
-  scene.rotation.set(0, -1.55, 0);
+  if(ship.assetId !== "cargo") scene.rotation.set(0, -1.55, 0);
   if (ship.assetId === "fighter") {
     
     scene.children[0].rotation.y = -55;

@@ -170,7 +170,7 @@ const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
           ? 70
           : shipType === "hullspaceship"
           ? 30
-          : 12) &&
+          : 7) &&
       theAngle < 0.05
     )
   }
@@ -208,7 +208,7 @@ const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
     }
 
     const speedFactor = Math.max(
-      isFighter ? 55 : shipType === "hullspaceship" ? 100 : 25
+      isFighter ? 55 : shipType === "hullspaceship" ? 100 : 12.5
     ); // Adjust for sensitivity
     meshRef.current.position.add(
       direction.multiplyScalar((55 * speedFactor) / 5000)

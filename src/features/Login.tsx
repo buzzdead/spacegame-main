@@ -93,7 +93,7 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
                 top: 7.5,
               }}
             />
-            <Input autoFocus placeholder="Player name" />
+            <Input name="username" autoComplete="current-username" autoFocus placeholder="Player name" />
           </div>
         </Form.Item>
         <Form.Item name="password">
@@ -107,7 +107,7 @@ export const Login = ({setGameStarted, setShowOptions}: Props) => {
                 top: 7.5,
               }}
             />
-            <Input placeholder="Password" type="password" />
+            <Input.Password name="password" autoComplete="" placeholder="Password" type="password" />
           </div>
         </Form.Item>
         

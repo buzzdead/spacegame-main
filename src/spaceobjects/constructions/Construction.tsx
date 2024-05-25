@@ -29,8 +29,6 @@ const Construction: FC<Props> = ({ construction }) => {
   });
   const handleClick = (e: any) => {
     e.stopPropagation()
-    destroy()
-    return;
     construction.type === "Refinary" ?
     origin?.position === position ? setOrigin(undefined) : setOrigin(construction)
     : 

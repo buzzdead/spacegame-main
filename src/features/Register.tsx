@@ -5,7 +5,7 @@ import {
   HomeOutlined,
   RocketOutlined,
   SettingFilled,
-  SafetyCertificateOutlined
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import { useRef, useState } from "react";
 import Checkmark from "./Checkmark";

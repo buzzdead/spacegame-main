@@ -1,12 +1,14 @@
 import { Typography } from "antd";
 import { useShallowStore } from "../store/UseStore";
 import { useEffect, useState } from "react";
-import { SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Options } from "./Options";
 import Checkmark from "./Checkmark";
+import GameMenu from "./GameMenu/GameMenu";
 
 const UI = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [showMenu, setShowMenu] = useState(false)
   const [helperUi, setHelperUi] = useState(
     "Left-click on one of the cargo spaceships to get started"
   );
@@ -45,7 +47,7 @@ const UI = () => {
         "Great, now find one of the cruisers further out and left-click on it"
       );
   }, [ships]);
-
+  if(showMenu) return <GameMenu visible={showMenu} onClose={() => setShowMenu(false)} />
   return (
     <div style={{
       position: "absolute",
@@ -67,6 +69,7 @@ const UI = () => {
     >
       <Options visible={showOptions} onClose={() => setShowOptions(false)} />
       <SettingOutlined style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowOptions(true)} />
+      {showMenu ? <MenuFoldOutlined  style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(false)}/> : <MenuUnfoldOutlined  style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(true)}/>}
       <Typography style={{ color: "yellowgreen" }}>Origin: {origin?.position}</Typography>
       <Typography style={{ color: "lightblue" }}>
         Resources: {resources}

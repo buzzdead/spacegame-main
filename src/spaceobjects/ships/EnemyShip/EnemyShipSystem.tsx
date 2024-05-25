@@ -6,6 +6,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 import UseSoundEffect from "../../../hooks/SoundEffect";
 import { TheBeam } from "../../weapons/TheBeam";
+import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
 
 interface Props {
   origin: THREE.Vector3;

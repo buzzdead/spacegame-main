@@ -3,3 +3,9 @@
     height: 100vh;
     overflow: hidden;
 }
+
+.starfield-container2 {
+    width: 72vw;
+    height: 60vh;
+    overflow: hidden;
+}
