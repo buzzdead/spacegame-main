@@ -253,6 +253,7 @@ const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
       />
       {isFighter && (
         <LaserCannon
+        whatever={meshRef}
           position={
             meshRef.current ? meshRef.current.position : new Vector3(0, 0, 0)
           }

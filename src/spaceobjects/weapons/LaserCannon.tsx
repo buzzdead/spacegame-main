@@ -7,6 +7,7 @@ import { ObjectType } from "../../store/StoreState";
 import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 import { weapons } from "../../store/StoreAssets";
 import { MissileLauncher } from "./MissileLauncher";
+import { useThree } from '@react-three/fiber'
 
 interface Props {
     position: Vector3
@@ -14,10 +15,12 @@ interface Props {
     target: {objectLocation: ObjectLocation, objectType: ObjectType} | undefined
     setFightDone: () => void
     color?: string
+    whatever: any
 }
 
-export const LaserCannon = ({fire, position, target, color = 'red', setFightDone}: Props) => {
+export const LaserCannon = ({fire, position, target, color = 'red', setFightDone, whatever}: Props) => {
   const missilePath = weapons.find(e => e.id === "fighter-missile")?.glbPath
+  const { camera } = useThree()
   const {scene: missileScene} = useGLTF(missilePath || "")
   const meshRef = useRef<ElementRef<"group">>(null)
   missileScene.scale.set(0.75,0.75,0.75)
@@ -33,9 +36,16 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
     minVolume: 0.75,
   });
   useEffect(() => {
+    if(whatever) {
+      console.log("whatever")
+      const newPos = whatever.current.position
+      calculateLaserSound(newPos)
+    calculateMissileSound(newPos)
+    }
+    else{
     calculateLaserSound(position)
-    calculateMissileSound(position)
-  }, [calculateLaserSound])
+    calculateMissileSound(position)}
+  }, [position, fire, camera.position])
     return (
         <group ref={meshRef}>
         <Laser

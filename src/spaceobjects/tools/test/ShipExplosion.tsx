@@ -135,7 +135,8 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   UseSoundEffect({
     sfxPath: explosion.size === "Small" ? "/assets/sounds/missile-explosion.mp3" : "/assets/sounds/explo.mp3",
     minVolume: 0.75,
-    autoPlay: true
+    autoPlay: true,
+    position: explosion.pos
   });
 
   useFrame(() => {
@@ -156,8 +157,8 @@ export const ShipExplosion = ({ explosion, texture, onEnd }: Props) => {
   });
 
   useEffect(() => {
-    calculateExplosionSound(scene.position);
-  }, []);
+    calculateExplosionSound(explosion.pos);
+  }, [scene.position]);
 
   useEffect(() => {
     createShipExplosion(scene, texture, explosion.size).then((nebulaSystem) => {

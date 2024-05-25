@@ -45,9 +45,15 @@ export const EnemyShipSystem = ({ origin, nearby, currentPos, shipRef }: Props) 
     detune: 300
   });
   useEffect(() => {
+    if(shipRef?.current?.position) {
+      const newPos = shipRef.current.position
+      calculateBeamSound(newPos)
+    calculateLaserSound(newPos)
+    }
+    else{
     calculateBeamSound(currentPos)
-    calculateLaserSound(currentPos)
-  }, [camera, calculateLaserSound])
+    calculateLaserSound(currentPos)}
+  }, [camera.position, nearbyEnemies])
   return (
     <group>
       {nearbyEnemies.length > 0 && <HeavyLaser sound={laserSound} shipRef={shipRef} origin={currentPos} target={nearbyEnemies} />}
