@@ -33,7 +33,7 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   const { sound: missileSound, calculateVolume: calculateMissileSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/missile-launch.mp3",
-    minVolume: 0.75,
+    minVolume: 0.25,
   });
   useEffect(() => {
     if(whatever) {
