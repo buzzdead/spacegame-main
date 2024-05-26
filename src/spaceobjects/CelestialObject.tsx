@@ -36,7 +36,7 @@ useEffect(() => {
   return (
     <Suspense fallback={null}>
       <mesh onClick={handleSetDestination} ref={meshRef} position={position}>
-        {celestialObject.assetId.includes("planet") && <directionalLight position={[185, 185, 25]} intensity={2.5}/>}
+        {celestialObject.assetId.includes("planet") && <directionalLight position={[185, 185, 25]} intensity={1.5}/>}
         <primitive object={scene} />
       </mesh>
     </Suspense>

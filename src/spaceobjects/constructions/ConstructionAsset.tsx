@@ -30,6 +30,8 @@ const ConstructionAsset = ({ shouldRender, glbPath, x, scale }: Props) => {
     }
     scene.children[0].rotation.y += 0.01;
   });
+
+
  
   return shouldRender ? (
     <mesh>

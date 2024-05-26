@@ -34,6 +34,12 @@ export const AssetPortal = ({assetPosition, x}: Props) => {
   auraMesh.position.copy(assetPosition);
   auraMesh.scale.setScalar(1.2); // adjust the scale to fit your needs
 
+  const aLight = new THREE.PointLight()
+  
+   aLight.intensity = 20
+   aLight.position.set(0, 2, 0)
+   auraMesh.add(aLight)
+
   useFrame(() => {
     if(clicked) {auraMesh.material.emissiveIntensity += 50}
   })

@@ -76,10 +76,12 @@ export type CelestialObjectState = {
   export type OptionsState = {
     postProcessing: boolean
     stats: boolean
+    brightness: number
     developerMode: boolean
     setDeveloperMode: () => void
     setStats:() => void
     setPostProcessing: () => void
+    setBrightness: (n: number) => void
   }
 
   export type EffectsState = {

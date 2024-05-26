@@ -14,7 +14,9 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 const ambLight = new THREE.AmbientLight()
-ambLight.intensity = 2
+const dLight = new THREE.DirectionalLight()
+dLight.position.set(1,1,1)
+ambLight.intensity = 5
 
 const Starfield = ({inGame = false, theRef}: Props) => {
   const starfieldRef = useRef<HTMLDivElement | null>(null);
@@ -24,13 +26,14 @@ const Starfield = ({inGame = false, theRef}: Props) => {
   const pScene = useAsset('/assets/celestialobjects/planet3.glb', 1)
   const bScene = useAsset('/assets/celestialobjects/blackhole.glb', 1)
   let animationId: number
-  const cargo = useAsset('/assets/spaceships/cargo2.glb', 0.35)
+  const cargo = useAsset('/assets/spaceships/cargo2.glb', 0.55)
   const cruiser = useAsset('/assets/spaceships/cruiser.glb', 0.2)
-  const fighter = useAsset('/assets/spaceships/fighter.glb', 40)
+  const fighter = useAsset('/assets/spaceships/fighter.glb', 70)
 
   fighter.position.set(100,0,-55)
   cargo.position.set(100,0,-65)
   cruiser.position.set(100,0,-55)
+ 
 
   const planetScene = pScene.clone()
   const blackHoleScene = bScene.clone()
@@ -82,9 +85,11 @@ const Starfield = ({inGame = false, theRef}: Props) => {
           else if (theRef.current === "Cruiser") scene.add(cruiser)
           if(theRef.current !== null) {
             scene.add(ambLight)
+            scene.add(dLight)
           }
           else {
             scene.remove(ambLight)
+            scene.remove(dLight)
           }
           currentThing.current = theRef.current
         }

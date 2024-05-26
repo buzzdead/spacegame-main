@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox, Flex, Modal, Typography } from "antd";
+import { Checkbox, Flex, Modal, Slider, Typography } from "antd";
 import { useShallowStore } from "../store/UseStore";
 
 interface Props {
@@ -8,14 +8,16 @@ interface Props {
 }
 
 export const Options = ({onClose, visible}: Props) => {
-    const { postProcessing, setPostProcessing, developerMode, setDeveloperMode, setResources, stats, setStats } = useShallowStore([
+    const { postProcessing, setPostProcessing, developerMode, setDeveloperMode, setResources, stats, setStats, brightness, setBrightness } = useShallowStore([
         "postProcessing",
         "setPostProcessing",
         "developerMode",
         "setDeveloperMode",
         "setResources",
         "stats",
-        "setStats"
+        "setStats",
+        "brightness",
+        "setBrightness"
 
       ]);
       
@@ -34,7 +36,7 @@ export const Options = ({onClose, visible}: Props) => {
         onCancel={onClose}
         onOk={handleModalOk}
         open={visible}
-        styles={{body: {height: 200}}}
+        styles={{body: {height: 250}}}
       >
         <Typography style={{marginBottom: 5, fontWeight: 'bold'}}>Options</Typography>
         <Flex vertical>
@@ -51,6 +53,10 @@ export const Options = ({onClose, visible}: Props) => {
         <Checkbox checked={stats} onClick={() => setStats()}>
         <p style={{userSelect: 'none'}}>Stats enabled</p>
         </Checkbox>
+        <div style={{marginTop: 10}}>
+          <Typography style={{userSelect: 'none'}}>Adjust brightness</Typography>
+        </div>
+        <Slider value={brightness * 100} onChange={(n: number) => setBrightness(n / 100)} />
         </Flex>
       </Modal>
   )

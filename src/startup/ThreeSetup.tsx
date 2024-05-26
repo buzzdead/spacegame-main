@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { ACESFilmicToneMapping } from "three";
+import { ACESFilmicToneMapping, CustomBlending } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Environment } from "@react-three/drei";
 import { StatsComponent } from "./StatsComponent";
+import { EnviromentComponent } from "./EnviromentComponent";
 
 interface Props {
   children: React.ReactNode;
@@ -77,17 +78,13 @@ const ThreeSetup = ({ children }: Props) => {
       style={{ width: "100vw", height: "100vh" }}
     >
        
-      <Environment
-        encoding={3001}
-        backgroundIntensity={0.3}
-        files={"./starmap-min.jpg"}
-        background
-      />
+      <EnviromentComponent />
       <EffectComposer>
         <Bloom
-          intensity={0.15}
+          intensity={0.35}
           luminanceThreshold={0.98}
           luminanceSmoothing={0.85}
+          blendFunction={CustomBlending}
         />
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />

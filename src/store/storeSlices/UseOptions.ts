@@ -11,6 +11,7 @@ const useOptions: StateCreator<
   postProcessing: true,
   developerMode: false,
   stats: false,
+  brightness: 0.65,
   setPostProcessing: () => {
     set((state) => ({postProcessing: !state.postProcessing}))
   },
@@ -19,6 +20,9 @@ const useOptions: StateCreator<
   },
   setStats: () => {
     set((state) => ({stats: !state.stats}))
+  },
+  setBrightness: (n: number) => {
+    set((state) => ({brightness: (n > 0 && n < 1) ? n : state.brightness}))
   }
 })
 

@@ -22,6 +22,11 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   const missilePath = weapons.find(e => e.id === "fighter-missile")?.glbPath
   const { camera } = useThree()
   const {scene: missileScene} = useGLTF(missilePath || "")
+  
+  //@ts-ignore
+  const mat = missileScene.children[0].material
+  mat.emissiveIntensity = 0.1
+  mat.metalness = 0.5
   const meshRef = useRef<ElementRef<"group">>(null)
   missileScene.scale.set(0.75,0.75,0.75)
 
