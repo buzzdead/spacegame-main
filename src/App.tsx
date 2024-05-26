@@ -17,7 +17,7 @@ const App: React.FC = () => {
       const res = await decodeJWT(token)
       if(res &&  (res?.exp || 0 > 0)) {
         const {homebase, name, solarSystem} = res
-        logIn({homebase: res.homebase as string, name: res.name as string, solarSystem: res.solarSystem as string})
+        logIn({homebase: homebase as string, name: name as string, solarSystem: solarSystem as string})
       }
     }
   abc()
