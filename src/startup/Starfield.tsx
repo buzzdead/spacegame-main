@@ -1,23 +1,37 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import '../styles/starfield.css'
 import { useGLTF } from '@react-three/drei';
+import { useAsset } from '../hooks/Asset';
 
 interface Props {
   inGame?: boolean
+  theRef?: any
 }
 
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+const ambLight = new THREE.AmbientLight()
+ambLight.intensity = 2
 
-const Starfield = ({inGame = false}: Props) => {
+const Starfield = ({inGame = false, theRef}: Props) => {
   const starfieldRef = useRef<HTMLDivElement | null>(null);
   const material = new THREE.MeshBasicMaterial({ color: inGame ? "orange" : '#ffffff' });
   const geometry = new THREE.SphereGeometry(0.25, inGame ? 20 : 16, inGame ? 20 : 16);
-  const { scene: pScene } = useGLTF('/assets/celestialobjects/planet3.glb')
-  const { scene: bScene } = useGLTF('/assets/celestialobjects/blackhole.glb')
+  const currentThing = useRef(null)
+  const pScene = useAsset('/assets/celestialobjects/planet3.glb', 1)
+  const bScene = useAsset('/assets/celestialobjects/blackhole.glb', 1)
+  
+  const cargo = useAsset('/assets/spaceships/cargo2.glb', 0.35)
+  const cruiser = useAsset('/assets/spaceships/cruiser.glb', 0.2)
+  const fighter = useAsset('/assets/spaceships/fighter.glb', 40)
+
+  fighter.position.set(100,0,-55)
+  cargo.position.set(100,0,-65)
+  cruiser.position.set(100,0,-55)
+
   const planetScene = pScene.clone()
   const blackHoleScene = bScene.clone()
   planetScene.position.set( (Math.random() - 0.5) * 300,
@@ -55,6 +69,28 @@ const Starfield = ({inGame = false}: Props) => {
       camera.position.z = 50;
 
       const animate = () => {
+        if(theRef){
+        if(theRef.current !== currentThing.current) {
+          if(currentThing.current !== null) {
+            if(currentThing.current === "Fighter") scene.remove(fighter)
+            else if(currentThing.current === "Cargo") scene.remove(cargo)
+            else if(currentThing.current === "Cruiser") scene.remove(cruiser)
+          }
+          if(theRef.current === "Fighter") scene.add(fighter)
+            else if(theRef.current === "Cargo") scene.add(cargo)
+          else if (theRef.current === "Cruiser") scene.add(cruiser)
+          if(theRef.current !== null) {
+            scene.add(ambLight)
+          }
+          else {
+            scene.remove(ambLight)
+          }
+          currentThing.current = theRef.current
+        }
+        if(currentThing.current === "Fighter") fighter.rotation.y += 0.01
+        else if(currentThing.current === "Cargo") cargo.rotation.y += 0.01
+        else if (currentThing.current === "Cruiser") cruiser.rotation.y += 0.01
+      }
         requestAnimationFrame(animate);
         if (planetScene && !inGame) {
           planetScene.position.z -= 0.1;

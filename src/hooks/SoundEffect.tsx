@@ -40,7 +40,6 @@ const UseSoundEffect = ({sfxPath, minVolume = 0.1, autoPlay = false, detune, pos
         // Adjust these parameters based on your desired sound behavior
           const maxDistance = 75;
           const distance = camera.position.distanceTo(position)
-          if(sfxPath.includes("missile-launch")) console.log(camera.position, position)
       
           let volume = 0.15 - Math.min(1, distance / maxDistance); // Linear decrease
           volume = Math.max(minVolume, volume); // Clamp to a minimum

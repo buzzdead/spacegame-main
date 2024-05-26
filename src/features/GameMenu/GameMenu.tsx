@@ -11,10 +11,10 @@ import {
     FullscreenExitOutlined,
     StarFilled
   } from "@ant-design/icons";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Dashboard } from "./Dashboard";
 import { Guide } from "./Guide";
-import { Intel } from "./Intel";
+import { Intel, Selected } from "./Intel";
 
 interface Props {
     onClose: () => void
@@ -28,7 +28,7 @@ interface GameMenuTab {
     content: React.ReactNode
 }
 
-const currentGameMenutabs: GameMenuTab[] = [
+const currentGameMenutabs = (theRef: any) => {return [
     {
         name: "Dashboard",
         content: <Dashboard />
@@ -39,20 +39,20 @@ const currentGameMenutabs: GameMenuTab[] = [
     },
     {
         name: "Intel",
-        content: <Intel />
+        content: <Intel theRef={theRef}/>
     }
-]
-
-
+]}
 
 const GameMenu = ({onClose, visible}: Props) => {
+    const theRef = useRef<Selected | null>(null)
+    const tabs = currentGameMenutabs(theRef)
     const [currentTab, setCurrentTab] = useState<GameMenuTabs>("Dashboard") 
     const renderContent = () => {
-        const tab = currentGameMenutabs.find((tab) => tab.name === currentTab);
+        const tab = tabs.find((tab) => tab.name === currentTab);
         return tab ? tab.content : null;
       };
     const starField = useMemo(() => {
-        return <Starfield inGame />
+        return <Starfield inGame theRef={theRef} />
     }, [])
     return (
         <Modal
@@ -62,7 +62,7 @@ const GameMenu = ({onClose, visible}: Props) => {
         width={'75%'}
         style={{marginTop: 50,}}
         closeIcon={<FullscreenExitOutlined style={{color: "white", fontSize: 20, paddingTop: 30, paddingRight: 60}} />}
-        styles={{content: {backgroundColor: '#011a05', opacity: 0.85,}, body: {height: "60vh",}, mask: {backgroundColor: 'rgba(30, 0, 0, 0.55)'}}}
+        styles={{content: {backgroundColor: '#011a05', opacity: 0.9,}, body: {height: "60vh",}, mask: {backgroundColor: 'rgba(30, 0, 0, 0.55)'}}}
       >
          <div style={{position: 'relative',}}>
             <div style={{position: 'absolute'}}>
@@ -70,7 +70,6 @@ const GameMenu = ({onClose, visible}: Props) => {
         </div>
         </div>
         {renderContent()}
-       
         <Buttons handleChange={(tab: GameMenuTabs) => setCurrentTab(tab)}/>
         </Modal>
     )

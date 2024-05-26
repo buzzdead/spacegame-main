@@ -8,12 +8,15 @@ interface Props {
 }
 
 export const Options = ({onClose, visible}: Props) => {
-    const { postProcessing, setPostProcessing, developerMode, setDeveloperMode, setResources } = useShallowStore([
+    const { postProcessing, setPostProcessing, developerMode, setDeveloperMode, setResources, stats, setStats } = useShallowStore([
         "postProcessing",
         "setPostProcessing",
         "developerMode",
         "setDeveloperMode",
-        "setResources"
+        "setResources",
+        "stats",
+        "setStats"
+
       ]);
       
     const [enablePostprocessing, setEnablePostProcessing] =
@@ -34,6 +37,7 @@ export const Options = ({onClose, visible}: Props) => {
         styles={{body: {height: 200}}}
       >
         <Typography style={{marginBottom: 5, fontWeight: 'bold'}}>Options</Typography>
+        <Flex vertical>
         <Checkbox
           disabled
           onClick={() => setEnablePostProcessing(!enablePostprocessing)}
@@ -41,9 +45,13 @@ export const Options = ({onClose, visible}: Props) => {
         >
           <p style={{userSelect: 'none', textDecoration: 'line-through'}}>Postprocessing enabled (may degrade performance)</p>
         </Checkbox>
-        <Checkbox onClick={() => setEnableDeveloperMode(!enableDeveloperMode)}>
+        <Checkbox checked={enableDeveloperMode} onClick={() => setEnableDeveloperMode(!enableDeveloperMode)}>
         <p style={{userSelect: 'none'}}>Developer mode enabled (restart required)</p>
         </Checkbox>
+        <Checkbox checked={stats} onClick={() => setStats()}>
+        <p style={{userSelect: 'none'}}>Stats enabled</p>
+        </Checkbox>
+        </Flex>
       </Modal>
   )
 }

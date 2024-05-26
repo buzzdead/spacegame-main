@@ -20,20 +20,24 @@ const intelObjects = [
   },
 ];
 
-type Selected = "Fighter" | "Cargo" | "Cruiser";
+export type Selected = "Fighter" | "Cargo" | "Cruiser";
 
 const descriptions = { Fighter:  "The fighter ship is a very effective ship at small excursions. These ships travel fast, packs a nice punch with their laser cannon and can be upgraded with missiles. The fighter ship attacks best in group with other fighter ships.",
 Cargo: "The cargo ship is effective at practical tasks like mining asteroids and shipping resources. Should aim to have at least one per asteroid.", Cruiser: "The B tier of the cruiser class. These ships have a multi-targeted laser cannons that can shoot three ships at the same time. Additionally, they are equipped with a laser beam that shoots directly in front of it."
  }
 
-export const Intel = () => {
+interface Props {
+  theRef: any
+}
+
+export const Intel = ({theRef}: Props) => {
   const [selected, setSelected] = useState<Selected | null>(null);
   const { Title, Paragraph } = Typography;
   const handleOnClick = (name: string) => {
     const newName = name as Selected;
     if (newName) {
-      if (newName === selected) setSelected(null);
-      else setSelected(newName);
+      if (newName === selected) {setSelected(null); theRef.current = null}
+      else {setSelected(newName); theRef.current = newName}
     }
   };
   return (
@@ -128,7 +132,7 @@ export const Intel = () => {
             <Paragraph style={{maxWidth: '60%', color: 'white'}}>
               {descriptions[selected]}
             </Paragraph>
-            <Button style={{width: '100px'}} onClick={() => setSelected(null)}>Go back</Button>
+            <Button style={{width: '100px'}} onClick={() => handleOnClick(selected)}>Go back</Button>
           </>
         )}
       </div>

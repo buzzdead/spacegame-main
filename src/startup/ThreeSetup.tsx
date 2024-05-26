@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { Environment, Stats } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
+import { StatsComponent } from "./StatsComponent";
 
 interface Props {
   children: React.ReactNode;
@@ -91,9 +92,7 @@ const ThreeSetup = ({ children }: Props) => {
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
       </EffectComposer>
-      <mesh scale={5}>
-      <Stats />
-      </mesh>
+      <StatsComponent />
       {children}
     </Canvas>
   );

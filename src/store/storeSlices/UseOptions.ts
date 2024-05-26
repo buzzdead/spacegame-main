@@ -10,11 +10,15 @@ const useOptions: StateCreator<
 > = (set) => ({
   postProcessing: true,
   developerMode: false,
+  stats: false,
   setPostProcessing: () => {
     set((state) => ({postProcessing: !state.postProcessing}))
   },
   setDeveloperMode: () => {
     set((state) => ({developerMode: !state.developerMode}))
+  },
+  setStats: () => {
+    set((state) => ({stats: !state.stats}))
   }
 })
 

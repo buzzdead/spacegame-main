@@ -3,7 +3,6 @@ import { useShallowStore } from "../store/UseStore";
 import { useEffect, useState } from "react";
 import { SettingOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Options } from "./Options";
-import Checkmark from "./Checkmark";
 import GameMenu from "./GameMenu/GameMenu";
 
 const UI = () => {
@@ -12,11 +11,10 @@ const UI = () => {
   const [helperUi, setHelperUi] = useState(
     "Left-click on one of the cargo spaceships to get started"
   );
-  const { selected, destination, ships, origin, resources } = useShallowStore([
+  const { selected, destination, ships, resources } = useShallowStore([
     "selected",
     "destination",
     "ships",
-    "origin",
     "resources",
   ]);
   useEffect(() => {
@@ -60,17 +58,16 @@ const UI = () => {
     <div
       style={{
         position: 'relative',
-        top: 25,
-        left: 25,
+        top: 15,
+        justifyContent: 'center',
         display: "flex",
         gap: 45,
         flexWrap: "wrap",
       }}
     >
       <Options visible={showOptions} onClose={() => setShowOptions(false)} />
-      <SettingOutlined style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowOptions(true)} />
-      {showMenu ? <MenuFoldOutlined  style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(false)}/> : <MenuUnfoldOutlined  style={{userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(true)}/>}
-      <Typography style={{ color: "yellowgreen" }}>Origin: {origin?.position}</Typography>
+      <SettingOutlined style={{userSelect: 'all', pointerEvents: 'all', fontSize: 20}} onClick={() => setShowOptions(true)} />
+      {showMenu ? <MenuFoldOutlined style={{fontSize: 20,userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(false)}/> : <MenuUnfoldOutlined  style={{fontSize: 20,userSelect: 'all', pointerEvents: 'all'}} onClick={() => setShowMenu(true)}/>}
       <Typography style={{ color: "lightblue" }}>
         Resources: {resources}
       </Typography>

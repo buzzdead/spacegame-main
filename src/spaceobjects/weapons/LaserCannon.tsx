@@ -37,7 +37,6 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   });
   useEffect(() => {
     if(whatever) {
-      console.log("whatever")
       const newPos = whatever.current.position
       calculateLaserSound(newPos)
     calculateMissileSound(newPos)
