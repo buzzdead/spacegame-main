@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { Environment } from "@react-three/drei";
+import { Environment, Stats } from "@react-three/drei";
 
 interface Props {
   children: React.ReactNode;
@@ -55,13 +55,10 @@ const ThreeSetup = ({ children }: Props) => {
   }
   return (
     <Canvas
-    onCreated={({ gl }) => {
-      gl.toneMapping = ACESFilmicToneMapping;
-    }}
     gl={{
       antialias: false,
+      powerPreference: "high-performance",
     alpha: false,
-    powerPreference: "high-performance",
     stencil: true,
     depth: true,
     failIfMajorPerformanceCaveat: true
@@ -78,6 +75,7 @@ const ThreeSetup = ({ children }: Props) => {
       }}
       style={{ width: "100vw", height: "100vh" }}
     >
+       
       <Environment
         encoding={3001}
         backgroundIntensity={0.3}
@@ -93,6 +91,9 @@ const ThreeSetup = ({ children }: Props) => {
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
       </EffectComposer>
+      <mesh scale={5}>
+      <Stats />
+      </mesh>
       {children}
     </Canvas>
   );
