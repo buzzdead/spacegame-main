@@ -10,7 +10,7 @@ import {
 import { useRef, useState } from "react";
 import Checkmark from "./Checkmark";
 import useStore from "../store/UseStore";
-import { createJWT, decodeJWT } from "../util";
+import { createJWT } from "../util";
 
 
 interface PlayerInfo {
@@ -24,8 +24,7 @@ interface PlayerInfo {
     setGameStarted: (b: boolean) => void;
     setShowOptions: () => void
   }
-  const SECRET_KEY = 'your_secret_key';
-  const TOKEN_EXPIRY = '1h'; // Token expiry time
+
 export const Register = ({setGameStarted, setShowOptions}: Props) => {
     const logIn = useStore((state) => state.logIn)
     const [failed, setFailed] = useState(false)

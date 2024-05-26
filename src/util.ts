@@ -1,5 +1,6 @@
 import { Vector3 } from 'three'
 import { jwtVerify, SignJWT } from 'jose';
+import { env } from 'process';
 
 export const getTargetPos = (target: any) => {
   const targetPos = target ? target.objectType === "Ship"
@@ -11,7 +12,8 @@ export const getTargetPos = (target: any) => {
   return targetPos
 }
 
-   const SECRET_KEY = 'your-secret-key'; // Replace with your actual secret key
+   const SECRET_KEY = process.env.REACT_APP_JWS_KEY;
+
    const TOKEN_EXPIRY = '1h'; // Replace with your desired token expiry
 
    export async function createJWT(payload: any) {
