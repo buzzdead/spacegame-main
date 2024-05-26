@@ -23,7 +23,7 @@ const Starfield = ({inGame = false, theRef}: Props) => {
   const currentThing = useRef(null)
   const pScene = useAsset('/assets/celestialobjects/planet3.glb', 1)
   const bScene = useAsset('/assets/celestialobjects/blackhole.glb', 1)
-  
+  let animationId: number
   const cargo = useAsset('/assets/spaceships/cargo2.glb', 0.35)
   const cruiser = useAsset('/assets/spaceships/cruiser.glb', 0.2)
   const fighter = useAsset('/assets/spaceships/fighter.glb', 40)
@@ -69,6 +69,7 @@ const Starfield = ({inGame = false, theRef}: Props) => {
       camera.position.z = 50;
 
       const animate = () => {
+        
         if(theRef){
         if(theRef.current !== currentThing.current) {
           if(currentThing.current !== null) {
@@ -91,7 +92,7 @@ const Starfield = ({inGame = false, theRef}: Props) => {
         else if(currentThing.current === "Cargo") cargo.rotation.y += 0.01
         else if (currentThing.current === "Cruiser") cruiser.rotation.y += 0.01
       }
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
         if (planetScene && !inGame) {
           planetScene.position.z -= 0.1;
           if (planetScene.position.z < -200) {
@@ -122,6 +123,7 @@ const Starfield = ({inGame = false, theRef}: Props) => {
     }
 
     return () => {
+      cancelAnimationFrame(animationId);
       // Clean up the Three.js scene and renderer
       stars.forEach(star => {
         star.geometry.dispose();
@@ -146,6 +148,12 @@ const Starfield = ({inGame = false, theRef}: Props) => {
       scene.remove(camera)
       camera.removeFromParent()
       scene.removeFromParent()
+      cargo.removeFromParent()
+      cruiser.removeFromParent()
+      fighter.removeFromParent()
+      scene.remove(cruiser)
+      scene.remove(fighter)
+      scene.remove(cargo)
       
       if (renderer) {
         renderer.dispose();

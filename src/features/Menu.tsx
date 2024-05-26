@@ -52,7 +52,10 @@ const Menu = ({ setGameStarted }: Props) => {
           
         </div>
       </div>
-      <p style={{fontSize: 14, color: 'grey', position: 'absolute', bottom: 5, right: 15}}>Contact Me</p>
+      <p style={{fontSize: 14, color: 'lightblue', position: 'absolute', bottom: 5, right: 15}}>
+  <a href="mailto:sigmundvolden@gmail.com" style={{color: 'inherit', textDecoration: 'none'}}>Contact Me @</a>
+</p>
+
     </Suspense>
   );
 };
