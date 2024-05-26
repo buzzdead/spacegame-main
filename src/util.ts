@@ -45,4 +45,4 @@ export const getTargetPos = (target: any) => {
     document.body.style.cursor = "grab"
   }
 
-  export const functions = { onPointerLeave: handleLeave, onPointerEnter: handleEnter }
+  export const functions = { onPointerOut: handleLeave, onPointerEnter: handleEnter }

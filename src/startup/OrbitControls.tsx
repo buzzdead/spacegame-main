@@ -1,5 +1,5 @@
 
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, CameraControls } from '@react-three/drei';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { Vector2 } from 'three'
@@ -32,5 +32,5 @@ export const Collisions = () => {
           window.addEventListener('touchmove', handleMouseMove)
         };
       }, [handleMouseMove]); */
-      return  <OrbitControls panSpeed={isClose ? 0.01 : 0.5} zoomSpeed={isClose ? 0.01 : 1} rotateSpeed={isClose ? 0.01 : 0.35} />
+      return  <CameraControls truckSpeed={2} polarRotateSpeed={.51} azimuthRotateSpeed={.51} />
 }

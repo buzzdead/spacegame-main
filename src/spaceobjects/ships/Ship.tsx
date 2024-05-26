@@ -49,7 +49,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   }, [destroyed]);
 
   const handleOver = (e: any) => {
-  
+    e.stopPropagation()
     if (keyMap && keyMap['KeyS']) {
       setSelected(ship.id)
     }
