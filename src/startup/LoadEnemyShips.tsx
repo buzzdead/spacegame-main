@@ -24,6 +24,7 @@ export const LoadEnemyShips = () => {
     addEnemyShip(new Vector3(55, 85, 675), 350)
     addEnemyShip(new Vector3(355, 85, 675), 350)
     addEnemyShip(new Vector3(100, 50, 250), 350)
+    addEnemyShip(new Vector3(850, 50, 1450), 350)
     if(developerMode){
     addEnemyShip(new Vector3(255, 85, 300), 300)
     addEnemyShip(new Vector3(355, 85, 300), 300)

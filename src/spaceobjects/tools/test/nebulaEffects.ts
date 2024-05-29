@@ -1,0 +1,221 @@
+import * as THREE from 'three';
+import Nebula, {
+  SpriteRenderer,
+  Emitter,
+  Rate,
+  Span,
+  Position,
+  RadialVelocity,
+  Vector3D,
+  Color,
+  Life,
+  Scale,
+  PointZone,
+  Alpha,
+  Body,
+  Mass,
+  Radius,
+  SphereZone,
+} from 'three-nebula';
+import { ExplosionSize } from '../../../store/storeSlices/useEffects';
+
+export async function createLightningStrike(scene: THREE.Scene, texture: THREE.Texture, size = "Large") {
+  const nebula = new Nebula();
+
+  function createSprite() {
+    var material = new THREE.SpriteMaterial({
+      map: texture,
+      color: 0xffffff,
+      blending: THREE.AdditiveBlending,
+      blendEquation: THREE.MaxEquation,
+      blendDst: THREE.OneMinusConstantAlphaFactor,
+      blendSrc: THREE.OneFactor,
+      blendEquationAlpha: THREE.CustomBlending,
+      fog: true
+    });
+    return new THREE.Sprite(material);
+  }
+
+  const zone = new SphereZone(0, 0, 0, size === "Small" ? 25 : 45);
+  const emitter = new Emitter()
+    .setRate(new Rate(new Span(size === "Small" ? 2 : 2, size === "Small" ? 2 : 3), new Span(0.5, 0.4)))
+    .setInitializers([
+      new Position(zone),
+      new Mass(.1),
+      new Radius(size === "Small" ? 1 : 2, size === "Small" ? 2 : 1),
+      new Life(size === "Small" ? 0.2 : 0.1),
+      new Body(createSprite()),
+      new RadialVelocity(2, new Vector3D(0, -1, 0), 360)
+    ])
+    .setBehaviours([
+      new Alpha(1, 0),
+      new Scale(2.85, 2.85),
+      new Color(new THREE.Color("white"), new THREE.Color("blue"))
+    ])
+    .emit();
+
+  nebula.addEmitter(emitter);
+  const renderer = new SpriteRenderer(scene, THREE);
+  nebula.addRenderer(renderer);
+
+  return {
+    update: () => nebula.update(),
+    setDirection: (direction: THREE.Vector3) => {
+      emitter.addInitializer(new RadialVelocity(10, new Vector3D(direction.x, direction.y, direction.z), 360));
+    },
+    setPosition: (position: THREE.Vector3) => {
+      emitter.position.set(position.x, position.y, position.z);
+    },
+    sys: nebula,
+    emitter: emitter,
+    renderer: renderer,
+    onExit: () => nebula.destroy()
+  };
+}
+
+export async function createSmokeSphere(scene: THREE.Scene, texture: THREE.Texture, size = "Large") {
+  const nebula = new Nebula();
+  
+  function createSprite() {
+    var material = new THREE.SpriteMaterial({
+      map: texture,
+      color: 0xffffff,
+      blending: THREE.NormalBlending,
+      fog: true
+    });
+    return new THREE.Sprite(material);
+  }
+  // To adjust scale, life, alpha...
+  const zone = new SphereZone(0, 0, 0, size === "Small" ? 5 : 70);
+  const emitter = new Emitter()
+    .setRate(new Rate(new Span(size === "Small" ? 2 : 5, size === "Small" ? 5 : 10), new Span(0.1, 0.5)))
+    .setInitializers([
+      new Position(zone),
+      new Mass(1),
+      new Radius(size === "Small" ? 2.5 : 10, size === "Small" ? 4 : 20),
+      new Life(size === "Small" ? .91 : 4),
+      new Body(createSprite()),
+      new RadialVelocity(22, new Vector3D(0, 1, 0), 360)
+    ])
+    .setBehaviours([
+      new Alpha(size === "Small" ? 0.35 : 1, 0.15),
+      new Scale(size === "Small" ? 2.75 : 1, size === "Small" ? 2.75 : 3),
+      new Color(new THREE.Color("gray"), new THREE.Color("black"))
+    ])
+    .emit();
+
+  nebula.addEmitter(emitter);
+  const renderer = new SpriteRenderer(scene, THREE);
+  nebula.addRenderer(renderer);
+
+  return {
+    update: () => nebula.update(),
+    setDirection: (direction: THREE.Vector3) => {
+      emitter.addInitializer(new RadialVelocity(2, new Vector3D(direction.x, direction.y, direction.z), 360));
+    },
+    setPosition: (position: THREE.Vector3) => {
+      emitter.position.set(position.x, position.y, position.z);
+    },
+    sys: nebula,
+    emitter: emitter,
+    renderer: renderer,
+    onExit: () => nebula.destroy()
+  };
+}
+
+export async function createShipExplosion(scene: THREE.Scene, texture: THREE.Texture, size: ExplosionSize) {
+  const nebula = new Nebula();
+  function createSprite() {
+    var material = new THREE.SpriteMaterial({
+      map: texture,
+      color: 0xfffff,
+      blending: THREE.AdditiveBlending,
+      fog: true
+    });
+    return new THREE.Sprite(material);
+}
+
+const zone = new PointZone(0, 0);
+  const emitter = new Emitter()
+  .setRate(new Rate(new Span(size === "Small" ? 1 : 3, size === "Small" ? 3 : 6), new Span(size === "Small" ? 0.01  : 0.5)))
+  .setInitializers([
+    new Position(zone),
+    new Mass(1),
+    //new Radius(size === "Big" ? 5 : 2.5, size ==="Big" ? 12 : 6),
+    new Radius(5, 12),
+    new Life(size === "Small" ? .75 : 0.85),
+    new Body(createSprite()),
+    new RadialVelocity(13, new Vector3D(0, 1, 0), 360)
+  ])
+  .setBehaviours([new Alpha(1, 0), new Scale(1.5, 2), new Color(new THREE.Color("white"), new THREE.Color("red"))])
+  .emit();
+
+  nebula.addEmitter(emitter);
+  const renderer = new SpriteRenderer(scene, THREE)
+  nebula.addRenderer(renderer);
+
+  return {
+    update: () => nebula.update(),
+    setDirection: (direction: THREE.Vector3) => {
+      emitter.addInitializer(new RadialVelocity(13, new Vector3D(direction.x, direction.y, direction.z), 360))
+    },
+    setPosition: (position: THREE.Vector3) => {
+      emitter.position.set(position.x, position.y, position.z);
+    },
+    sys: nebula,
+    emitter: emitter,
+    renderer: renderer,
+    onExit: () => nebula.destroy()
+  };
+}
+
+export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
+  const nebula = new Nebula();
+
+  function createSprite() {
+    var material = new THREE.SpriteMaterial({
+      map: texture,
+      blending: THREE.AdditiveBlending,
+      blendEquation: THREE.AddEquation,
+      blendDst: THREE.OneMinusConstantAlphaFactor,
+      blendSrc: THREE.OneFactor,
+      blendEquationAlpha: THREE.CustomBlending,
+    });
+    return new THREE.Sprite(material);
+  }
+  
+  const zone = new PointZone(0, 0, 0);
+  const emitter = new Emitter()
+    .setRate(new Rate(new Span(1, 1), new Span(0.021, 0.021)))
+    .setInitializers([
+      new Position(zone),
+      new Mass(1),
+      new Life(2.95, 2.65),
+      new Body(createSprite()),
+      new Radius(1., 1.),
+      new RadialVelocity(26.5, new Vector3D(0, 0, 1), 1),
+    ])
+    .setBehaviours([
+      new Alpha(19, 9),
+      new Color(new THREE.Color("#FF3131"), new THREE.Color("#a12d06")),
+      new Scale(1.425),
+      
+      
+    ])
+    .emit();
+
+  nebula.addEmitter(emitter);
+  const renderer = new SpriteRenderer(scene, THREE);
+  nebula.addRenderer(renderer);
+  return {
+    update: (delta: number) => nebula.update(delta),
+    onExit: () => nebula.destroy(),
+    emitter: emitter,
+    updatePosition: (position: THREE.Vector3, rotation: THREE.Euler) => {
+      const offset = new THREE.Vector3(0, 0, 25);
+      offset.applyEuler(rotation);
+      emitter.position.set(position.x + offset.x, position.y + offset.y, position.z + offset.z);
+    },
+    updateRotation: (rotation: THREE.Vector3) => emitter.setRotation(new THREE.Vector3(rotation.x, rotation.y, rotation.z))
+  };
+}

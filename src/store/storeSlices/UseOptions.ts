@@ -11,7 +11,7 @@ const useOptions: StateCreator<
   postProcessing: true,
   developerMode: false,
   stats: false,
-  brightness: 0.65,
+  brightness: 0.35,
   setPostProcessing: () => {
     set((state) => ({postProcessing: !state.postProcessing}))
   },

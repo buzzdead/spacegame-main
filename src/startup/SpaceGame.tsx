@@ -10,6 +10,8 @@ import { Effects } from "./Effects";
 import { LoadEnemyShips } from "./LoadEnemyShips";
 import { KeyboardProvider } from "../hooks/Keys";
 import { MissionControl } from "./MissionControl";
+import { Vector3 } from "three";
+import {PortalScene} from "./PortalSpawn";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -23,6 +25,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
       <ThreeSetup>
         <KeyboardProvider>
         <Suspense fallback={<Starfield2 />}>
+          <group>
           <Collisions />
           <LoadCelestialObjects startPlanet={startPlanet} />
           <LoadConstructions />
@@ -30,9 +33,13 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
           <LoadEnemyShips />
           <Effects />
           <MissionControl />
+          <PortalScene position={new Vector3(850, 50, 1450)} />
+          <PortalScene position={new Vector3(-50, 50, 1450)} />
+          </group>
         </Suspense>
         </KeyboardProvider>
       </ThreeSetup>
+      
     </div>
   );
 };

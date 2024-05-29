@@ -55,8 +55,8 @@ const useShips: StateCreator<
         return { ships: ship ? [...state.ships.map(s => s.id === shipId ? newShip : s)] : state.ships }
       }),
     enemyShips: [],
-    addEnemyShip: (pos: Vector3, hull: number) => set((state) => ({
-      enemyShips: [...state.enemyShips, {position: pos, nearby: false, hull: hull, id: state.enemyShips.length.toString()}]
+    addEnemyShip: (pos: Vector3, hull: number, rotation?: Vector3) => set((state) => ({
+      enemyShips: [...state.enemyShips, {position: pos, nearby: false, hull: hull, id: state.enemyShips.length.toString(), rotation: rotation}]
     })),
     toggleNearby: (pos: Vector3, n: boolean) => set((state) => 
       {

@@ -1,7 +1,7 @@
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useShallowStore } from "../../../store/UseStore";
 import { Vector3, Group, Object3DEventMap } from "three";
-import { useThree } from "@react-three/fiber";
+import { useThree, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { ShipHull } from "./ShipHull";
 import { EnemyShipSystem } from "./EnemyShipSystem";
@@ -10,13 +10,15 @@ import { EnemyShip as ES } from "../../../store/StoreState";
 import { InfoBox } from "../../tools/InfoBox";
 import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
 import { functions } from "../../../util";
+import { Ignition } from "../../tools/Ignition";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
   enemyShip: ES
+  rotation?: Vector3
 }
 
-export const EnemyShip = ({ enemyShip, eScene}: Props) => {
+export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
   const { id: shipId, position: origin, nearby } = enemyShip
   const position = enemyShip.meshRef?.position || origin
   const hullRef = useRef(enemyShip.hull)
@@ -68,20 +70,25 @@ export const EnemyShip = ({ enemyShip, eScene}: Props) => {
     });
   };
   
-  
+  useFrame(() => {
+    if(!rotation || !meshRef.current) return
+    meshRef.current.position.z -= 0.1
+  })
 
   return (
     <group>
-    <mesh {...functions} position={position} ref={meshRef} onPointerDown={handleOnClick}>
+    <mesh {...functions} position={position} ref={meshRef} rotation={[rotation?.x || 0, rotation?.y ? rotation.y * 2 : 0, rotation?.z || 0]} onPointerDown={handleOnClick}>
       <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
-      <EnemyNavigation
+     {!rotation && <EnemyNavigation
         nearby={nearby}
         origin={origin}
         shipType="cruiser"
         meshRef={meshRef}
         shipId={shipId}
       />
+     }
+     {rotation && !nearby && <Ignition  type={"cruiser"} />}
     </mesh>
     <EnemyShipSystem
         shipRef={meshRef}

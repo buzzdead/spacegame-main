@@ -1,34 +1,27 @@
-import useStore, { useShallowStore } from "../../store/UseStore";
-import { TextureLoader, Vector3 } from "three";
-import ShipExplosion, { ShipBeam } from "../../spaceobjects/tools/test/ShipExplosion";
-import { useMemo } from "react";
+import { useShallowStore } from "../../store/UseStore";
+import {ShipExplosion, SmokeSphere } from "../../spaceobjects/tools/test/nebulaSystem";
+import { useTexture } from "../../hooks/Texture";
 
 export const ExplosionEffects = () => {
   const { explosions, removeExplosion, enemyShips } = useShallowStore(["explosions", "setExplosions", "removeExplosion", "enemyShips"])
-  const particle = useMemo(() => {
-    return require("./explosion00.png");
-  }, []);
-  const texture2 = useMemo(() => {
-    const p = require('./flame_04.png')
-    return new TextureLoader().load(p);
-  }, [])
-  const texture3 = useMemo(() => {
-    const p = require('./light_01.png')
-    return new TextureLoader().load(p);
-  }, [])
-  const texture = useMemo(() => {
-    return new TextureLoader().load(particle);
-  }, []);
+  const explosionTexture = useTexture('explosion00.png')
+  const missileExplosionTexture = useTexture('flame_04.png')
+  const smokeTexture = useTexture('blackSmoke15.png')
+
   return (
     <group>
       {explosions.map((e) => (
+        <group  key={e.id}>
         <ShipExplosion
           onEnd={() => removeExplosion(e.id)}
-          texture={e.size === "Small" ? texture2 : texture}
+          texture={e.size === "Small" ? missileExplosionTexture : explosionTexture}
           key={e.id}
           explosion={e}
         />
+              <SmokeSphere size="Small" texture={smokeTexture} position={e.pos}/>
+      </group>
       ))}
+
     </group>
   );
 };
