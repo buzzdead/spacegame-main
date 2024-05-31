@@ -11,14 +11,6 @@ interface Props {
 }
 
 const ThreeSetup = ({ children }: Props) => {
-  const aspect = window.innerWidth / window.innerHeight;
-  const zoom = 100; // Adjust as needed for starfield density
-  const frustumHeight = 2 * zoom; // Assuming zoom behaves similarly to FOV
-  const frustumWidth = frustumHeight * aspect;
-  const left = -frustumWidth;
-  const right = frustumWidth;
-  const top = frustumHeight;
-  const bottom = -frustumHeight;
   const [webglSupported, setWebglSupported] = useState(true);
 
   useEffect(() => {
@@ -55,21 +47,15 @@ const ThreeSetup = ({ children }: Props) => {
       </div>
     );
   }
+
   return (
     <Canvas
     gl={{
-      antialias: false,
       powerPreference: "high-performance",
-    alpha: false,
-    stencil: true,
-    depth: true,
+
     failIfMajorPerformanceCaveat: true
     }}
       camera={{
-        left: left,
-        right: right,
-        top: top,
-        bottom: bottom,
         far: 60000,
         fov: 60,
         near: 0.1,
@@ -78,7 +64,7 @@ const ThreeSetup = ({ children }: Props) => {
       style={{ width: "100vw", height: "100vh" }}
     >
        
-      <EnviromentComponent />
+     <EnviromentComponent />
       <EffectComposer>
         <Bloom
           intensity={0.35}
@@ -89,7 +75,6 @@ const ThreeSetup = ({ children }: Props) => {
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
       </EffectComposer>
-      <StatsComponent />
       {children}
     </Canvas>
   );

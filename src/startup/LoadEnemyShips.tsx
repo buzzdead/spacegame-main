@@ -1,5 +1,5 @@
-import { memo, useEffect } from "react";
-import useStore from "../store/UseStore";
+import { memo, useEffect, useState } from "react";
+import useStore, { useShallowStore } from "../store/UseStore";
 import { Vector3 } from 'three'
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
 import { EnemyShip } from "../store/StoreState";
@@ -9,14 +9,13 @@ interface ShipProps {
 }
 
 const MemoizedShip = memo(({ ship }: ShipProps) => <EnemyShipScene ship={ship} />, (prevProps, nextProps) => {
-  return prevProps.ship.id === nextProps.ship.id && prevProps.ship.nearby !== nextProps.ship.nearby
+  return prevProps.ship.id === nextProps.ship.id && prevProps.ship.nearby === nextProps.ship.nearby
 });
 
 export const LoadEnemyShips = () => {
-  const developerMode = useStore((state) => state.developerMode)
-  const addEnemyShip = useStore((state) => state.addEnemyShip)
-  const enemyShips = useStore((state) => state.enemyShips)
-  
+  const { developerMode, addEnemyShip, enemyShips } = useShallowStore(["developerMode", "addEnemyShip", "enemyShips"])
+  const [loading, setLoading] = useState(true)
+ 
   useEffect(() => {
     if(enemyShips.length > 0) return
     addEnemyShip(new Vector3(35, 50, 675), 350)
@@ -50,7 +49,10 @@ export const LoadEnemyShips = () => {
     addEnemyShip(new Vector3(755, 585, 800), 300)
     addEnemyShip(new Vector3(855, 685, 900), 300)
   }
+  setLoading(false)
   }, [addEnemyShip]);
+  if(loading) return null
+  console.log("render enemy ships")
   return (
     <group>
       {enemyShips.map((ship) => (

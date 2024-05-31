@@ -2,15 +2,14 @@ import { ElementRef, useEffect, useRef, useState } from "react";
 import { useShallowStore } from "../../../store/UseStore";
 import { Vector3, Group, Object3DEventMap } from "three";
 import { useThree, useFrame } from "@react-three/fiber";
-import { useTexture } from "@react-three/drei";
 import { ShipHull } from "./ShipHull";
 import { EnemyShipSystem } from "./EnemyShipSystem";
-import { EnemyNavigation } from "./Navigation";
 import { EnemyShip as ES } from "../../../store/StoreState";
 import { InfoBox } from "../../tools/InfoBox";
-import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
 import { functions } from "../../../util";
 import { Ignition } from "../../tools/Ignition";
+import { Navigation } from "../navigation/Navigation";
+import { SpaceShipId } from "../../../store/StoreAssets";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -20,8 +19,11 @@ interface Props {
 
 export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
   const { id: shipId, position: origin, nearby } = enemyShip
+  const targetRef = useRef<any | null>(null)
   const position = enemyShip.meshRef?.position || origin
   const hullRef = useRef(enemyShip.hull)
+
+  const type = rotation ? "hunting" : "patrol"
   const {
     setDestination,
     setSelectedEnemies,
@@ -35,11 +37,9 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     "setExplosions",
     "setEnemyShipRef",
   ]);
-  const { camera, scene } = useThree();
+  const { scene } = useThree();
   const meshRef = useRef<ElementRef<"mesh">>(null);
-  const [fire, setFire] = useState(false);
   const [showInfo, setShowInfo] = useState(false)
-  const texture = useTexture.preload("/assets/fire1.png");
 
   useEffect(() => {
     setEnemyShipRef(meshRef.current, shipId);
@@ -58,7 +58,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     e.stopPropagation();
     if (e.ctrlKey) {setShowInfo(!showInfo); return;}
     setDestination(
-      enemyShip,
+      {...enemyShip, meshRef: meshRef.current},
       "Attack",
       "Ship"
     );
@@ -69,33 +69,22 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
       nearby: false,
     });
   };
-  
-  useFrame(() => {
-    if(!rotation || !meshRef.current) return
-    meshRef.current.position.z -= 0.1
-  })
+
+  const navProps = (type: "patrol" | "hunting") => {
+return type === "patrol" ? {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId} : {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
+  }
 
   return (
     <group>
     <mesh {...functions} position={position} ref={meshRef} rotation={[rotation?.x || 0, rotation?.y ? rotation.y * 2 : 0, rotation?.z || 0]} onPointerDown={handleOnClick}>
       <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
-     {!rotation && <EnemyNavigation
-        nearby={nearby}
-        origin={origin}
-        shipType="cruiser"
-        meshRef={meshRef}
-        shipId={shipId}
+     <Navigation
+     type={type}
+      props={navProps(type)}
       />
-     }
-     {rotation && !nearby && <Ignition  type={"cruiser"} />}
     </mesh>
-    <EnemyShipSystem
-        shipRef={meshRef}
-        currentPos={meshRef.current?.position || position}
-        nearby={nearby}
-        origin={position}
-      />
+ 
       {showInfo && <InfoBox type="Cruiser" hullRef={hullRef} position={meshRef.current?.position || position} />}
     </group>
   );

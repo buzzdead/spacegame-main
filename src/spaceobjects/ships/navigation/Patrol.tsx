@@ -12,7 +12,7 @@ interface Props {
     nearby: boolean
   }
 
-  export const EnemyNavigation = ({shipType, shipId, meshRef, origin, nearby}: Props) => {
+  export const Patrol = ({shipType, shipId, meshRef, origin, nearby}: Props) => {
     const [brake, setBrake] = useState(false)
     const targetRef = origin.clone()
     const patrolDistance = 75;

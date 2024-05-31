@@ -7,7 +7,6 @@ import {
   Mesh,
   NormalBufferAttributes,
   Object3DEventMap,
-  TextureLoader,
   Vector3,
 } from "three";
 import { useAsset } from "../hooks/Asset";
@@ -17,7 +16,7 @@ import React from "react";
 import {
   LightningStrike,
   SmokeSphere,
-} from "../spaceobjects/tools/test/nebulaSystem";
+} from "../spaceobjects/tools/nebula/nebulaSystem";
 import { useKeyboard } from "../hooks/Keys";
 import useStore from "../store/UseStore";
 import { dampWithEase, getRandomPosition } from "../util";
@@ -29,7 +28,7 @@ interface Props {
 }
 
 export const PortalScene = ({ position }: Props) => {
- 
+  
   const smokeTexture = useTexture('blackSmoke15.png')
  const lightningTexture = useTexture('flash01.png')
  const smokeDecay = useRef(0)
@@ -166,9 +165,9 @@ const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
     if (shouldMove) {
       phasedShips.forEach((ps, id) => {
         if (ps.stop) return;
-        const thePos = pos.clone();
         ps.ship.position.z -= 1 / (id + 1);
         if (ps.ship.position.z < -25) {
+          const thePos = pos.clone();
           const mw = thePos.add(ps.ship.position.clone());
           mw.y -= 5;
           addEnemyShip(mw, 350, new Vector3(0, 1.55, 0));
@@ -180,8 +179,8 @@ const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
   });
   return (
     <group>
-      {phasedShips.map((ps) => {
-        return ps.stop ? null : <primitive object={ps.ship} />;
+      {phasedShips.map((ps, id) => {
+        return ps.stop ? null : <primitive key={id} object={ps.ship} />;
       })}
     </group>
   );

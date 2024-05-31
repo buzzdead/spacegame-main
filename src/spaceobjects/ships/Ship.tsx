@@ -3,7 +3,7 @@ import { Group, Object3DEventMap } from "three";
 import { SGS, useShallowStore } from "../../store/UseStore";
 import { ShipHull } from "./EnemyShip/ShipHull";
 import { SelectedShip } from "../tools/SelectedShip";
-import Navigation from "./UseNavigation";
+import {Navigation} from "./navigation/Navigation";
 import { useKeyboard } from "../../hooks/Keys";
 import { InfoBox } from "../tools/InfoBox";
 import { functions } from "../../util";
@@ -19,7 +19,6 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     "removeShip",
     "setExplosions"
   ]);
-
   const { position } = ship;
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [destroyed, setDestroyed] = useState(false);
@@ -58,7 +57,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
     
   }
 
-  
+  const props = { shipId: ship.id, isSelected, meshRef: ship.meshRef || meshRef, shipType: ship.assetId}
  
   return (
     <Suspense fallback={null}>
@@ -77,10 +76,8 @@ const Ship: FC<Props> = ({ ship, scene }) => {
           onSelected={(b) => isSelected.current = b}
         />
         <Navigation
-          shipId={ship.id}
-          isSelected={isSelected}
-          meshRef={ship.meshRef || meshRef}
-          shipType={ship.assetId}
+         type="user"
+         props={props}
         />
         <primitive object={scene} />
        

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useRef } from 'react';
 const KeyboardContext = createContext(null);
 
 export const KeyboardProvider = ({ children }: any) => {
-  const keyMap = useRef<any>({});
+  const keyMap = useRef<any>({}); 
 
   useEffect(() => {
     const onDocumentKey = (e: any) => {

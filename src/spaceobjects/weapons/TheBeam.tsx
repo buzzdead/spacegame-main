@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TextureLoader, Vector3 } from "three";
-import { ShipBeam } from "../tools/test/nebulaSystem";
+import { ShipBeam } from "../tools/nebula/nebulaSystem";
 import { useFrame } from "@react-three/fiber";
 import useStore from "../../store/UseStore";
 import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";

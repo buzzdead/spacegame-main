@@ -1,8 +1,7 @@
 import React, { memo, useEffect } from "react";
 import { SpaceShipId } from "../store/StoreAssets";
-import useStore from "../store/UseStore";
+import useStore, { useShallowStore } from "../store/UseStore";
 import { ShipScene } from "../spaceobjects/ships/ShipScene";
-import { LoadEnemyShips } from "./LoadEnemyShips";
 import { Ship } from "../store/SpaceGameStateUtils";
 import { ShipShifter } from "./ShipShifter";
 
@@ -19,8 +18,7 @@ const MemoizedShip = memo(({ ship }: ShipProps) => <ShipScene ship={ship} />, (p
 });
 
 export const LoadShips = ({ startShip }: Props) => {
-  const ships = useStore((state) => state.ships);
-  const addShip = useStore((state) => state.addShip);
+  const { ships, addShip } = useShallowStore(["ships", "addShip"])
 
   useEffect(() => {
     if (ships.length > 0) return;

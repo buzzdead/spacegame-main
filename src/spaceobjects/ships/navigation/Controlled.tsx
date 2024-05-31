@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Vector3, Quaternion } from "three";
-import { useShallowStore } from "../../store/UseStore";
-import { SpaceShipId } from "../../store/StoreAssets";
+import { useShallowStore } from "../../../store/UseStore";
+import { SpaceShipId } from "../../../store/StoreAssets";
 import { useFrame } from "@react-three/fiber";
-import ShipSound from "./ShipSound";
+import ShipSound from "../ShipSound";
 import * as THREE from "three";
-import { LaserCannon } from "../weapons/LaserCannon";
-import { Ignition } from "../tools/Ignition";
-import { HarvestLaser } from "../tools/HarvestLaser";
-import { ObjectType } from "../../store/StoreState";
-import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
+import { LaserCannon } from "../../weapons/LaserCannon";
+import { Ignition } from "../../tools/Ignition";
+import { HarvestLaser } from "../../tools/HarvestLaser";
+import { ObjectType } from "../../../store/StoreState";
+import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 
 interface Props {
   shipType: SpaceShipId;
@@ -18,7 +18,7 @@ interface Props {
   isSelected: any;
 }
 
-const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
+export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => {
   const {
     destination,
     setResources,
@@ -208,7 +208,7 @@ const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
     }
 
     const speedFactor = Math.max(
-      isFighter ? 55 : shipType === "hullspaceship" ? 100 : 12.5
+      isFighter ? 75 : shipType === "hullspaceship" ? 100 : 12.5
     ); // Adjust for sensitivity
     meshRef.current.position.add(
       direction.multiplyScalar((55 * speedFactor) / 5000)
@@ -270,5 +270,3 @@ const Navigation = ({ shipId, meshRef, shipType, isSelected }: Props) => {
     </group>
   );
 };
-
-export default Navigation;

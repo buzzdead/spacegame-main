@@ -31,7 +31,6 @@ export async function createLightningStrike(scene: THREE.Scene, texture: THREE.T
       blendDst: THREE.OneMinusConstantAlphaFactor,
       blendSrc: THREE.OneFactor,
       blendEquationAlpha: THREE.CustomBlending,
-      fog: true
     });
     return new THREE.Sprite(material);
   }
@@ -81,7 +80,6 @@ export async function createSmokeSphere(scene: THREE.Scene, texture: THREE.Textu
       map: texture,
       color: 0xffffff,
       blending: THREE.NormalBlending,
-      fog: true
     });
     return new THREE.Sprite(material);
   }
@@ -130,7 +128,6 @@ export async function createShipExplosion(scene: THREE.Scene, texture: THREE.Tex
       map: texture,
       color: 0xfffff,
       blending: THREE.AdditiveBlending,
-      fog: true
     });
     return new THREE.Sprite(material);
 }

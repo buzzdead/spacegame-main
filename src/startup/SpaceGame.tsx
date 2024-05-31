@@ -12,6 +12,7 @@ import { KeyboardProvider } from "../hooks/Keys";
 import { MissionControl } from "./MissionControl";
 import { Vector3 } from "three";
 import {PortalScene} from "./PortalSpawn";
+import { Random } from "./random";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -24,7 +25,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
       <UI />
       <ThreeSetup>
         <KeyboardProvider>
-        <Suspense fallback={<Starfield2 />}>
+        <Suspense fallback={null}>
           <group>
           <Collisions />
           <LoadCelestialObjects startPlanet={startPlanet} />
@@ -35,6 +36,7 @@ const SpaceGame: React.FC<Props> = ({ startPlanet, startShip }) => {
           <MissionControl />
           <PortalScene position={new Vector3(850, 50, 1450)} />
           <PortalScene position={new Vector3(-50, 50, 1450)} />
+          <Random />
           </group>
         </Suspense>
         </KeyboardProvider>

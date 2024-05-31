@@ -1,5 +1,5 @@
 import { useShallowStore } from "../../store/UseStore";
-import {ShipExplosion, SmokeSphere } from "../../spaceobjects/tools/test/nebulaSystem";
+import {ShipExplosion, SmokeSphere } from "../../spaceobjects/tools/nebula/nebulaSystem";
 import { useTexture } from "../../hooks/Texture";
 
 export const ExplosionEffects = () => {
@@ -18,7 +18,7 @@ export const ExplosionEffects = () => {
           key={e.id}
           explosion={e}
         />
-              <SmokeSphere size="Small" texture={smokeTexture} position={e.pos}/>
+               <SmokeSphere size="Small" texture={smokeTexture} position={e.pos}/>
       </group>
       ))}
 
