@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { ACESFilmicToneMapping, CustomBlending } from "three";
+import { CustomBlending } from "three";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { Environment } from "@react-three/drei";
 import { StatsComponent } from "./StatsComponent";
 import { EnviromentComponent } from "./EnviromentComponent";
+import { LoadEnemyShips } from "./LoadEnemyShips";
+import { LoadShips } from "./LoadShips";
 
 interface Props {
   children: React.ReactNode;
@@ -75,6 +76,10 @@ const ThreeSetup = ({ children }: Props) => {
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
       </EffectComposer>
+
+      <LoadShips startShip={"cargo"} />
+          <LoadEnemyShips />
+          <StatsComponent />
       {children}
     </Canvas>
   );

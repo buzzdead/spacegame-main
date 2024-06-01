@@ -58,14 +58,15 @@ const useShips: StateCreator<
     addEnemyShip: (pos: Vector3, hull: number, rotation?: Vector3) => set((state) => ({
       enemyShips: [...state.enemyShips, {position: pos, nearby: false, hull: hull, id: state.enemyShips.length.toString(), rotation: rotation}]
     })),
-    toggleNearby: (pos: Vector3, n: boolean) => set((state) => 
+    toggleNearby: (id: string, n: boolean) => set((state) => 
       {
-        
-        const ship = state.enemyShips.find(s => s.meshRef?.position === pos)
+
+        const ship = state.enemyShips.find(s => s.id === id)
+    
         if(ship?.nearby === n) return state
         if(ship) {ship.nearby = n;}
 
-     return { enemyShips: ship ? [...state.enemyShips.map(es => es.meshRef.position === pos ? ship : es)] : [...state.enemyShips]}
+     return { enemyShips: ship ? [...state.enemyShips.map(es => es.id === id ? ship : es)] : [...state.enemyShips]}
     }),
   dealDamageToEnemy: (id: string, n: number, friend?: boolean) => {
     let destroyed: DamageReport = "Hit";

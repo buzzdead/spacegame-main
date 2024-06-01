@@ -52,7 +52,6 @@ export const LoadEnemyShips = () => {
   setLoading(false)
   }, [addEnemyShip]);
   if(loading) return null
-  console.log("render enemy ships")
   return (
     <group>
       {enemyShips.map((ship) => (

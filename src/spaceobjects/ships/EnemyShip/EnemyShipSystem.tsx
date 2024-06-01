@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import HeavyLaser from "../../weapons/HeavyLaser";
-import { RadarScanner } from "./RadarScanner";
+import MemoizedRadar from "./RadarScanner";
 import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
@@ -14,6 +14,7 @@ interface Props {
   currentPos: THREE.Vector3;
   shipRef: any;
   targetRef: any;
+  id: string
 }
 
 export const EnemyShipSystem = ({
@@ -22,6 +23,7 @@ export const EnemyShipSystem = ({
   currentPos,
   shipRef,
   targetRef,
+  id
 }: Props) => {
   const [nearbyEnemies, setNearbyEnemies] = useState<ObjectLocation[]>([]);
   const lookingAtTarget = useRef(false);
@@ -74,11 +76,12 @@ export const EnemyShipSystem = ({
           target={nearbyEnemies}
         />
       )}
-      <RadarScanner
+      <MemoizedRadar
         currentPos={currentPos}
         nearby={nearby}
         origin={origin}
         setNearbyEnemies={setNearbyEnemies}
+        id={id}
       />
       {nearby && (
         <TheBeam

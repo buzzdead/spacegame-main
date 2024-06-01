@@ -7,6 +7,7 @@ export const Hunting = ({ ...p }: HuntingNavigation) => {
   useFrame(() => {
     if (!p.meshRef) return;
     if(p.target.current){
+      console.log(p.target.current)
     if(p.target.current.position.distanceTo(p.meshRef.current.position) < 50) {
       return
     }

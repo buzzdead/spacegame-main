@@ -4,6 +4,7 @@ import { CelestialObjectId, celestialObjects, ConstructionId, constructions, Spa
 import Construction from '../spaceobjects/constructions/Construction';
 import { ElementRef } from 'react';
 import { ShipShift } from './StoreState';
+
 export interface CelestialObject {
     assetId: CelestialObjectId
     id: string;

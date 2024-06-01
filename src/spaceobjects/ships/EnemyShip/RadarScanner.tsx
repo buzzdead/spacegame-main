@@ -1,41 +1,77 @@
-import { useEffect, useRef, useState } from "react"
-import useStore from "../../../store/UseStore"
-import { Vector3 } from 'three'
+import { useEffect, useRef, useState } from "react";
+import useStore from "../../../store/UseStore";
+import { Vector3 } from "three";
 import { EffectComposer } from "@react-three/postprocessing";
 import { SWave } from "./swave";
 import { useFrame } from "@react-three/fiber";
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
+import { Ship } from "../../../store/SpaceGameStateUtils";
+import React from "react";
 
 interface Props {
-    setNearbyEnemies: (n: ObjectLocation[]) => void
-    origin: Vector3
-    nearby: boolean
-    currentPos: Vector3
+  setNearbyEnemies: (n: ObjectLocation[]) => void;
+  origin: Vector3;
+  nearby: boolean;
+  currentPos: Vector3;
+  id: string;
 }
 
-export const RadarScanner = ({setNearbyEnemies, origin, nearby, currentPos }: Props) => {
-    const [hasNearby, setHasNearby] = useState(false)
-    const [hasNearby2, setHasNearby2] = useState(nearby)
-    const ships = useStore(state => state.ships)
-    const toggleNearby = useStore(state => state.toggleNearby)
-    const [scan, setScan] = useState(false)
-    const groupRef = useRef<any>(null)
-    const timeoutRef = useRef(true)
+const RadarScanner = ({
+  setNearbyEnemies,
+  origin,
+  nearby,
+  currentPos,
+  id,
+}: Props) => {
+  if (id === "4") console.log("radar", nearby);
+  const ships = useStore((state) => state.ships);
+  const shipsNear = useRef<Ship[]>([]);
+  const toggleNearby = useStore((state) => state.toggleNearby);
+  const groupRef = useRef<any>(null);
+  const scanTimer = useRef(false);
+  setTimeout(() => (scanTimer.current = true), 1500);
 
-    useEffect(() => {
-        const checkForNearByShips = () => {
-        const nearby = ships.filter(e => e.meshRef?.position && e.meshRef?.position?.distanceTo(currentPos) <= 100)
-        const nearby2 = ships.filter(e => e.meshRef?.position && e.meshRef?.position?.distanceTo(currentPos) <= 100)
-        const isNear = nearby2.length > 0
-        toggleNearby(currentPos, isNear)
-        setNearbyEnemies(nearby)
-        setHasNearby2(nearby2.length > 0)
-        setHasNearby(nearby.length > 0)
-        }
-        checkForNearByShips()
-        setTimeout(() => setScan(!scan), 1200)
-    }, [scan])
-    return null
-    return (<group ref={groupRef}>{hasNearby && <EffectComposer><SWave pos={origin} scan={scan}/></EffectComposer>}</group>)
+  useFrame(() => {
+    if (!scanTimer.current) return;
+    scanTimer.current = false;
+    const checkForNearByShips = () => {
+      const nearbyShips = ships.filter(
+        (e) =>
+          e.meshRef?.position &&
+          e.meshRef?.position?.distanceTo(currentPos) <= 100
+      );
+      const isNearby = nearbyShips.length > 0;
 
-}
+      if (isNearby !== nearby) {
+        toggleNearby(id, isNearby);
+      }
+      const isTheSameShips = shipsNear.current.map((s) =>
+        nearbyShips.some((d) => d.id === s.id)
+      );
+      if (
+        shipsNear.current.length > 0 &&
+        isTheSameShips.length === shipsNear.current.length
+      )
+        return;
+      setNearbyEnemies(nearbyShips);
+      shipsNear.current = nearbyShips;
+    };
+    checkForNearByShips();
+
+    setTimeout(() => (scanTimer.current = true), 1500);
+  });
+
+  return null;
+  return (
+    <group ref={groupRef}>
+      {true && (
+        <EffectComposer>
+          <SWave pos={origin} scan={true} />
+        </EffectComposer>
+      )}
+    </group>
+  );
+};
+
+const MemoizedRadar = React.memo(RadarScanner, (prevProps, nextProps) => prevProps.nearby === nextProps.nearby)
+export default MemoizedRadar

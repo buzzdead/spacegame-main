@@ -14,7 +14,8 @@ export const MissionControl = () => {
     const [missionCompleted, setMissionCompleted] = useState(false)
     const [blastShockWave, setBlastShockWave] = useState(false)
     const [hullShip, setHullShip] = useState<any>(null)
-   
+    useAsset("/assets/spaceships/mothershipp.glb", 1, true)
+    useAsset("/assets/celestialobjects/sphere.glb", 1, true)
     const { sound: missionCompletedSound, calculateVolume: calculateMissionCompletedSound } =
     UseSoundEffect({
       sfxPath: "/assets/sounds/scientist-discovery.mp3",

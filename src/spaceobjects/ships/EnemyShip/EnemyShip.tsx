@@ -66,7 +66,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
       id: shipId,
       hull: 350,
       position: meshRef?.current?.position || new Vector3(0, 0, 0),
-      nearby: false,
+      nearby: nearby,
     });
   };
 
@@ -84,7 +84,14 @@ return type === "patrol" ? {nearby, origin, shipType: "cruiser" as SpaceShipId, 
       props={navProps(type)}
       />
     </mesh>
- 
+    <EnemyShipSystem
+        id={shipId}
+        shipRef={meshRef}
+        currentPos={meshRef.current?.position || position}
+        nearby={nearby}
+        origin={position}
+        targetRef={targetRef}
+      />
       {showInfo && <InfoBox type="Cruiser" hullRef={hullRef} position={meshRef.current?.position || position} />}
     </group>
   );
