@@ -38,7 +38,7 @@ export type CelestialObjectState = {
     enemyShips: EnemyShip[]
     addEnemyShip: (pos: Vector3, hull: number, rotation?: Vector3) => void
     toggleNearby: (id: string, n: boolean) => void
-    setShipRef: (ref: null | ElementRef<"mesh"> & Partial<ShipShift>, shipId: string) => void
+    setShipRef: (ref: null | ElementRef<"mesh"> & Partial<ShipShift> & {hull?: number}, shipId: string) => void
     setShipShift: (ships: Ship[]) => void
     setEnemyShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (id: string, n: number, friend?: boolean) => DamageReport;

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./styles/theme.css";
-import AudioPlayer from "./features/AudioPlayer";
 import SpaceGame from "./startup/SpaceGame";
 import Menu from "./features/Menu";
 import { decodeJWT } from "./util";
 import useStore from "./store/UseStore";
-const gameMusic = require("./assets/sd2.mp3");
+
 
 const App: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -26,10 +25,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       {gameStarted ? (
-        <>
-          <AudioPlayer src={gameMusic} autoPlay loop shouldPlay={gameStarted} />
-          <SpaceGame startShip="cargo" startPlanet="planet1" />
-        </>
+           <SpaceGame startShip="cargo" startPlanet="planet1" />
       ) : (
         <Menu setGameStarted={setGameStarted} />
       )}

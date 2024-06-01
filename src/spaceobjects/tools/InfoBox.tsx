@@ -8,17 +8,18 @@ import { Ship } from "../../store/SpaceGameStateUtils";
 interface Props {
   position: Vector3;
   type: "Cruiser" | "Fighter" | "Cargo";
-  hullRef?: any;
+  meshRef?: any;
 }
 
-export const InfoBox = ({ position, hullRef, type }: Props) => {
-  const [hullState, setHullState] = useState(hullRef?.current || 100);
+export const InfoBox = ({ position, meshRef, type }: Props) => {
+  const [hullState, setHullState] = useState(meshRef?.current?.hull || 100);
   const { camera } = useThree();
   const ref = useRef<any>();
   const textRef = useRef<any>();
+  console.log("what", meshRef)
 
   useFrame(() => {
-    if (hullRef && hullRef.current !== hullState) setHullState(hullRef.current);
+    if (meshRef && meshRef.current?.hull && meshRef.current?.hull !== hullState) setHullState(meshRef.current.hull);
     if (ref?.current?.rotation) {
       ref.current.rotation.set(
         camera.rotation.x,

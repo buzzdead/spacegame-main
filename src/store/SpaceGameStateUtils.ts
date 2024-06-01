@@ -30,9 +30,8 @@ export interface Ship {
     id: string;
     glbPath: string
     position: Vector3
-    hull: number
     scale?: number
-    meshRef?: ElementRef<"mesh"> & {shipShift: Partial<ShipShift>}
+    meshRef?: ElementRef<"mesh"> & {shipShift: Partial<ShipShift>, hull: number}
 }
 let ship_id = 0
 let construction_id = 0
@@ -40,11 +39,11 @@ let celestialObject_id = 0
 export type SelectedShip = Ship
 export type numberVector = [number, number, number]
 class SpaceGameStateUtils {
-    static addShipToState(ships: Ship[], shipId: string, nv: numberVector, hull = 100, scale = 1): {ships: Ship[], ship: Ship | null} {
+    static addShipToState(ships: Ship[], shipId: string, nv: numberVector, scale = 1): {ships: Ship[], ship: Ship | null} {
         const position = createVector3(nv)
         const spaceShip = spaceShips.find(ship => ship.id === shipId)
         if (spaceShip) {
-            const newShip = { ...spaceShip, hull: hull, assetId: spaceShip.id, id: (ship_id++).toString(), position: position, scale: scale }
+            const newShip = { ...spaceShip, assetId: spaceShip.id, id: (ship_id++).toString(), position: position, scale: scale }
             return {ships: [...ships, newShip], ship: newShip}
         }
         return {ships: [...ships], ship: null}

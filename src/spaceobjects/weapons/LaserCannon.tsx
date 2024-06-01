@@ -29,7 +29,6 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
   mat.metalness = 0.5
   const meshRef = useRef<ElementRef<"group">>(null)
   missileScene.scale.set(0.75,0.75,0.75)
-
   const { sound: laserSound, calculateVolume: calculateLaserSound } =
   UseSoundEffect({
     sfxPath: "/assets/sounds/laser.mp3",
@@ -69,7 +68,8 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
           origin={position}
           target={target}
         />
-       
+        <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
+        <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
       </group>
     )
 }

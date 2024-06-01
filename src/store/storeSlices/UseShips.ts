@@ -11,14 +11,13 @@ const useShips: StateCreator<
   SpaceShipState
 > = (set, get) => ({
   ships: [],
-  addShip: (shipId, position, hull, scale) =>{
+  addShip: (shipId, position, scale) =>{
     let shipReturn = null
     set((state) => {
       const { ships, ship } = SpaceGameStateUtils.addShipToState(
         state.ships,
         shipId,
         position,
-        hull,
         scale
       );
       shipReturn = ship
@@ -34,7 +33,7 @@ const useShips: StateCreator<
       if(friend) return {selected: state.selected.filter(s => s.id !== id), ships: [...state.ships.filter(s => s.id !== id)]}
       else return { enemyShips: [...state.enemyShips.filter(e => e.id !== id)]}
     }),
-    setEnemyShipRef: (shipRef: ElementRef<"mesh"> & ShipShift, shipId: string) => 
+    setEnemyShipRef: (shipRef: any, shipId: string) => 
       set((state) => {
         const ship = state.enemyShips.find(es => es.id === shipId)
         const newShip = {...(ship as EnemyShip & { meshRef: any }), meshRef: shipRef}
@@ -60,7 +59,7 @@ const useShips: StateCreator<
     })),
     toggleNearby: (id: string, n: boolean) => set((state) => 
       {
-
+        if(id === "4") console.log(n)
         const ship = state.enemyShips.find(s => s.id === id)
     
         if(ship?.nearby === n) return state
@@ -71,13 +70,18 @@ const useShips: StateCreator<
   dealDamageToEnemy: (id: string, n: number, friend?: boolean) => {
     let destroyed: DamageReport = "Hit";
     set((state) => {
-      const attackedShip = friend ? state.ships.find(e => e.id === id) : state.selectedEnemies?.find(e => e.id === id)
-      if (!attackedShip) {destroyed = "Not Found"; return friend ? { ships:[...state.ships] } : { selectedEnemies: [ ...state.selectedEnemies ] }}
-      const newHull = attackedShip?.hull - n;
+      const attackedShip = friend ? state.ships.find(e => e.id === id) : state.enemyShips?.find(e => e.id === id)
+      if(friend) { 
+        const nh = attackedShip?.meshRef.hull - n;
+        if(attackedShip?.meshRef.hull) attackedShip.meshRef.hull = nh
+        destroyed = nh <= 0 ? "Destroyed" : "Hit";
+        return state
+      }
+      if (!attackedShip) {destroyed = "Not Found"; return state}
+      const newHull = attackedShip?.meshRef?.hull - n;
       destroyed = newHull <= 0 ? "Destroyed" : "Hit";
-      attackedShip.hull = newHull
-      const updatedShips = friend ? state.ships.map(s => s.id === attackedShip.id ? attackedShip : s)  : state.selectedEnemies.map(m => m.id === attackedShip.id ? attackedShip : m)
-      return friend ? {ships: updatedShips as Ship[] } : { selectedEnemies: updatedShips as EnemyShip[] };
+      if(attackedShip?.meshRef.hull) attackedShip.meshRef.hull = newHull
+      return state
     });
     return destroyed;
   },

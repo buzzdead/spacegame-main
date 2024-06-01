@@ -53,7 +53,9 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
   }, [shipsDestination]);
 
   useEffect(() => {
-    setShipRef(meshRef.current, shipId);
+    const newMeshRef = {...meshRef.current, hull: 100}
+    setShipRef(newMeshRef, shipId);
+    meshRef.current = newMeshRef
   }, []);
 
   const passDestinationOrigin = () => {
@@ -251,7 +253,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
         isTraveling={isTraveling}
         meshRef={meshRef}
       />
-      {isFighter && (
+      {isFighter && shipsDestination?.objectType !== "Planet" && (
         <LaserCannon
         whatever={meshRef}
           position={

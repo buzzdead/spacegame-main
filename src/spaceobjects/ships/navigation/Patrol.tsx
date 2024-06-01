@@ -9,11 +9,12 @@ interface Props {
     shipId: string
     meshRef: any
     origin: Vector3
-    nearby: boolean
+    nearby: any
   }
 
   export const Patrol = ({shipType, shipId, meshRef, origin, nearby}: Props) => {
     const [brake, setBrake] = useState(false)
+    const [isNearby, setIsNearby] = useState(false)
     const targetRef = origin.clone()
     const patrolDistance = 75;
     const patrolOffset = 125;
@@ -26,7 +27,8 @@ interface Props {
     ]
     const currentTarget = useRef(0)
     useFrame(() => {
-        if(nearby) return
+        if(nearby.current) {setIsNearby(true); return}
+        if(!nearby.current && isNearby) setIsNearby(false);
         const target = patrolPosition[currentTarget.current]
         if(target.distanceTo(meshRef.current.position) < 2) {currentTarget.current = (currentTarget.current + 1) % patrolPosition.length; setBrake(true); setTimeout(() => setBrake(false), 250)}
         const direction = new Vector3()
@@ -45,6 +47,6 @@ interface Props {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
         
     })
-    if(nearby) return null
+    if(isNearby) return null
     return <Ignition brake={brake} type={"cruiser"} />
 }

@@ -7,7 +7,6 @@ import { getDistance, getDistanceType, LaserRef, LaserTypes } from "./weaponType
 import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 
 interface Props {
-  origin: THREE.Vector3;
   target: ObjectLocation[];
   shipRef: any;
   sound: THREE.PositionalAudio | undefined
@@ -15,7 +14,7 @@ interface Props {
 
 const HLS = LaserTypes["HeavyLaser"]
 
-const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
+const HeavyLaser = ({ target: myTarget, shipRef, sound }: Props) => {
   const TARGET_LENGTH = myTarget.length
   const dealDamageToEnemy = useStore((state) => state.dealDamageToEnemy);
   const hit = useRef(false);
@@ -58,7 +57,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
 
   useFrame(({ clock }) => {
     laserRefs.current.forEach((laserRef, id) => {
-      if (!goRef.current[id] || hit.current) return;
+      if (!goRef.current[id] || hit.current || !shipRef.current) return;
       const currentTarget = myTarget[id % TARGET_LENGTH].meshRef.position.clone() ?? lastKnownTarget.current;
       const lr = laserRef.current;
       if (lr && currentTarget) {
@@ -70,7 +69,7 @@ const HeavyLaser = ({ target: myTarget, origin, shipRef, sound }: Props) => {
             //const newCurrentTarget = currentTarget.clone()
             //newCurrentTarget.x -= 10
         const direction = new THREE.Vector3()
-          .subVectors(currentTarget, origin)
+          .subVectors(currentTarget, shipRef.current.position)
           .normalize();
         const targetQuaternion = new THREE.Quaternion().setFromUnitVectors(
           new THREE.Vector3(0, 0, 1),

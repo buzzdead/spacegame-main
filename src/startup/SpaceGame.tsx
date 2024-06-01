@@ -21,8 +21,9 @@ const SpaceGame: React.FC<Props> = ({ startPlanet }) => {
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
       <UI />
+      <KeyboardProvider>
       <ThreeSetup>
-        <KeyboardProvider>
+      
         <Suspense fallback={<Starfield2 />}>
           <group>
           <Collisions />
@@ -35,9 +36,9 @@ const SpaceGame: React.FC<Props> = ({ startPlanet }) => {
           <Random />
           </group>
         </Suspense>
-        </KeyboardProvider>
+     
       </ThreeSetup>
-      
+      </KeyboardProvider>
     </div>
   );
 };

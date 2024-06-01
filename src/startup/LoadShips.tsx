@@ -23,15 +23,15 @@ export const LoadShips = ({ startShip }: Props) => {
 
   useEffect(() => {
     if (ships.length > 0) return;
-    addShip(startShip, [8, 1, 0], 100, 0.1);
-    addShip(startShip, [10, 2, 12], 100, 0.1);
-    addShip(startShip, [12, 3, 24], 100, 0.1);
-    addShip("fighter", [55, 15, 55], 100, 20)
+    addShip(startShip, [8, 1, 0], 0.1);
+    addShip(startShip, [10, 2, 12], 0.1);
+    addShip(startShip, [12, 3, 24], 0.1);
+    addShip("fighter", [55, 15, 55], 20)
     setLoading(false)
   }, []);
 
   if(loading) return null
-  
+  //console.log("shipssss")
   return (
     <group>
       {ships.map((ship) => (

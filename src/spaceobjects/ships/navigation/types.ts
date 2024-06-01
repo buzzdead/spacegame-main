@@ -8,7 +8,7 @@ type PatrolNavigation = {
     shipId: string
     meshRef: any
     origin: Vector3
-    nearby: boolean
+    nearby: any
 }
 
 type UserNavigation2 = {
@@ -30,7 +30,7 @@ export type HuntingNavigation = {
     shipId: string
     meshRef: any
     origin: Vector3
-    nearby: boolean
+    nearby: any
     target?: any
 }
 

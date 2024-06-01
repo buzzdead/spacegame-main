@@ -18,10 +18,11 @@ interface Props {
 }
 
 export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
-  const { id: shipId, position: origin, nearby } = enemyShip
+  const { id: shipId, position: origin } = enemyShip
   const targetRef = useRef<any | null>(null)
   const position = enemyShip.meshRef?.position || origin
   const hullRef = useRef(enemyShip.hull)
+  const nearby = useRef(false)
 
   const type = rotation ? "hunting" : "patrol"
   const {
@@ -42,7 +43,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
   const [showInfo, setShowInfo] = useState(false)
 
   useEffect(() => {
-    setEnemyShipRef(meshRef.current, shipId);
+    setEnemyShipRef({...meshRef.current, hull: 350}, shipId);
   }, []);
 
   const destroyShip = () => {
@@ -66,7 +67,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
       id: shipId,
       hull: 350,
       position: meshRef?.current?.position || new Vector3(0, 0, 0),
-      nearby: nearby,
+      nearby: nearby.current,
     });
   };
 
@@ -87,12 +88,10 @@ return type === "patrol" ? {nearby, origin, shipType: "cruiser" as SpaceShipId, 
     <EnemyShipSystem
         id={shipId}
         shipRef={meshRef}
-        currentPos={meshRef.current?.position || position}
         nearby={nearby}
-        origin={position}
         targetRef={targetRef}
       />
-      {showInfo && <InfoBox type="Cruiser" hullRef={hullRef} position={meshRef.current?.position || position} />}
+      {showInfo && <InfoBox type="Cruiser" meshRef={hullRef} position={meshRef.current?.position || position} />}
     </group>
   );
 };
