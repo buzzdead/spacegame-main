@@ -3,8 +3,13 @@ import { HuntingNavigation } from "./types";
 import { Ignition } from "../../tools/Ignition";
 import { Quaternion, Vector3 } from "three";
 import { easing } from "maath";
+import useStore from "../../../store/UseStore";
+import { useRef } from "react";
 
 export const Hunting = ({ ...p }: HuntingNavigation) => {
+  const goToNextStage = useStore(state => state.goToNextStage)
+  const finished = useRef(false)
+
   useFrame((state, delta) => {
     if (!p.meshRef) return;
     if(p.target.current){
@@ -24,7 +29,9 @@ export const Hunting = ({ ...p }: HuntingNavigation) => {
   
   }
   else
-    {p.meshRef.current.position.z -= 0.5;
+    {
+      if(p.meshRef.current.position.z < -1000) { finished.current = true; goToNextStage("mission1") }
+      p.meshRef.current.position.z -= 0.5;
     easing.damp(
       p.meshRef.current.rotation,
       'y', // key for the rotation axis

@@ -26,6 +26,7 @@ const UI = () => {
     const missionStage = missions.find(m => m.name === "mission1")?.currentStage
     if(!missionStage) return
     if(missionStage === "stage2") setSrc(invasionMusic)
+    if(missionStage === "stage3") {setSrc(gameMusic); setHelperUi("You have completed the demo, great work. Come back at a later time.")}
   }, [missions])
   useEffect(() => {
     if (
