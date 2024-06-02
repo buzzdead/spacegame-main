@@ -43,6 +43,7 @@ export const MissionControl = () => {
 
   useAsset("/assets/spaceships/mothershipp.glb", 1, true);
   useAsset("/assets/celestialobjects/sphere.glb", 1, true);
+  useAsset("/assets/theworld3.glb", 1, true)
   const {
     sound: missionCompletedSound,
     calculateVolume: calculateMissionCompletedSound,

@@ -40,7 +40,7 @@ const Menu = ({ setGameStarted }: Props) => {
         <Starfield />
         <div className="start-page-container">
         <h2 style={{justifyContent: 'center', display: 'flex', fontSize: 12}}>
-            Alpha 1.0
+            Alpha 2.0
           </h2>
           <h1
             style={{ textAlign: "center", paddingBottom: 15 }}
