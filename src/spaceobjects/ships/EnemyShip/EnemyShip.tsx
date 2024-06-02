@@ -1,15 +1,15 @@
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useShallowStore } from "../../../store/UseStore";
 import { Vector3, Group, Object3DEventMap } from "three";
-import { useThree, useFrame } from "@react-three/fiber";
 import { ShipHull } from "./ShipHull";
 import { EnemyShipSystem } from "./EnemyShipSystem";
 import { EnemyShip as ES } from "../../../store/StoreState";
 import { InfoBox } from "../../tools/InfoBox";
 import { functions } from "../../../util";
-import { Ignition } from "../../tools/Ignition";
 import { Navigation } from "../navigation/Navigation";
 import { SpaceShipId } from "../../../store/StoreAssets";
+import { NavigationNames } from "../navigation/types";
+import { NavigationSwitcher } from "./NavigationSwitcher";
 
 interface Props {
   eScene: Group<Object3DEventMap>;
@@ -24,7 +24,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
   const hullRef = useRef(enemyShip.hull)
   const nearby = useRef(false)
 
-  const type = rotation ? "hunting" : "patrol"
+  const [type, setType] = useState<NavigationNames>(rotation ? "hunting" : "patrol")
   const {
     setDestination,
     setSelectedEnemies,
@@ -38,7 +38,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     "setExplosions",
     "setEnemyShipRef",
   ]);
-  const { scene } = useThree();
+  
   const meshRef = useRef<ElementRef<"mesh">>(null);
   const [showInfo, setShowInfo] = useState(false)
 
@@ -50,7 +50,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     setExplosions(meshRef.current?.position || position, "Big");
     setTimeout(() => {
       removeShip(shipId);
-      scene.removeFromParent();
+      eScene.removeFromParent();
       setSelectedEnemies({id: shipId, hull: 0, position: position, nearby: false}, true)
     }, 150)
     //setTimeout(() => {setDestroyed(false); setSelectedEnemies({ship: shipId, hull: 100})}, 10000)
@@ -71,22 +71,21 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     });
   };
 
-  const navProps = (type: "patrol" | "hunting") => {
-return type === "patrol" ? {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId} : {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
-  }
+  const props = {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
 
   return (
     <group>
-    <mesh {...functions} position={position} ref={meshRef} rotation={[rotation?.x || 0, rotation?.y ? rotation.y * 2 : 0, rotation?.z || 0]} onPointerDown={handleOnClick}>
+    <mesh position={position} ref={meshRef} rotation={[0, rotation ? 3.1 : 0, 0]} onPointerDown={handleOnClick}>
       <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
      <Navigation
      type={type}
-      props={navProps(type)}
+      props={props}
       />
     </mesh>
+    <NavigationSwitcher toggleType={() => setType("hunting")}/>
     <EnemyShipSystem
-        id={shipId}
+        distance={type === "hunting" ? 300 : 75}
         shipRef={meshRef}
         nearby={nearby}
         targetRef={targetRef}

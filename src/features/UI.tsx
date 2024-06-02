@@ -9,17 +9,24 @@ const gameMusic = require("../assets/sd2.mp3");
 const invasionMusic = require("../assets/invasion.mp3")
 
 const UI = () => {
+  const [src, setSrc] = useState(gameMusic)
   const [showOptions, setShowOptions] = useState(false);
   const [showMenu, setShowMenu] = useState(false)
   const [helperUi, setHelperUi] = useState(
     "Left-click on one of the cargo spaceships to get started"
   );
-  const { selected, destination, ships, resources } = useShallowStore([
+  const { selected, destination, ships, resources, missions } = useShallowStore([
     "selected",
     "destination",
     "ships",
     "resources",
+    "missions",
   ]);
+  useEffect(() => {
+    const missionStage = missions.find(m => m.name === "mission1")?.currentStage
+    if(!missionStage) return
+    if(missionStage === "stage2") setSrc(invasionMusic)
+  }, [missions])
   useEffect(() => {
     if (
       selected.length > 0 &&
@@ -58,7 +65,7 @@ const UI = () => {
       pointerEvents: 'none',
       userSelect: 'none'
     }}>
-       <AudioPlayer src={gameMusic} autoPlay loop shouldPlay />
+       <AudioPlayer src={src} autoPlay loop shouldPlay />
     <div
       style={{
         position: 'relative',

@@ -16,7 +16,6 @@ export const InfoBox = ({ position, meshRef, type }: Props) => {
   const { camera } = useThree();
   const ref = useRef<any>();
   const textRef = useRef<any>();
-  console.log("what", meshRef)
 
   useFrame(() => {
     if (meshRef && meshRef.current?.hull && meshRef.current?.hull !== hullState) setHullState(meshRef.current.hull);

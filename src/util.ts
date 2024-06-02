@@ -46,7 +46,7 @@ export const getTargetPos = (target: any) => {
 
   const handleLeave = (e: any) => {
     e.stopPropagation()
-    document.body.style.cursor = "grab"
+    document.body.style.cursor = "default"
   }
 
   export const functions = { onPointerOut: handleLeave, onPointerEnter: handleEnter }

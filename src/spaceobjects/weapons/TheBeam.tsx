@@ -11,14 +11,16 @@ interface Props {
   nearbyRef: any;
   sound: any;
   target: ObjectLocation;
+  distance: number
 }
 
-export const TheBeam = ({ position, rotation, nearbyRef, sound, target }: Props) => {
+export const TheBeam = ({ position, rotation, nearbyRef, sound, target, distance }: Props) => {
   const [shouldBeam, setShouldBeam] = useState(false);
   const dealDamageToEnemy = useStore(state => state.dealDamageToEnemy)
   const beamDamageRef = useRef(0)
   useFrame(() => {
-    if (nearbyRef.current !== shouldBeam) setShouldBeam(nearbyRef.current);
+    const dst = position.distanceTo(target.meshRef.position)
+    if (nearbyRef.current !== shouldBeam && dst <= 100) setShouldBeam(nearbyRef.current);
     if(shouldBeam) {
       beamDamageRef.current += 1
       if(beamDamageRef.current >= 100) {dealDamageToEnemy(target.id, 15, true); beamDamageRef.current = 0}

@@ -13,22 +13,23 @@ interface Props {
   nearby: any;
   shipRef: any;
   targetRef: any;
-  id: string
+  distance: number
 }
 
 export const EnemyShipSystem = ({
   nearby: nearbyRef,
   shipRef,
   targetRef,
-  id
+  distance
 }: Props) => {
   const [nearbyEnemies, setNearbyEnemies] = useState<ObjectLocation[]>([]);
   const lookingAtTarget = useRef(false);
   const { camera } = useThree();
   const [nearby, setNearBy] = useState(false)
-  id === "4" && console.log(nearby)
   useFrame(() => {
     if (!nearby || !nearbyEnemies[0]?.meshRef?.position) return;
+    const dst = nearbyEnemies[0]?.meshRef?.position.distanceTo(shipRef?.current?.position)
+    if (dst > 100) return
     const direction = new THREE.Vector3()
       .subVectors(nearbyEnemies[0]?.meshRef?.position, shipRef?.current?.position || origin)
       .normalize();
@@ -78,11 +79,12 @@ export const EnemyShipSystem = ({
         toggleNearBy={(b: boolean) => setNearBy(b)}
         nearby={nearbyRef}
         setNearbyEnemies={setNearbyEnemies}
-        id={id}
+        distance={distance}
       />
       {nearby && (
         <TheBeam
           target={nearbyEnemies[0]}
+          distance={distance}
           sound={beamSound}
           nearbyRef={lookingAtTarget}
           position={shipRef.current?.position || origin}

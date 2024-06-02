@@ -9,9 +9,10 @@ type PatrolNavigation = {
     meshRef: any
     origin: Vector3
     nearby: any
+    target?: any
 }
 
-type UserNavigation2 = {
+type UserNavigation = {
     shipType: SpaceShipId;
     shipId: string;
     meshRef: any;
@@ -36,7 +37,7 @@ export type HuntingNavigation = {
 
 export type NavigationProps = {
     patrol: PatrolNavigation
-    user: UserNavigation2
+    user: UserNavigation
     harvest: HarvestNavigation
     hunting: HuntingNavigation
 }

@@ -12,16 +12,16 @@ interface Props {
   setNearbyEnemies: (n: ObjectLocation[]) => void;
   nearby: any;
   shipRef: any;
-  id: string;
   toggleNearBy: (b: boolean) => void
+  distance: number
 }
 
 export const RadarScanner = ({
   setNearbyEnemies,
   nearby,
   shipRef,
-  id,
-  toggleNearBy
+  toggleNearBy,
+  distance
 }: Props) => {
   const ships = useStore((state) => state.ships);
   const shipsNear = useRef<Ship[]>([]);
@@ -33,7 +33,7 @@ export const RadarScanner = ({
       const nearbyShips = ships.filter(
         (e) =>
           e.meshRef?.position &&
-          e.meshRef?.position?.distanceTo(shipRef.current.position) <= 100
+          e.meshRef?.position?.distanceTo(shipRef.current.position) <= distance
       );
       const isNearby = nearbyShips.length > 0;
 
@@ -50,6 +50,6 @@ export const RadarScanner = ({
   return null;
 };
 
-const MemoizedRadar = React.memo(RadarScanner, () => true);
+const MemoizedRadar = React.memo(RadarScanner, (prevProps, nextProps) => prevProps.distance === nextProps.distance);
 
 export default MemoizedRadar;

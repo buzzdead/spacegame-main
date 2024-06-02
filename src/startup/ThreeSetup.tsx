@@ -53,7 +53,7 @@ const ThreeSetup = ({ children }: Props) => {
     <Canvas
     gl={{
       powerPreference: "high-performance",
-
+      alpha: false,
     failIfMajorPerformanceCaveat: true
     }}
       camera={{

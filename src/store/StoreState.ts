@@ -91,8 +91,8 @@ export type CelestialObjectState = {
   }
 
   export type MissionState = {
-    missions: {name: string; completed: boolean}[];
-    setMissionComplete: (name: string) => void;
+    missions: {name: string; stages: string[], currentStage: string, completed: boolean}[];
+    goToNextStage: (name: string) => void;
   }
 
   export type UserType = {  homebase: string

@@ -32,5 +32,5 @@ export const Collisions = () => {
           window.addEventListener('touchmove', handleMouseMove)
         };
       }, [handleMouseMove]); */
-      return  <CameraControls polarRotateSpeed={.51} azimuthRotateSpeed={.51} />
+      return  <CameraControls dollySpeed={.6} polarRotateSpeed={.51} azimuthRotateSpeed={.51} />
 }

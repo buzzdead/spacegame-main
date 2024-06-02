@@ -10,8 +10,8 @@ import {
   Vector3,
 } from "three";
 import { useAsset } from "../hooks/Asset";
-import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
 import React from "react";
 import {
   LightningStrike,
@@ -25,10 +25,11 @@ import { useTexture } from "../hooks/Texture";
 
 interface Props {
   position: Vector3;
+  forceDev?: boolean
 }
 
-export const PortalScene = ({ position }: Props) => {
-  
+export const PortalScene = ({ position, forceDev = false }: Props) => {
+  const developerMode = useStore(state => state.developerMode)
   const smokeTexture = useTexture('blackSmoke15.png')
  const lightningTexture = useTexture('flash01.png')
  const smokeDecay = useRef(0)
@@ -44,6 +45,11 @@ export const PortalScene = ({ position }: Props) => {
   const stateRef = useRef(state);
   const start = useRef(false);
   const timer = useRef(0);
+
+  useEffect(() => {
+    if(!developerMode && !forceDev) setSmoke(true)
+    if(!developerMode && !forceDev) setTimeout(() => start.current = true, 10000)
+  }, [])
 
   const resetPortal = () => {
     timer.current = 0;
@@ -104,7 +110,7 @@ const Portal = ({ shouldMove, pos }: Prop) => {
   return (
     <MeshPortalMaterial blend={2} side={DoubleSide}>
       <ambientLight intensity={5} />
-      <StaticRotatingPortal />
+      <StaticRotatingPortal pos={pos}/>
       <PhasedShips shouldMove={shouldMove} pos={pos} />
     </MeshPortalMaterial>
   );
@@ -115,11 +121,23 @@ const SpawnPortal = React.memo(
   (prevProps, nextProps) => prevProps.shouldMove === nextProps.shouldMove
 );
 
-const RotatingPortal = () => {
-  const portal = useAsset("/assets/theworld3.glb", 2111);
+interface StaticPortal {
+  pos: Vector3
+}
 
-  portal.rotation.x += 0.55;
+const RotatingPortal = ({pos}: StaticPortal) => {
+  const portal = useAsset("/assets/theworld3.glb", 2111).clone();
+  const {camera } = useThree()
+
+  portal.rotation.x += Math.random()
   useFrame(() => {
+    const dst = camera.position.distanceTo(pos)
+    if(dst > 1500 && dst < 3000 && portal.scale.x === 2111)
+      portal.scale.set(4300, 4300, 4300)
+    else if (dst < 1500 && portal.scale.x >= 4300)
+      portal.scale.set(2111, 2111, 2111)
+    else if (dst > 3000 && portal.scale.x <= 8000)
+        portal.scale.set(8000, 8000, 8000)
     portal.rotation.y += 0.001;
   });
   return <primitive object={portal} />;
@@ -170,7 +188,7 @@ const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
           const thePos = pos.clone();
           const mw = thePos.add(ps.ship.position.clone());
           mw.y -= 5;
-          addEnemyShip(mw, 350, new Vector3(0, 1.55, 0));
+          addEnemyShip(mw, 350, new Vector3(0, 0, 0));
           ps.stop = true;
           set(!update);
         }
@@ -185,3 +203,5 @@ const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
     </group>
   );
 };
+
+export const MemoizedPortalScene = React.memo(PortalScene, () => true)

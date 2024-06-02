@@ -47,6 +47,5 @@ interface Props {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
         
     })
-    if(isNearby) return null
-    return <Ignition brake={brake} type={"cruiser"} />
+    return null
 }

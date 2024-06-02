@@ -59,7 +59,6 @@ const useShips: StateCreator<
     })),
     toggleNearby: (id: string, n: boolean) => set((state) => 
       {
-        if(id === "4") console.log(n)
         const ship = state.enemyShips.find(s => s.id === id)
     
         if(ship?.nearby === n) return state

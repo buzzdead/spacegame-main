@@ -25,14 +25,14 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     origin,
     setShipRef,
     setSelected,
-    setMissionComplete,
+    goToNextStage,
   } = useShallowStore([
     "destination",
     "setResources",
     "origin",
     "setShipRef",
     "setSelected",
-    "setMissionComplete",
+    "goToNextStage",
   ]);
   const [isTraveling, setIsTraveling] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
@@ -190,7 +190,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
           setIsFighting(true);
           setIsTraveling(false);
         } else if (shipType === "hullspaceship") {
-          setMissionComplete("mission1");
+          goToNextStage("mission1");
           setIsTraveling(false);
         } else {
           setIsTraveling(false);
@@ -210,7 +210,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     }
 
     const speedFactor = Math.max(
-      isFighter ? 75 : shipType === "hullspaceship" ? 100 : 12.5
+      isFighter ? 115 : shipType === "hullspaceship" ? 100 : 12.5
     ); // Adjust for sensitivity
     meshRef.current.position.add(
       direction.multiplyScalar((55 * speedFactor) / 5000)
