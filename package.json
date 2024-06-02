@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^5.13.0",
-    "@react-three/drei": "^9.105.4",
+    "@react-three/drei": "^9.106.0",
+    "@react-three/fiber": "^8.16.7",
     "@react-three/postprocessing": "^2.16.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -27,7 +28,7 @@
     "react-h5-audio-player": "^3.9.1",
     "react-scripts": "5.0.1",
     "react-virtuoso": "^4.7.11",
-    "three": "^0.163.0",
+    "three": "^0.164.0",
     "three-nebula": "^10.0.3",
     "three-nebula-types": "^1.0.1",
     "typescript": "^4.9.5",
