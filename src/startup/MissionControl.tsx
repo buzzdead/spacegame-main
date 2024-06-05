@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import useStore, { useShallowStore } from "../store/UseStore";
+import { useShallowStore } from "../store/UseStore";
 import UseSoundEffect from "../hooks/SoundEffect";
-import { useThree, useFrame, useLoader } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-import { AudioLoader, Vector3 } from "three";
-import { EffectComposer, ShockWave } from "@react-three/postprocessing";
+import { useThree } from "@react-three/fiber";
+import { Vector3 } from "three";
+import { EffectComposer } from "@react-three/postprocessing";
 import { SWave } from "../spaceobjects/ships/EnemyShip/swave";
 import { useAsset } from "../hooks/Asset";
-import { MemoizedPortalScene, PortalScene } from "./PortalSpawn";
+import { MemoizedPortalScene } from "./PortalSpawn";
 
 type MissionState = {
   missionCompleted: boolean;
@@ -22,12 +21,10 @@ export const MissionControl = () => {
     constructions,
     addShip,
     addCelestialObject,
-    goToNextStage,
     findShip,
     missions,
   } = useShallowStore([
     "addShip",
-    "goToNextStage",
     "constructions",
     "addCelestialObject",
     "setDestination",

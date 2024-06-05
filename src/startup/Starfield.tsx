@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import '../styles/starfield.css'
-import { useGLTF } from '@react-three/drei';
 import { useAsset } from '../hooks/Asset';
 
 interface Props {

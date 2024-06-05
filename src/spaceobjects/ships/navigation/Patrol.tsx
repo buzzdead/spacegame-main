@@ -47,5 +47,5 @@ interface Props {
         meshRef.current.quaternion.slerp(targetQuaternion, 0.1);
         
     })
-    return null
+    return nearby.current ? null : <Ignition type="cruiser" />
 }

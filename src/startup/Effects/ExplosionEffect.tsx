@@ -18,7 +18,7 @@ export const ExplosionEffects = () => {
           key={e.id}
           explosion={e}
         />
-               <SmokeSphere size="Small" texture={smokeTexture} position={e.pos}/>
+               <SmokeSphere size="Small" texture={smokeTexture} position={e.pos} decay={0.65}/>
       </group>
       ))}
 

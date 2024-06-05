@@ -90,14 +90,14 @@ export async function createSmokeSphere(scene: THREE.Scene, texture: THREE.Textu
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Radius(size === "Small" ? 2.5 : 10, size === "Small" ? 4 : 20),
-      new Life(size === "Small" ? .91 : 4),
+      new Radius(size === "Small" ? 2.5 : 10, size === "Small" ? 4 : 6),
+      new Life(size === "Small" ? .91 : 18),
       new Body(createSprite()),
       new RadialVelocity(22, new Vector3D(0, 1, 0), 360)
     ])
     .setBehaviours([
-      new Alpha(size === "Small" ? 0.35 : 1, 0.15),
-      new Scale(size === "Small" ? 2.75 : 1, size === "Small" ? 2.75 : 3),
+      new Alpha(size === "Small" ? 0.35 : 1, 0.45),
+      new Scale(size === "Small" ? 2.75 : 1.25, size === "Small" ? 2.75 : 4.25),
       new Color(new THREE.Color("gray"), new THREE.Color("black"))
     ])
     .emit();
@@ -183,19 +183,18 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
   
   const zone = new PointZone(0, 0, 0);
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(1, 1), new Span(0.021, 0.021)))
+    .setRate(new Rate(new Span(2, 2), new Span(0.021, 0.021)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(2.95, 2.65),
+      new Life(2.45, 2.45),
       new Body(createSprite()),
-      new Radius(1., 1.),
+      new Radius(1.15, 1.15),
       new RadialVelocity(26.5, new Vector3D(0, 0, 1), 1),
     ])
     .setBehaviours([
-      new Alpha(19, 9),
-      new Color(new THREE.Color("#FF3131"), new THREE.Color("#a12d06")),
-      new Scale(1.425),
+      new Alpha(15, 15),
+      new Scale(1.0005),
       
       
     ])

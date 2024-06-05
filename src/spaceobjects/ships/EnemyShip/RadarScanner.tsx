@@ -43,7 +43,7 @@ export const RadarScanner = ({
       setNearbyEnemies(nearbyShips);
     };
 
-    const interval = setInterval(checkForNearByShips, 1000);
+    const interval = setInterval(checkForNearByShips, 500);
     return () => clearInterval(interval);
   }, [ships, shipRef, nearby, toggleNearBy, setNearbyEnemies]);
 

@@ -39,11 +39,13 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     "setEnemyShipRef",
   ]);
   
-  const meshRef = useRef<ElementRef<"mesh">>(null);
+  const meshRef = useRef<any>(null);
   const [showInfo, setShowInfo] = useState(false)
 
   useEffect(() => {
-    setEnemyShipRef({...meshRef.current, hull: 350}, shipId);
+    const newMeshRef = {...meshRef.current, hull: 350}
+    setEnemyShipRef(newMeshRef, shipId);
+    meshRef.current = newMeshRef
   }, []);
 
   const destroyShip = () => {
@@ -71,7 +73,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
     });
   };
 
-  const props = {nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
+  const props = {nearby: nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
 
   return (
     <group>
@@ -90,7 +92,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
         nearby={nearby}
         targetRef={targetRef}
       />
-      {showInfo && <InfoBox type="Cruiser" meshRef={hullRef} position={meshRef.current?.position || position} />}
+      {showInfo && <InfoBox type="Cruiser" meshRef={meshRef} position={meshRef.current?.position || position} />}
     </group>
   );
 };

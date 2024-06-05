@@ -1,10 +1,10 @@
 import { useFrame } from "@react-three/fiber";
 import { HuntingNavigation } from "./types";
-import { Ignition } from "../../tools/Ignition";
 import { Quaternion, Vector3 } from "three";
 import { easing } from "maath";
 import useStore from "../../../store/UseStore";
 import { useRef } from "react";
+import { Ignition } from "../../tools/Ignition";
 
 export const Hunting = ({ ...p }: HuntingNavigation) => {
   const goToNextStage = useStore(state => state.goToNextStage)
@@ -55,5 +55,5 @@ export const Hunting = ({ ...p }: HuntingNavigation) => {
     );}
   });
 
-  return null
+  return p.nearby.current ? null : <Ignition type="cruiser" />
 };

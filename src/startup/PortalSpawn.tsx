@@ -59,12 +59,6 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   };
 
   useFrame((_state, delta) => {
-    if (keyMap && keyMap["KeyF"]) {
-      resetPortal();
-    }
-    if(keyMap && keyMap["KeyG"]) {
-      setSmoke(!smoke)
-    }
     if (start.current) {
       timer.current += 1;
       if (timer.current % 3 > 0) return;
@@ -86,7 +80,6 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
 
   return (
     <RoundedBox
-      onClick={resetPortal}
       ref={ref}
       smoothness={state.s}
       radius={state.r}

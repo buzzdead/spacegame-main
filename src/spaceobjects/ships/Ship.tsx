@@ -1,7 +1,6 @@
 import { FC, ElementRef, Suspense, useRef, useEffect, useState } from "react";
 import { Group, Object3DEventMap } from "three";
 import { SGS, useShallowStore } from "../../store/UseStore";
-import { ShipHull } from "./EnemyShip/ShipHull";
 import { SelectedShip } from "../tools/SelectedShip";
 import {Navigation} from "./navigation/Navigation";
 import { useKeyboard } from "../../hooks/Keys";

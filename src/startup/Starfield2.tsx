@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
-import { Center, Text } from '@react-three/drei'
+import { Text } from '@react-three/drei'
 import { Mesh, SphereGeometry, MeshBasicMaterial } from 'three'
 
 export const Starfield2 = () => {

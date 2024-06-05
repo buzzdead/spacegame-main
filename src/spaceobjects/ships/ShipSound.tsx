@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import UseSoundEffect from "../../hooks/SoundEffect";
-import { useThree } from "@react-three/fiber";
 
 interface Props {
   isHarvesting: boolean;

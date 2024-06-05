@@ -1,9 +1,7 @@
-import { Center, Plane, Text } from "@react-three/drei";
+import { Plane, Text } from "@react-three/drei";
 import { useThree, useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useRef, useState } from "react";
-import { EnemyShip } from "../../store/StoreState";
-import { Ship } from "../../store/SpaceGameStateUtils";
 
 interface Props {
   position: Vector3;
@@ -26,9 +24,7 @@ export const InfoBox = ({ position, meshRef, type }: Props) => {
         camera.rotation.z
       );
     }
-    const pos = position.clone();
-    pos.y += 5;
-    ref.current.position.set(pos.x, pos.y, pos.z);
+    ref.current.position.set(position.x, position.y + 5, position.z);
   });
 
   return (

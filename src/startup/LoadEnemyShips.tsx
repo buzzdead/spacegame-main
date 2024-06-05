@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import useStore, { useShallowStore } from "../store/UseStore";
+import { useShallowStore } from "../store/UseStore";
 import { Vector3 } from 'three'
 import { EnemyShipScene } from "../spaceobjects/ships/EnemyShip/EnemyShipScene";
 import { EnemyShip } from "../store/StoreState";

@@ -10,7 +10,7 @@ const App: React.FC = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const logIn = useStore(state => state.logIn)
   useEffect(() => {
-    const abc = async () => {
+    const CheckForToken = async () => {
       const token = localStorage.getItem("token")
       if(!token) return
       const res = await decodeJWT(token)
@@ -19,7 +19,7 @@ const App: React.FC = () => {
         logIn({homebase: homebase as string, name: name as string, solarSystem: solarSystem as string})
       }
     }
-  abc()
+  CheckForToken()
   }, [])
 
   return (

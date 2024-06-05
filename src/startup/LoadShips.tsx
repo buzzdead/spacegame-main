@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { SpaceShipId } from "../store/StoreAssets";
-import useStore, { useShallowStore } from "../store/UseStore";
+import { useShallowStore } from "../store/UseStore";
 import { ShipScene } from "../spaceobjects/ships/ShipScene";
 import { Ship } from "../store/SpaceGameStateUtils";
 import { ShipShifter } from "./ShipShifter";
