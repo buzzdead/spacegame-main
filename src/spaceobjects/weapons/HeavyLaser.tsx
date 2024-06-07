@@ -32,11 +32,6 @@ const HeavyLaser = ({ target: myTarget, shipRef, sound }: Props) => {
     resetsLaserRefs()
   }, [myTarget.length])
 
-  useEffect(() => {
-    sound?.stop()
-    sound?.play()
-  }, [])
-
   const { vs, fs } = Shader("laser-cannon");
   const gradientMaterial = new THREE.ShaderMaterial({
     uniforms: {

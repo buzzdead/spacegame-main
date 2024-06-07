@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import HeavyLaser from "../../weapons/HeavyLaser";
-import MemoizedRadar, { RadarScanner } from "./RadarScanner";
+import MemoizedRadar from "./RadarScanner";
 import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 import UseSoundEffect from "../../../hooks/SoundEffect";
 import { TheBeam } from "../../weapons/TheBeam";
-import { EffectComposer, SelectiveBloom } from "@react-three/postprocessing";
-import { Vector3 } from "three";
 
 interface Props {
   nearby: any;

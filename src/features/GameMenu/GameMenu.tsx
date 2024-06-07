@@ -60,7 +60,7 @@ const GameMenu = ({onClose, visible}: Props) => {
         open={visible}
         footer={null}
         width={'75%'}
-        style={{marginTop: 50,}}
+        style={{marginTop: 50}}
         closeIcon={<FullscreenExitOutlined style={{color: "white", fontSize: 20, paddingTop: 30, paddingRight: 60}} />}
         styles={{content: {backgroundColor: '#011a05', opacity: 0.9,}, body: {height: "60vh",}, mask: {backgroundColor: 'rgba(30, 0, 0, 0.55)'}}}
       >
@@ -69,8 +69,16 @@ const GameMenu = ({onClose, visible}: Props) => {
         {starField}
         </div>
         </div>
-        {renderContent()}
-        <Buttons handleChange={(tab: GameMenuTabs) => setCurrentTab(tab)}/>
+        <Row>
+    <Col span={6} pull={0}>
+    <Buttons handleChange={(tab: GameMenuTabs) => setCurrentTab(tab)}/>
+    </Col>
+    <Col span={18} pull={1} style={{marginTop: 10}}>
+    {renderContent()}
+    </Col>
+  </Row>
+        
+        
         </Modal>
     )
 }

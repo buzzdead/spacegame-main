@@ -85,13 +85,14 @@ const useShips: StateCreator<
     return destroyed;
   },
   selected: [],
-  setSelected: (id: string, remove?: boolean) =>
+  setSelected: (id: string | string[], remove?: boolean, force?: boolean) =>
     set((state) => ({
       selected: SpaceGameStateUtils.addToSelected(
         state.ships,
         state.selected,
-        id,
-        remove
+        Array.isArray(id) ? id : [id],
+        remove,
+        force
       ),
     })),
   selectedEnemies: [],

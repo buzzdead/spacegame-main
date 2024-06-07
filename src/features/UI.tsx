@@ -88,7 +88,7 @@ const UI = () => {
     <div style={{position: 'absolute', bottom: 15, width: '100%'}}>
       <div style={{position: 'relative', justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
       {selected.map(s => {
-        return <img key={s.id} style={{padding: 2.5, border: `1px solid ${!s.meshRef ? 100 : s.meshRef.hull < 30 ? '#ff000030' : s.meshRef.hull < 50 ? '#0000ff45' : '#00ff0030'}`}} width='40px' height={'25px'} src={s.assetId === "fighter" ? '/assets/fightert.png' : '/assets/cargoship.png'} />
+        return <img key={s.assetId + s.id} style={{padding: 2.5, border: `1px solid ${!s.meshRef ? 100 : s.meshRef.hull < 30 ? '#ff000030' : s.meshRef.hull < 50 ? '#0000ff45' : '#00ff0030'}`}} width='40px' height={'25px'} src={s.assetId === "fighter" ? '/assets/fightert.png' : '/assets/cargoship.png'} />
       })}
       </div>
     </div>

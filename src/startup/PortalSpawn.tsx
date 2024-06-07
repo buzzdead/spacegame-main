@@ -17,7 +17,6 @@ import {
   LightningStrike,
   SmokeSphere,
 } from "../spaceobjects/tools/nebula/nebulaSystem";
-import { useKeyboard } from "../hooks/Keys";
 import useStore from "../store/UseStore";
 import { dampWithEase, getRandomPosition } from "../util";
 import { DAMP_SETTINGS, PORTAL_HEIGHT, PORTAL_WIDTH } from "../constants";
@@ -29,7 +28,6 @@ interface Props {
 }
 
 export const PortalScene = ({ position, forceDev = false }: Props) => {
-  const developerMode = useStore(state => state.developerMode)
   const smokeTexture = useTexture('blackSmoke15.png')
  const lightningTexture = useTexture('flash01.png')
  const smokeDecay = useRef(0)
@@ -41,14 +39,13 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   > | null>(null);
   const [state, setState] = useState({ h: 5, w: 2.5, d: 0.25, r: 1, s: 1 });
   const [isOpen, setIsOpen] = useState(false);
-  const keyMap = useKeyboard();
   const stateRef = useRef(state);
   const start = useRef(false);
   const timer = useRef(0);
 
   useEffect(() => {
-    if(!developerMode && !forceDev) setSmoke(true)
-    if(!developerMode && !forceDev) setTimeout(() => start.current = true, 10000)
+    setSmoke(true)
+    setTimeout(() => start.current = true, 10000)
   }, [])
 
   const resetPortal = () => {
@@ -90,7 +87,7 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
       {smoke && state.h < 290 && (
         <LightningStrike texture={lightningTexture} position={position} />
       )}
-      <SpawnPortal pos={position} shouldMove={isOpen} />
+      <SpawnPortal resetPortal={resetPortal} pos={position} shouldMove={isOpen} />
     </RoundedBox>
   );
 };
@@ -98,13 +95,14 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
 interface Prop {
   shouldMove: boolean;
   pos: Vector3;
+  resetPortal: () => void
 }
-const Portal = ({ shouldMove, pos }: Prop) => {
+const Portal = ({ shouldMove, pos, resetPortal }: Prop) => {
   return (
     <MeshPortalMaterial blend={2} side={DoubleSide}>
       <ambientLight intensity={5} />
       <StaticRotatingPortal pos={pos}/>
-      <PhasedShips shouldMove={shouldMove} pos={pos} />
+      <PhasedShips resetPortal={resetPortal} shouldMove={shouldMove} pos={pos} />
     </MeshPortalMaterial>
   );
 };
@@ -141,8 +139,9 @@ const StaticRotatingPortal = React.memo(RotatingPortal, () => true);
 interface ShipProps {
   shouldMove: boolean;
   pos: Vector3;
+  resetPortal: () => void
 }
-const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
+const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
   const addEnemyShip = useStore((state) => state.addEnemyShip);
   const [update, set] = useState(false);
   const [phasedShips, setPs] = useState<
@@ -169,6 +168,10 @@ const PhasedShips = ({ shouldMove, pos }: ShipProps) => {
     setPs(ps);
 
   }, [shouldMove]);
+
+  useEffect(() => {
+    //if(phasedShips.filter(ps => ps.stop).length === 0) resetPortal()
+  }, [update])
 
   enemyShip.position.set(0, 10, 15);
   enemyShip.rotation.set(0, 1.55, 0);

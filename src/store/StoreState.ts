@@ -43,7 +43,7 @@ export type CelestialObjectState = {
     setEnemyShipRef: (ref: any, shipId: string) => void
     dealDamageToEnemy: (id: string, n: number, friend?: boolean) => DamageReport;
     selected: SelectedShip[];
-    setSelected: (id: string, removeAll?: boolean) => void;
+    setSelected: (id: string | string[], removeAll?: boolean, force?: boolean) => void;
     selectedEnemies: EnemyShip[];
     setSelectedEnemies: (a: EnemyShip, remove?: boolean) => void;
     removeShip: (id: string, friend?: boolean) => void

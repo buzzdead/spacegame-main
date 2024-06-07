@@ -10,21 +10,11 @@ export const Guide = () => {
       style={{
         color: "white",
         zIndex: 128931938129382,
-        display: "flex",
         justifyContent: "center",
         position: "relative",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-          zIndex: 1289319381293821,
-          gap: 15,
-          maxWidth: '65%'
-        }}
-      >
+      
         <Title style={{ color: "red" }}>Guide</Title>
         <Paragraph style={{ color: "white", fontSize: 16 }}>
           You can select a friendly ship by clicking{" "}
@@ -54,6 +44,5 @@ export const Guide = () => {
           drag in any direction.
         </Paragraph>
       </div>
-    </div>
   );
 };

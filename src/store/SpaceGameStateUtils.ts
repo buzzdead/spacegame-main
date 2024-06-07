@@ -69,13 +69,17 @@ class SpaceGameStateUtils {
         return [...currentCelestialObjects]
     }
 
-    static addToSelected(ships: Ship[], selected: SelectedShip[], id: string, remove = false): SelectedShip[] {
-        const selectedShip = ships.find(e => e.id === id) as SelectedShip
-        if(remove && selectedShip) {
-            return selected.find(s => s.id === id) ? [...selected.filter(s => s.id !== selectedShip.id)] : [...selected]
+    static addToSelected(ships: Ship[], selected: SelectedShip[], ids: string[], remove = false, force = false): SelectedShip[] {
+        const selectedShips = ships.filter(e => ids.includes(e.id)) as SelectedShip[]
+        const emptySelected = remove && force
+        if(emptySelected) return []
+        if(force) return selectedShips
+        if(remove && selectedShips.length > 0) {
+            return selected.filter(s => !ids.includes(s.id))
         }
-        else if (selectedShip) {
-            return selected.find(s => s.id === id) ? [...selected] : [...selected, selectedShip]
+        else if (selectedShips.length > 0) {
+            const shipsToAdd = selectedShips.filter(sh => !selected.some(s => s.id === sh.id))
+            return [...selected, ...shipsToAdd]
         }
         return [...selected]
     }

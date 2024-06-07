@@ -126,6 +126,14 @@ const Starfield = ({inGame = false, theRef}: Props) => {
       createStarfield();
     }
 
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
       cancelAnimationFrame(animationId);
       // Clean up the Three.js scene and renderer

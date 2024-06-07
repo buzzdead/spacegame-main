@@ -28,7 +28,7 @@ export const TheBeam = ({
   const beamDamageRef = useRef(0);
   useFrame(() => {
     const dst = position.distanceTo(target.meshRef.position);
-    if (nearbyRef.current !== shouldBeam && dst <= 100)
+    if (nearbyRef.current !== shouldBeam && dst <= 70)
       setShouldBeam(nearbyRef.current);
     if (shouldBeam) {
       beamDamageRef.current += 1;

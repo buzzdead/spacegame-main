@@ -7,6 +7,7 @@ export const KeyboardProvider = ({ children }: any) => {
 
   useEffect(() => {
     const onDocumentKey = (e: any) => {
+      if(e.ctrlKey) e.preventDefault()
       keyMap.current[e.code] = e.type === 'keydown';
     };
     document.addEventListener('keydown', onDocumentKey);

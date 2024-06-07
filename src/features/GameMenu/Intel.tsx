@@ -46,19 +46,12 @@ export const Intel = ({theRef}: Props) => {
         color: "white",
         zIndex: 128931938129382,
         display: "flex",
+        flexDirection: 'column',
         justifyContent: "center",
         position: "relative",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-          zIndex: 1289319381293821,
-          maxWidth: "65%",
-        }}
-      >
+      
         <Title style={{ color: "red" }}>Intel</Title>
         {selected === null ? (
           <>
@@ -136,6 +129,5 @@ export const Intel = ({theRef}: Props) => {
           </>
         )}
       </div>
-    </div>
   );
 };

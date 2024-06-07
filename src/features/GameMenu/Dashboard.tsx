@@ -8,17 +8,14 @@ export const Dashboard = () => {
       style={{
         color: "white",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: 'column',
+        justifyContent: "start",
+        alignContent: 'start',
+        alignItems: 'start',
         position: "relative",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      
         <Typography.Title style={{ color: "red" }}>
           {user.solarSystem.replaceAll("_", " ") || "huhu"}
         </Typography.Title>
@@ -29,6 +26,5 @@ export const Dashboard = () => {
           Current resources: {resources}
         </Typography.Title>
       </div>
-    </div>
   );
 };
