@@ -24,6 +24,7 @@ export const EnemyShipSystem = ({
   const lookingAtTarget = useRef(false);
   const { camera } = useThree();
   const [nearby, setNearBy] = useState(false)
+
   useFrame(() => {
     if (!nearby || !nearbyEnemies[0]?.meshRef?.position) return;
     const dst = nearbyEnemies[0]?.meshRef?.position.distanceTo(shipRef?.current?.position)

@@ -21,6 +21,7 @@ import useStore from "../store/UseStore";
 import { dampWithEase, getRandomPosition } from "../util";
 import { DAMP_SETTINGS, PORTAL_HEIGHT, PORTAL_WIDTH } from "../constants";
 import { useTexture } from "../hooks/Texture";
+import { useKeyboard } from "../hooks/Keys";
 
 interface Props {
   position: Vector3;
@@ -30,6 +31,7 @@ interface Props {
 export const PortalScene = ({ position, forceDev = false }: Props) => {
   const smokeTexture = useTexture('blackSmoke15.png')
  const lightningTexture = useTexture('flash01.png')
+ const keyMap = useKeyboard()
  const smokeDecay = useRef(0)
  const [smoke, setSmoke] = useState(false)
   const ref = useRef<Mesh<
@@ -43,9 +45,13 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   const start = useRef(false);
   const timer = useRef(0);
 
-  useEffect(() => {
+  const startUp = () => {
     setSmoke(true)
     setTimeout(() => start.current = true, 10000)
+  }
+
+  useEffect(() => {
+    !forceDev && startUp()
   }, [])
 
   const resetPortal = () => {
@@ -56,6 +62,7 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   };
 
   useFrame((_state, delta) => {
+    if(keyMap && keyMap["KeyF"]) { startUp(); }
     if (start.current) {
       timer.current += 1;
       if (timer.current % 3 > 0) return;
@@ -72,7 +79,7 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
         start.current = false;
       }
     }
-    if(!isOpen && state.h > 200) smokeDecay.current = 1.5
+    if(!isOpen && state.h > 200) smokeDecay.current = 22.5
   });
 
   return (

@@ -39,8 +39,9 @@ export const RadarScanner = ({
 
       if (isNearby !== nearby.current) toggleNearBy(isNearby);
 
+      let abc = shipsNear.current.length
       shipsNear.current = nearbyShips;
-      setNearbyEnemies(nearbyShips);
+      abc !== nearbyShips.length && setNearbyEnemies(nearbyShips);
     };
 
     const interval = setInterval(checkForNearByShips, 500);

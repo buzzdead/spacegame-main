@@ -143,12 +143,12 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     return shiftQuaternion;
   };
 
-  const calculateDirectionAndRotation = (targetPosition: Vector3) => {
+  const calculateDirectionAndRotation = (targetPosition: Vector3, stop = false) => {
     if (!meshRef.current) return {};
     const direction = new Vector3()
       .subVectors(targetPosition, meshRef.current.position)
       .normalize();
-    if (meshRef.current.shipShift) {
+    if (meshRef.current.shipShift && !stop) {
       const shiftQuaternion = getShift(targetPosition);
       direction.applyQuaternion(shiftQuaternion);
     }
@@ -237,10 +237,10 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
         updateShipPosition(direction, targetQuaternion, targetPosition);
     } else if (isFighting && shipsDestination) {
       const { direction, targetQuaternion } =
-        calculateDirectionAndRotation(shipsDestinationPos);
+        calculateDirectionAndRotation(shipsDestinationPos, true);
       const theAngle = targetQuaternion?.angleTo(meshRef.current.quaternion);
-      if (theAngle && theAngle > 0.01) {
-        meshRef.current.quaternion.slerp(targetQuaternion, 0.01);
+      if (theAngle && theAngle > 0.00005) {
+        meshRef.current.quaternion.slerp(targetQuaternion, .51);
       }
     }
   });

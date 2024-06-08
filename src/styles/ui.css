@@ -1,0 +1,9 @@
+.container div.ant-typography {
+    color: silver;
+    font-size: 18px;
+}
+
+.container span {
+    color: lightskyblue;
+    font-size: 18px;
+}

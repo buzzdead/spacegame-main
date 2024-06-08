@@ -24,7 +24,7 @@ export const ShipShifter = () => {
                 newShip.meshRef.shipShift = { shift: shiftDirection, multiplyer: i };
             }
             if (shiftDirection === 'left') {
-                i *= 1.75;
+                i *= (i > 2 ? 1.5 : 1.75);
             }
             return newShip;
         }).filter(ship => ship !== undefined); // Filter out any undefined entries
@@ -37,31 +37,30 @@ export const ShipShifter = () => {
     }, []);
 
     useFrame(() => {
-        if (keys) {
-            // Check for Ctrl + 1 to 9
+        if (keys && keys["ControlLeft"]) {
             for (let i = 1; i <= 9; i++) {
-                if (keys["ControlLeft"] && keys[`Digit${i}`]) {
+                if (keys[`Digit${i}`]) {
                     const selectedIds = selected.map(s => s.id);
                     setShipGroups(prevGroups => ({
                         ...prevGroups,
                         [i]: selectedIds
                     }));
-                    break; // Ensure we only set one group at a time
+                    break;
                 }
             }
-
-            // Check for 1 to 9 to select groups
+        }
+        else if (keys && !keys["ControlLeft"]){
             for (let i = 1; i <= 9; i++) {
-                if (keys[`Digit${i}`] && !keys["ControlLeft"]) {
+                if (keys[`Digit${i}`]) {
                     const group = shipGroups[i];
                     if (group) {
                         setSelected(group, false, true);
                     }
                     else (setSelected('1', true, true))
-                    break; // Ensure we only select one group at a time
+                    break;
                 }
-            }
-        }
+            }}
+        
         if (delayedChecker.current) { 
             shiftShips(); 
             delayedChecker.current = false; 

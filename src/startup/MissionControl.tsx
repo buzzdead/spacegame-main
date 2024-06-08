@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useShallowStore } from "../store/UseStore";
+import useStore, { useShallowStore } from "../store/UseStore";
 import UseSoundEffect from "../hooks/SoundEffect";
 import { useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
@@ -18,14 +18,12 @@ type MissionState = {
 export const MissionControl = () => {
   const { camera } = useThree();
   const {
-    constructions,
     addShip,
     addCelestialObject,
     findShip,
     missions,
   } = useShallowStore([
     "addShip",
-    "constructions",
     "addCelestialObject",
     "setDestination",
     "findShip",
@@ -69,11 +67,7 @@ export const MissionControl = () => {
       setTimeout(handleTheTimeout, 8000);
     }
   }, [missions]);
-  useEffect(() => {
-    const enemyConstructions = constructions.filter((c) => c.type === "Enemy");
-    if (enemyConstructions.length === 0 && constructions.length !== 0)
-      set({ ...state, missionCompleted: true });
-  }, [constructions]);
+
   useEffect(() => {
     const hs = state.hullShip;
     if (!hs || hs?.meshRef?.position) return;
@@ -94,10 +88,10 @@ export const MissionControl = () => {
     if (!hs?.meshRef?.position) return;
     calculateMissionCompletedSound(hs?.meshRef?.position || hs.position);
     calculateInvasionSound(hs?.meshRef?.position || hs.position)
-  }, [camera.position, constructions, state.hullShip, missions]);
-
+  }, [camera.position, state.hullShip, missions]);
   return (
     <group>
+      <ConstructionController setMissionCompleted={() => set({...state, missionCompleted: true})}/>
       {state.blastShockWave && (
         <EffectComposer>
           <SWave pos={new Vector3(250, 50, 750)} />
@@ -112,3 +106,18 @@ export const MissionControl = () => {
     </group>
   );
 };
+
+interface PropsConst {
+  setMissionCompleted: () => void
+}
+
+const ConstructionController = ({setMissionCompleted}: PropsConst) => {
+  const constructions = useStore(state => state.constructions)
+  useEffect(() => {
+    const enemyConstructions = constructions.filter((c) => c.type === "Enemy");
+    if (enemyConstructions.length === 0 && constructions.length !== 0)
+      setMissionCompleted()
+  }, [constructions]);
+
+  return null
+}

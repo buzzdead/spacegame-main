@@ -1,4 +1,5 @@
 import { Flex, Typography } from "antd";
+import '../../styles/ui.css'
 
 export const Guide = () => {
   const { Title, Paragraph } = Typography;
@@ -7,6 +8,7 @@ export const Guide = () => {
   }
   return (
     <div
+    className="container"
       style={{
         color: "white",
         zIndex: 128931938129382,
@@ -16,31 +18,36 @@ export const Guide = () => {
     >
       
         <Title style={{ color: "red" }}>Guide</Title>
-        <Paragraph style={{ color: "white", fontSize: 16 }}>
+        <Paragraph>
           You can select a friendly ship by clicking{" "}
-          <span style={{ color: "green" }}>left mousebutton</span> on it, or
-          holding "<span style={{ color: "green" }}>S</span>" button and
+          <span>left mousebutton</span> on it, or
+          holding "<span>S</span>" button and
           dragging the cursor over any number of ships.
         </Paragraph>
-        <Paragraph style={{ color: "white", fontSize: 16 }}>
+        <Paragraph>
           Similarily, you can deselect by{" "}
-          <span style={{ color: "green" }}>clicking</span> a{" "}
+          <span>clicking</span> a{" "}
           <span style={{ fontStyle: "italic", fontWeight: 500 }}>
             selected ship
           </span>
-          , or holding "<span style={{ color: "green" }}>D</span>" button and
+          , or holding "<span>D</span>" button and
           dragging the cursor over any number of ships.
         </Paragraph>
-        <Paragraph style={{ color: "white", fontSize: 16 }}>
-          Hold <span style={{ color: "green" }}>ctrl button</span> (control) and
+        <Paragraph>
+          Hold <span>left control button</span> and
           click on a ship to show information about the ship.
         </Paragraph>
-        <Paragraph style={{ color: "white", fontSize: 16 }}>
+        <Paragraph>
+          To bind selected ships to a group, hold <span>left control button</span> and click on a digit from <span>1 to 9</span>.
+          To select a group just click on a digit from <span>1 to 9.</span>
+          {" "}{" "}{" "}Clicking on a digit that is not bound will deselect all ships.
+          </Paragraph>
+        <Paragraph>
           To move the camera, hold{" "}
-          <span style={{ color: "green" }}>right mouse button</span> and drag in
+          <span>right mouse button</span> and drag in
           the opposite direction, to zoom{" "}
-          <span style={{ color: "green" }}>scroll</span> in or out, rotate by
-          holding <span style={{ color: "green" }}>left mouse button</span> and
+          <span>scroll</span> in or out, rotate by
+          holding <span>left mouse button</span> and
           drag in any direction.
         </Paragraph>
       </div>
