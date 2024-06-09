@@ -190,10 +190,10 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
       new Life(life, life),
       new Body(createSprite()),
       new Radius(1.15, 1.15),
-      new RadialVelocity(26.5, new Vector3D(0, 0, 1), 0.10),
+      new RadialVelocity(26.5, new Vector3D(0, 0, 1), 0.510),
     ])
     .setBehaviours([
-      new Alpha(15, 15),
+      new Alpha(25, 25),
       new Scale(1.0005),
       
       
