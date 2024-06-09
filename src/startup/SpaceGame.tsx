@@ -28,8 +28,6 @@ const SpaceGame: React.FC<Props> = ({ startPlanet }) => {
           <LoadConstructions />
           <Effects />
           <MissionControl />
-          <MemoizedPortalScene position={new Vector3(850, 50, 1450)} />
-          <MemoizedPortalScene position={new Vector3(-50, 50, 1450)} />
         </Suspense>
       </ThreeSetup>
       </KeyboardProvider>

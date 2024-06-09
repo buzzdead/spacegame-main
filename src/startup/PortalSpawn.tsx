@@ -62,7 +62,7 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   };
 
   useFrame((_state, delta) => {
-    if(keyMap && keyMap["KeyF"]) { startUp(); }
+    //if(keyMap && keyMap["KeyF"]) { startUp(); }
     if (start.current) {
       timer.current += 1;
       if (timer.current % 3 > 0) return;
