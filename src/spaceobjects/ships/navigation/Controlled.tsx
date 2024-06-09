@@ -183,7 +183,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     targetPosition: Vector3
   ) => {
     if (!meshRef.current) return;
-
+    const distance = meshRef.current.position.distanceTo(targetPosition);
     if (stopBasedOnDistance(targetPosition, targetQuaternion)) {
       if (isTraveling) {
         if (isFighter) {
@@ -210,7 +210,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     }
 
     const speedFactor = Math.max(
-      isFighter ? 115 : shipType === "hullspaceship" ? 100 : 12.5
+      isFighter ? distance > 500 ? 115 : distance > 100 ? 100 : distance > 70 ? 45 : 15 : shipType === "hullspaceship" ? 100 : 12.5
     ); // Adjust for sensitivity
     meshRef.current.position.add(
       direction.multiplyScalar((55 * speedFactor) / 5000)

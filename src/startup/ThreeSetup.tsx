@@ -75,6 +75,7 @@ const ThreeSetup = ({ children }: Props) => {
         />
         <ambientLight intensity={0.5} />  
         <directionalLight intensity={0.5} />
+        <hemisphereLight intensity={1}/>
       </EffectComposer>
 
       <LoadShips startShip={"cargo"} />
