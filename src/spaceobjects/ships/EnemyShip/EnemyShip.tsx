@@ -74,6 +74,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
   };
 
   const props = {nearby: nearby, origin, shipType: "cruiser" as SpaceShipId, meshRef, shipId, target: targetRef}
+  const theProps = type === "patrol" ? props : { ...props, group: enemyShip.group }
 
   return (
     <group>
@@ -82,7 +83,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
       <primitive object={eScene} />
      <Navigation
      type={type}
-      props={props}
+      props={theProps}
       />
     </mesh>
     <NavigationSwitcher toggleType={() => setType("hunting")}/>

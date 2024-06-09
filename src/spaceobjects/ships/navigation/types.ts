@@ -33,6 +33,7 @@ export type HuntingNavigation = {
     origin: Vector3
     nearby: any
     target?: any
+    group?: {group: number; id: number;}
 }
 
 export type NavigationProps = {

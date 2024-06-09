@@ -191,7 +191,7 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
           const thePos = pos.clone();
           const mw = thePos.add(ps.ship.position.clone());
           mw.y -= 5;
-          addEnemyShip(mw, 350, new Vector3(0, 0, 0));
+          addEnemyShip(mw, 350, new Vector3(0, 0, 0), {group: (pos.x > 0 ? 1 : 2), id: id});
           ps.stop = true;
           set(!update);
         }

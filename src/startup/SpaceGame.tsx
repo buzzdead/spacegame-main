@@ -8,6 +8,8 @@ import { Collisions } from "./OrbitControls";
 import { Effects } from "./Effects";
 import { KeyboardProvider } from "../hooks/Keys";
 import { MissionControl } from "./MissionControl";
+import { Vector3 } from "three";
+import { MemoizedPortalScene } from "./PortalSpawn";
 
 interface Props {
   startPlanet: "planet1" | "planet2" | "planet3" | "planet5" | "planet6";
@@ -26,6 +28,8 @@ const SpaceGame: React.FC<Props> = ({ startPlanet }) => {
           <LoadConstructions />
           <Effects />
           <MissionControl />
+          <MemoizedPortalScene position={new Vector3(850, 50, 1450)} />
+          <MemoizedPortalScene position={new Vector3(-50, 50, 1450)} />
         </Suspense>
       </ThreeSetup>
       </KeyboardProvider>

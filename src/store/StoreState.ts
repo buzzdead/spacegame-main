@@ -11,7 +11,7 @@ import { ExplosionSize } from "./storeSlices/useEffects";
 import { ObjectLocation } from "./storeSlices/UseOriginDestination";
 import { ElementRef } from "react";
 
-export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any, rotation?: Vector3 }
+export type EnemyShip = { id: string; position: Vector3, nearby: boolean, hull: number, meshRef?: any, rotation?: Vector3, group?: {group: number; id: number;} }
 export type DestinationType = "Harvest" | "Attack" | "Travel" | "Collect"
 export type ObjectType = "Ship" | "Construction" | "Planet" | "MissionItem"
 export type DamageReport = "Destroyed" | "Hit" | "Not Found"
@@ -36,7 +36,7 @@ export type CelestialObjectState = {
     ) => Ship | null;
     findShip: (id: string) => void;
     enemyShips: EnemyShip[]
-    addEnemyShip: (pos: Vector3, hull: number, rotation?: Vector3) => void
+    addEnemyShip: (position: Vector3, hull: number, rotation?: Vector3, group?: {group: number; id: number;}) => void
     toggleNearby: (id: string, n: boolean) => void
     setShipRef: (ref: null | ElementRef<"mesh"> & Partial<ShipShift> & {hull?: number}, shipId: string) => void
     setShipShift: (ships: Ship[]) => void
