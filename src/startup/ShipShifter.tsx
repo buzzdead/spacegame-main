@@ -13,7 +13,6 @@ export const ShipShifter = () => {
         let i = 0.1;
 
         const updatedSelected = selected.filter(s => s.meshRef?.shipShift === undefined)
-        if(updatedSelected.length < 2) return
     
         const updatedShips = updatedSelected.map((s, id) => {
             if (id === 0) return s;
@@ -29,7 +28,7 @@ export const ShipShifter = () => {
             return newShip;
         }).filter(ship => ship !== undefined); // Filter out any undefined entries
     
-        if (updatedShips.length > 0) setShipShift(updatedShips);
+        
     };
 
     useEffect(() => {
