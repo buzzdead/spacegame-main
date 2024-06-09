@@ -47,7 +47,8 @@ export const TheBeam = ({
     }
   }, [shouldBeam]);
 
+
   return shouldBeam ? (
-    <ShipBeam texture={beamTexture} rotation={rotation} position={position} />
+    <ShipBeam texture={beamTexture} rotation={rotation} position={position} dst={position.distanceTo(target.meshRef.position)} />
   ) : null;
 };

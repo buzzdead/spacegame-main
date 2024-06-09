@@ -166,7 +166,7 @@ const zone = new PointZone(0, 0);
   };
 }
 
-export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,) {
+export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture, size: ExplosionSize, dst = 70) {
   const nebula = new Nebula();
 
   function createSprite() {
@@ -180,14 +180,14 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
     });
     return new THREE.Sprite(material);
   }
-  
+  const life = dst / 28.57;
   const zone = new PointZone(0, 0, 0);
   const emitter = new Emitter()
     .setRate(new Rate(new Span(2, 2), new Span(0.021, 0.021)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(2.45, 2.45),
+      new Life(life, life),
       new Body(createSprite()),
       new Radius(1.15, 1.15),
       new RadialVelocity(26.5, new Vector3D(0, 0, 1), 0.10),

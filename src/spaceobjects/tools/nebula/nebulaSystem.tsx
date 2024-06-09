@@ -83,25 +83,25 @@ interface BeamProps {
 }
 
 type ParticleSys = {
-  createSystem: (scene: any, texture: any, size?: any) => Promise<any>,
+  createSystem: (scene: any, texture: any, size?: any, dst?: number) => Promise<any>,
   position: any,
   texture: any,
   size?: any,
   rotation?: any,
   updateFn?: (particleSystem: any, position: any, rotation?: any) => void
   decay?: number
+  dst?: number
 }
 
-const useParticleSystem = ({createSystem, position, texture, size, rotation, updateFn, decay}: ParticleSys) => {
+const useParticleSystem = ({createSystem, position, texture, size, rotation, updateFn, decay, dst}: ParticleSys) => {
   const { scene } = useThree();
   const [particleSystem, setParticleSystem] = useState<any>();
   const psRef = useRef<any>();
 
   useFrame((state, delta) => {
     if(decay && particleSystem?.emitter) {if(particleSystem.emitter.life > 100) particleSystem.emitter.life = 100; else particleSystem.emitter.life -= decay;}
-    const upd = delta % 3 === 0
     if (particleSystem) {
-      if (updateFn && upd) {
+      if (updateFn) {
         updateFn(particleSystem, position, rotation);
       } else {
         particleSystem.update();
@@ -110,7 +110,7 @@ const useParticleSystem = ({createSystem, position, texture, size, rotation, upd
   });
 
   useEffect(() => {
-    createSystem(scene, texture, size).then((nebulaSystem) => {
+    createSystem(scene, texture, size, dst).then((nebulaSystem) => {
       setParticleSystem(nebulaSystem);
       if(updateFn) updateFn(nebulaSystem, position, rotation)
       else nebulaSystem.setPosition(position);
@@ -142,12 +142,11 @@ export const LightningStrike = ({ position, texture }: Omit<BeamProps, "rotation
   return useParticleSystem({createSystem: createLightningStrike, position, texture});
 };
 
-export const ShipBeam = ({ position, texture, rotation }: BeamProps) => {
+export const ShipBeam = ({ position, texture, rotation, dst }: BeamProps & {dst?: number}) => {
   const updateFn = (particleSystem: any, position: any, rotation: any) => {
     particleSystem.updatePosition(position, rotation);
     particleSystem.updateRotation(rotation);
     particleSystem.update();
   };
-
-  return useParticleSystem({createSystem: createShipBeam, position, texture, rotation, updateFn});
+  return useParticleSystem({createSystem: createShipBeam, position, texture, rotation, updateFn, dst: dst});
 };
