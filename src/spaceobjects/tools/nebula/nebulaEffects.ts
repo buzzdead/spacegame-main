@@ -183,7 +183,7 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
   const zone = new PointZone(0, 0, 0);
 
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(5, 2), new Span(0.081, 0.081)))
+    .setRate(new Rate(new Span(5, 2), new Span(0.041, 0.041)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
