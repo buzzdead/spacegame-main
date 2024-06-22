@@ -96,7 +96,7 @@ export const MissionControl = () => {
         <EffectComposer>
           <SWave pos={new Vector3(250, 50, 750)} />
         </EffectComposer>
-      )}{" "}
+      )}
       {state.portals && (
         <group>
           <MemoizedPortalScene position={new Vector3(850, 50, 1450)} />

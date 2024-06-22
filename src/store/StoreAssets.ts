@@ -23,6 +23,8 @@ export const spaceShips =  (<T>(p: readonly Asset<T>[]) => p)([
     { id: "cruiser", glbPath: '/assets/spaceships/cruiser.glb'},
     { id: "hawk", glbPath: '/assets/spaceships/hawk.glb'},
     { id: "fighter", glbPath: '/assets/spaceships/fighter.glb'},
+    { id: "heavyfighter", glbPath: '/assets/spaceships/heavyfighter.glb'},
+    { id: "spaceship-test", glbPath: '/assets/spaceships/spaceship_test.glb'},
 ] as const)
 
 export const constructions =  (<T>(p: readonly Asset<T>[]) => p)([
@@ -33,10 +35,12 @@ export const constructions =  (<T>(p: readonly Asset<T>[]) => p)([
     { id: "spacestation5", glbPath: 'assets/constructions/spacestation5.glb'},
     { id: "spacestation6", glbPath: 'assets/constructions/spacestation6.glb'},
     { id: "spacestation7", glbPath: 'assets/constructions/spacestation7.glb'},
+    { id: "spacestation-test", glbPath: 'assets/constructions/space_station_test.glb'},
 ] as const)
 
 export const weapons = (<T>(p: readonly Asset<T>[]) => p)([
-    { id: 'fighter-missile', glbPath: 'assets/weapons/fighter_missile.glb'}
+    { id: 'fighter-missile', glbPath: 'assets/weapons/fighter_missile.glb'},
+    { id: 'heatseeker-missile', glbPath: 'assets/weapons/heatseeker_missile.glb'},
 ] as const )
 
 export type CelestialObjectId = typeof celestialObjects[number]["id"]

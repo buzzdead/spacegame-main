@@ -78,7 +78,7 @@ export const EnemyShip = ({ enemyShip, eScene, rotation}: Props) => {
 
   return (
     <group>
-    <mesh position={position} ref={meshRef} rotation={[0, rotation ? 3.1 : 0, 0]} onPointerDown={handleOnClick}>
+    <mesh  position={position} ref={meshRef} rotation={[0, rotation ? 3.1 : 0, 0]} onPointerDown={handleOnClick}>
       <ShipHull hullRef={hullRef} shipId={shipId} destroyShip={destroyShip} />
       <primitive object={eScene} />
      <Navigation

@@ -35,7 +35,7 @@ const useStore = create<SpaceGameState>()((...a) => ({
   ...useUser(...a)
 }))
 
-export const useShallowStore = <T extends (keyof SpaceGameState)[]>(
+/* export const useShallowStore = <T extends (keyof SpaceGameState)[]>(
   parts: T
 ) => {
   const shallowStore = useStore((state) => {
@@ -47,6 +47,18 @@ export const useShallowStore = <T extends (keyof SpaceGameState)[]>(
     return obj;
   }, shallow);
   return shallowStore;
-};
+}; */
 
 export default useStore;
+
+
+export const useShallowStore = <T extends (keyof SpaceGameState)[]>(
+  parts: T
+) => {
+  const shallowStore = useStore((state) => {
+    return parts.reduce((obj, p) => {
+      return { ...obj, [p]: state[p] };
+    }, {} as { [K in T[number]]: SpaceGameState[K] });
+  }, shallow);
+  return shallowStore;
+};

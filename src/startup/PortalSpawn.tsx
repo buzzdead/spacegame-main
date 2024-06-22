@@ -25,15 +25,16 @@ import { useKeyboard } from "../hooks/Keys";
 
 interface Props {
   position: Vector3;
-  forceDev?: boolean
+  forceDev?: boolean;
 }
 
 export const PortalScene = ({ position, forceDev = false }: Props) => {
-  const smokeTexture = useTexture('blackSmoke15.png')
- const lightningTexture = useTexture('flash01.png')
- const keyMap = useKeyboard()
- const smokeDecay = useRef(0)
- const [smoke, setSmoke] = useState(false)
+  const smokeTexture = useTexture("blackSmoke15.png");
+  const lightningTexture = useTexture("flash01.png");
+  const keyMap = useKeyboard();
+  const smokeDecay = useRef(0);
+  const [smoke, setSmoke] = useState(false);
+  const [lightning, setLightning] = useState(false);
   const ref = useRef<Mesh<
     BufferGeometry<NormalBufferAttributes>,
     Material | Material[],
@@ -46,13 +47,13 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   const timer = useRef(0);
 
   const startUp = () => {
-    setSmoke(true)
-    setTimeout(() => start.current = true, 10000)
-  }
+    setSmoke(true);
+    setTimeout(() => (start.current = true), 10000);
+  };
 
   useEffect(() => {
-    !forceDev && startUp()
-  }, [])
+    !forceDev && startUp();
+  }, []);
 
   const resetPortal = () => {
     timer.current = 0;
@@ -79,8 +80,32 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
         start.current = false;
       }
     }
-    if(!isOpen && state.h > 200) smokeDecay.current = 22.5
+    if (!isOpen && state.h > 200) smokeDecay.current = 22.5;
   });
+
+  useEffect(() => {
+    if (state.h >= 490 && smoke) setSmoke(false);
+    else if (state.h < 490 && !smoke) setSmoke(true);
+
+    if (state.h >= 290 && lightning) setLightning(false);
+    else if (state.h < 290 && !lightning) setLightning(true);
+  }, [state.h]);
+
+  const smokeSphere = React.useMemo(() => {
+    return smoke ? (
+      <SmokeSphere
+        decay={smokeDecay.current}
+        texture={smokeTexture}
+        position={position}
+      />
+    ) : null;
+  }, [smoke]);
+
+  const lightningStrikes = React.useMemo(() => {
+    return lightning ? (
+      <LightningStrike texture={lightningTexture} position={position} />
+    ) : null;
+  }, [lightning]);
 
   return (
     <RoundedBox
@@ -90,11 +115,13 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
       position={position || new Vector3(0, 0, 0)}
       args={[state.w, state.h, state.d]}
     >
-      {smoke && state.h < 490 && <SmokeSphere decay={smokeDecay.current} texture={smokeTexture} position={position} />}
-      {smoke && state.h < 290 && (
-        <LightningStrike texture={lightningTexture} position={position} />
-      )}
-      <SpawnPortal resetPortal={resetPortal} pos={position} shouldMove={isOpen} />
+      {smokeSphere}
+      {lightningStrikes}
+      <SpawnPortal
+        resetPortal={resetPortal}
+        pos={position}
+        shouldMove={isOpen}
+      />
     </RoundedBox>
   );
 };
@@ -102,14 +129,18 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
 interface Prop {
   shouldMove: boolean;
   pos: Vector3;
-  resetPortal: () => void
+  resetPortal: () => void;
 }
 const Portal = ({ shouldMove, pos, resetPortal }: Prop) => {
   return (
     <MeshPortalMaterial blend={2} side={DoubleSide}>
       <ambientLight intensity={5} />
-      <StaticRotatingPortal pos={pos}/>
-      <PhasedShips resetPortal={resetPortal} shouldMove={shouldMove} pos={pos} />
+      <StaticRotatingPortal pos={pos} />
+      <PhasedShips
+        resetPortal={resetPortal}
+        shouldMove={shouldMove}
+        pos={pos}
+      />
     </MeshPortalMaterial>
   );
 };
@@ -120,22 +151,22 @@ const SpawnPortal = React.memo(
 );
 
 interface StaticPortal {
-  pos: Vector3
+  pos: Vector3;
 }
 
-const RotatingPortal = ({pos}: StaticPortal) => {
+const RotatingPortal = ({ pos }: StaticPortal) => {
   const portal = useAsset("/assets/theworld3.glb", 2111).clone();
-  const {camera } = useThree()
+  const { camera } = useThree();
 
-  portal.rotation.x += Math.random()
+  portal.rotation.x += Math.random();
   useFrame(() => {
-    const dst = camera.position.distanceTo(pos)
-    if(dst > 1500 && dst < 3000 && portal.scale.x === 2111)
-      portal.scale.set(4300, 4300, 4300)
+    const dst = camera.position.distanceTo(pos);
+    if (dst > 1500 && dst < 3000 && portal.scale.x === 2111)
+      portal.scale.set(4300, 4300, 4300);
     else if (dst < 1500 && portal.scale.x >= 4300)
-      portal.scale.set(2111, 2111, 2111)
+      portal.scale.set(2111, 2111, 2111);
     else if (dst > 3000 && portal.scale.x <= 8000)
-        portal.scale.set(8000, 8000, 8000)
+      portal.scale.set(8000, 8000, 8000);
     portal.rotation.y += 0.001;
   });
   return <primitive object={portal} />;
@@ -146,7 +177,7 @@ const StaticRotatingPortal = React.memo(RotatingPortal, () => true);
 interface ShipProps {
   shouldMove: boolean;
   pos: Vector3;
-  resetPortal: () => void
+  resetPortal: () => void;
 }
 const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
   const addEnemyShip = useStore((state) => state.addEnemyShip);
@@ -155,8 +186,8 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
     { ship: Group<Object3DEventMap>; stop: boolean }[]
   >([]);
   const enemyShip = useAsset("/assets/spaceships/cruiser.glb", 0.2);
-  
-   useMemo(() => {
+
+  useMemo(() => {
     if (shouldMove) return;
 
     const ps: { ship: Group<Object3DEventMap>; stop: boolean }[] = [
@@ -173,12 +204,11 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
       ps.push({ ship: newShip, stop: false });
     }
     setPs(ps);
-
   }, [shouldMove]);
 
   useEffect(() => {
     //if(phasedShips.filter(ps => ps.stop).length === 0) resetPortal()
-  }, [update])
+  }, [update]);
 
   enemyShip.position.set(0, 10, 15);
   enemyShip.rotation.set(0, 1.55, 0);
@@ -191,7 +221,10 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
           const thePos = pos.clone();
           const mw = thePos.add(ps.ship.position.clone());
           mw.y -= 5;
-          addEnemyShip(mw, 350, new Vector3(0, 0, 0), {group: (pos.x > 0 ? 1 : 2), id: id});
+          addEnemyShip(mw, 350, new Vector3(0, 0, 0), {
+            group: pos.x > 0 ? 1 : 2,
+            id: id,
+          });
           ps.stop = true;
           set(!update);
         }
@@ -207,4 +240,4 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
   );
 };
 
-export const MemoizedPortalScene = React.memo(PortalScene, () => true)
+export const MemoizedPortalScene = React.memo(PortalScene, () => true);

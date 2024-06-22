@@ -170,39 +170,39 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
   const nebula = new Nebula();
 
   function createSprite() {
-    var material = new THREE.SpriteMaterial({
+    const material = new THREE.SpriteMaterial({
       map: texture,
       blending: THREE.AdditiveBlending,
-      blendEquation: THREE.AddEquation,
-      blendDst: THREE.OneMinusConstantAlphaFactor,
-      blendSrc: THREE.OneFactor,
-      blendEquationAlpha: THREE.CustomBlending,
+      transparent: true,
+      depthWrite: false,
     });
     return new THREE.Sprite(material);
   }
+
   const life = dst / 28.57;
   const zone = new PointZone(0, 0, 0);
+
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(2, 2), new Span(0.021, 0.021)))
+    .setRate(new Rate(new Span(5, 2), new Span(0.081, 0.081)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
-      new Life(life, life),
+      new Life(life * 0.8, life * 1.2),
       new Body(createSprite()),
-      new Radius(1.15, 1.15),
-      new RadialVelocity(26.5, new Vector3D(0, 0, 1), 0.510),
+      new Radius(2.5, 4.5),
+      new RadialVelocity(30, new Vector3D(0, 0, 1), 0.3),
     ])
     .setBehaviours([
-      new Alpha(25, 25),
-      new Scale(1.0005),
-      
-      
+      new Alpha(1, 0),
+      new Scale(1.05, .9),
+      new Color(new THREE.Color(0x00ffff), new THREE.Color(0xff00ff)),
     ])
     .emit();
 
   nebula.addEmitter(emitter);
   const renderer = new SpriteRenderer(scene, THREE);
   nebula.addRenderer(renderer);
+
   return {
     update: (delta: number) => nebula.update(delta),
     onExit: () => nebula.destroy(),
@@ -212,6 +212,10 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
       offset.applyEuler(rotation);
       emitter.position.set(position.x + offset.x, position.y + offset.y, position.z + offset.z);
     },
-    updateRotation: (rotation: THREE.Vector3) => emitter.setRotation(new THREE.Vector3(rotation.x, rotation.y, rotation.z))
+    updateRotation: (rotation: THREE.Vector3) => emitter.setRotation(rotation),
+    setIntensity: (intensity: number) => {
+      (emitter as any).rate.numerator = intensity * 10;
+      (emitter as any).rate.denominator = 0.01;
+    }
   };
 }
