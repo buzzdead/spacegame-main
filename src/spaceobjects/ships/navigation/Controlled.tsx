@@ -43,7 +43,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
     objectLocation: ObjectLocation;
     objectType: ObjectType;
   }>();
-  const isFighter = shipType === "fighter" || shipType === "hawk";
+  const isFighter = shipType === "fighter" || shipType === "heavyfighter";
 
   const shipsDestinationPos = useMemo(() => {
     return (
@@ -261,7 +261,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
           }
           setFightDone={() => setIsFighting(false)}
           target={shipsDestination}
-          color={shipType === "hawk" ? "green" : "red"}
+          color={shipType === "heavyfighter" ? "green" : "red"}
           fire={isFighting}
         />
       )}

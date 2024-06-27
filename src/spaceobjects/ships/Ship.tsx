@@ -57,7 +57,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   }
 
   const props = { shipId: ship.id, isSelected, meshRef: meshRef, shipType: ship.assetId}
- 
+  
   return (
     <Suspense fallback={null}>
       <mesh {...functions} onPointerDown={handleOnClick} onPointerOver={handleOver} ref={meshRef} position={position}>
@@ -70,7 +70,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         />
         <SelectedShip
           shipId={ship.id}
-          isFighter={isFighter}
+          shipType={ship.assetId}
           onSelected={(b) => isSelected.current = b}
         />
         <Navigation

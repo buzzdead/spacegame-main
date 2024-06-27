@@ -3,39 +3,33 @@ import {
   Mesh,
   MeshPhongMaterial,
   ConeGeometry,
-  BoxGeometry,
   ColorRepresentation} from "three";
-import { useState } from "react";
-import { useFrame } from "@react-three/fiber";
+
+type Icon = { size: "S" | "M" | "L" }
+
 interface Props {
     color: ColorRepresentation | string
     position: Vector3
-    fireIcon?: boolean
-    handleFire?: () => void
+    size?: Icon["size"]
 }
 
-const SelectedIcon = ({color, position, fireIcon = false, handleFire}: Props) => {
-    const geometry = fireIcon ? new BoxGeometry(1.5, 1.25 , 4) :  new ConeGeometry(0.25, 1, 4); // Radius, height, number of sides = 4
-    const material = new MeshPhongMaterial({ color: color, opacity: fireIcon ? 0.05 : 1, transparent: fireIcon ? true : false });
+const Sizes: Record<Icon["size"], Vector3> = {
+  "S": new Vector3(0.25, 1, 4),
+  "M": new Vector3(0.5, 2, 4),
+  "L": new Vector3(0.5, 2, 4),
+}
+
+
+const SelectedIcon = ({color, position, size = "S"}: Props) => {
+    const geometry = new ConeGeometry(Sizes[size].x, Sizes[size].y, Sizes[size].z); // Radius, height, number of sides = 4
+    const material = new MeshPhongMaterial({ color: color, opacity: 1, transparent: false });
 
     const pyramidMesh = new Mesh(geometry, material);
     pyramidMesh.position.set(position.x, position.y, position.z)
     pyramidMesh.rotation.x = 3.22
    
-    const handleClick = (e: any) => {
-      e.stopPropagation()
-      fireIcon && handleFire && handleFire()
 
-    }
-    return <primitive onClick={handleClick} object={pyramidMesh} />
+    return <primitive object={pyramidMesh} />
 }
-
-const useTimer = () => {
-  const [time, setTime] = useState(0.0);
-  useFrame(() => {
-    setTime(time + 5);
-  });
-  return time;
-};
 
 export default SelectedIcon

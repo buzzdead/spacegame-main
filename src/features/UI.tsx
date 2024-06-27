@@ -139,6 +139,10 @@ const UI = () => {
                 src={
                   s.assetId === "fighter"
                     ? "/assets/fightert.png"
+                    :
+                    s.assetId === "heavyfighter" 
+                    ?
+                     "/assets/heavyfighter.png"
                     : "/assets/cargoship.png"
                 }
               />
