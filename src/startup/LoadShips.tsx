@@ -32,12 +32,11 @@ export const LoadShips = ({ startShip }: Props) => {
   }, []);
 
   if(loading) return null
-  //console.log("shipssss")
+
   return (
     <group>
       {ships.map((ship) => (
         <MemoizedShip key={ship.id} ship={ship} />
-        
       ))}
       <ShipShifter />
     </group>
