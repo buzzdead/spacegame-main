@@ -265,7 +265,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
           fire={isFighting}
         />
       )}
-       {(isTraveling || isReturning) && <Ignition type={shipType} />}
+        <Ignition type={shipType} brake={(!isTraveling && !isReturning)}/>
       {isHarvesting && shipType !== "fighter" && (
         <HarvestLaser isHarvesting={isHarvesting} />
       )}
