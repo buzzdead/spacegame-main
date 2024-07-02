@@ -189,13 +189,12 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
       new Mass(1),
       new Life(life * 0.8, life * 1.2),
       new Body(createSprite()),
-      new Radius(4.5, 4.5),
+      new Radius(3.15, 3.15),
       new RadialVelocity(30, new Vector3D(0, 0, 1), 0.3),
     ])
     .setBehaviours([
       new Alpha(5, 5),
       new Scale(1.071, 1.071),
-      new Color(new THREE.Color(0x00ffff), new THREE.Color(0xff00ff)),
     ])
     .emit();
 
