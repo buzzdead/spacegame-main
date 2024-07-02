@@ -101,8 +101,7 @@ const useParticleSystem = ({createSystem, position, texture, size, rotation, upd
   useFrame((state, delta) => {
     if(decay && particleSystem?.emitter) {if(particleSystem.emitter.life > 100) particleSystem.emitter.life = 100; else particleSystem.emitter.life -= decay;}
     if (particleSystem) {
-      const useFunction = delta % 3 === 1
-      if (updateFn && useFunction) {
+      if (updateFn) {
         updateFn(particleSystem, position, rotation);
       } else {
         particleSystem.update();

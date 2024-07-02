@@ -121,7 +121,7 @@ const RocketBooster = ({ position, brake = false, isHarvesting = false, cruiser 
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
-  }, [config, texture, brake]);
+  }, [config, texture ]);
 
   useFrame((state) => {
     if (particleSystemRef.current) {

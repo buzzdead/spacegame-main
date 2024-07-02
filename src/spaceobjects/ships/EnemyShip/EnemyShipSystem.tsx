@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HeavyLaser from "../../weapons/HeavyLaser";
 import MemoizedRadar from "./RadarScanner";
 import * as THREE from "three";
@@ -6,6 +6,8 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 import UseSoundEffect from "../../../hooks/SoundEffect";
 import { TheBeam } from "../../weapons/TheBeam";
+import { ShipBeam } from "../../tools/nebula/nebulaSystem";
+import { useTexture } from "../../../hooks/Texture";
 
 interface Props {
   nearby: any;
@@ -63,6 +65,7 @@ export const EnemyShipSystem = ({
     nearbyRef.current = nearbyEnemies.length > 0
     targetRef.current = nearbyEnemies.length > 0 ? nearbyEnemies[0] : null;
   }, [nearbyEnemies]);
+  const beamTexture = useTexture("explosion08.png");
 
   return (
     <group>

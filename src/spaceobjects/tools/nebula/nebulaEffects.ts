@@ -179,22 +179,22 @@ export async function createShipBeam(scene: THREE.Scene, texture: THREE.Texture,
     return new THREE.Sprite(material);
   }
 
-  const life = dst / 28.57;
+  const life = dst / 30.57;
   const zone = new PointZone(0, 0, 0);
 
   const emitter = new Emitter()
-    .setRate(new Rate(new Span(10, 5), new Span(0.091, 0.091)))
+    .setRate(new Rate(new Span(1, 1), new Span(0.091, 0.091)))
     .setInitializers([
       new Position(zone),
       new Mass(1),
       new Life(life * 0.8, life * 1.2),
       new Body(createSprite()),
-      new Radius(2.5, 4.5),
+      new Radius(4.5, 4.5),
       new RadialVelocity(30, new Vector3D(0, 0, 1), 0.3),
     ])
     .setBehaviours([
-      new Alpha(1, 0),
-      new Scale(1.15, .95),
+      new Alpha(5, 5),
+      new Scale(1.071, 1.071),
       new Color(new THREE.Color(0x00ffff), new THREE.Color(0xff00ff)),
     ])
     .emit();

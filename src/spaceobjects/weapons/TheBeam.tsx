@@ -29,7 +29,11 @@ export const TheBeam = ({
   useFrame(() => {
     const dst = position.distanceTo(target.meshRef.position);
     if (nearbyRef.current !== shouldBeam && dst <= 70)
-      setShouldBeam(nearbyRef.current);
+      setShouldBeam(true);
+    else if (shouldBeam && dst > 70){
+      setShouldBeam(false)
+      beamDamageRef.current = 0
+    }
     if (shouldBeam) {
       beamDamageRef.current += 1;
       if (beamDamageRef.current >= 100) {
@@ -47,8 +51,10 @@ export const TheBeam = ({
     }
   }, [shouldBeam]);
 
+  const BeamMemo = useMemo(() => {
+    return <ShipBeam texture={beamTexture} rotation={rotation} position={position} dst={position.distanceTo(target.meshRef.position)} />
+  }, [shouldBeam])
 
-  return shouldBeam ? (
-    <ShipBeam texture={beamTexture} rotation={rotation} position={position} dst={position.distanceTo(target.meshRef.position)} />
-  ) : null;
+
+  return shouldBeam ? BeamMemo : null
 };
