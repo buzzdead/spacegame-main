@@ -261,7 +261,7 @@ export const Controlled = ({ shipId, meshRef, shipType, isSelected }: Props) => 
           }
           setFightDone={() => setIsFighting(false)}
           target={shipsDestination}
-          color={shipType === "heavyfighter" ? "green" : "red"}
+          shipType={shipType}
           fire={isFighting}
         />
       )}

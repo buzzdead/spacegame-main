@@ -5,20 +5,22 @@ import { Vector3 } from 'three'
 import { useGLTF } from "@react-three/drei";
 import { ObjectType } from "../../store/StoreState";
 import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
-import { weapons } from "../../store/StoreAssets";
+import { SpaceShipId, weapons } from "../../store/StoreAssets";
 import { MissileLauncher } from "./MissileLauncher";
 import { useThree } from '@react-three/fiber'
+import PlasmaBall from "./PlasmaBall";
+import FrontalMountedWeapon from "./FrontalMountedWeapon";
 
 interface Props {
     position: Vector3
     fire: boolean
     target: {objectLocation: ObjectLocation, objectType: ObjectType} | undefined
     setFightDone: () => void
-    color?: string
     whatever: any
+    shipType: SpaceShipId
 }
 
-export const LaserCannon = ({fire, position, target, color = 'red', setFightDone, whatever}: Props) => {
+export const LaserCannon = ({fire, position, target, setFightDone, whatever, shipType}: Props) => {
   const missilePath = weapons.find(e => e.id === "fighter-missile")?.glbPath
   const { camera } = useThree()
   const {scene: missileScene} = useGLTF(missilePath || "")
@@ -39,37 +41,47 @@ export const LaserCannon = ({fire, position, target, color = 'red', setFightDone
     sfxPath: "/assets/sounds/missile-launch.mp3",
     minVolume: 0.25,
   });
+  const { sound: plasmaSound, calculateVolume: calculatePlasmaSound } =
+  UseSoundEffect({
+    sfxPath: "/assets/sounds/experimental/plasma-beam2.mp3",
+    minVolume: 0.25,
+  });
   useEffect(() => {
     if(whatever) {
       const newPos = whatever.current.position
       calculateLaserSound(newPos)
+      calculatePlasmaSound(newPos)
     calculateMissileSound(newPos)
     }
     else{
     calculateLaserSound(position)
+    calculatePlasmaSound(position)
     calculateMissileSound(position)}
   }, [position, fire, camera.position])
     return (
         <group ref={meshRef}>
-        <Laser
-          color={color}
+        <FrontalMountedWeapon
+        weaponType={shipType === "fighter" ? "laser" : "plasma"}
+        mountPosition="left"
+          color={shipType === "fighter" ? 'red' : '#712637'}
           setFightDone={setFightDone}
-          laserSound={laserSound}
+          sound={shipType === "fighter" ? laserSound : plasmaSound}
           fire={fire}
           origin={position}
           target={target}
         />
-        <Laser
-          color={color}
+        <FrontalMountedWeapon
+        weaponType={shipType === "fighter" ? "laser" : "plasma"}
+        mountPosition="right"
+          color={shipType === "fighter" ? 'red' : '#712637'}
           setFightDone={setFightDone}
-          laserSound={laserSound}
+          sound={shipType === "fighter" ? laserSound : plasmaSound}
           fire={fire}
-          second
           origin={position}
           target={target}
         />
-        <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={3} missile={missileScene.clone()}/>
-        <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/>
+        {shipType === "fighter" && <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={3} missile={missileScene.clone()}/> }
+        {shipType === "fighter" && <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/> }
       </group>
     )
 }
