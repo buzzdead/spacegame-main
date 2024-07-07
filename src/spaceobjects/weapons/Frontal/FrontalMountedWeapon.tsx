@@ -98,26 +98,31 @@ const FrontalMountedWeapon = ({
       );
   }
 
-  const updateFrontAttack = (weaponMesh: MeshType, time: number) => {
-    if (target) {
-      weaponMesh.position.z += weaponType === "laser" ? 1 : 0.31;
-      if (weaponMesh.position.z >= distance) {
-        const destroyed = dealDamageToTarget(target.objectType, target.objectLocation.id)
-        scene.remove(weaponMesh);
+  const handleRemove = (weaponMesh: any) => {
+    scene.remove(weaponMesh);
         weaponMesh.removeFromParent();
         setWeaponMeshes((prevMeshes) =>
           prevMeshes.filter((m) => m !== weaponMesh)
         );
+  }
+
+  const handleSplash = (weaponMesh: any) => {
+    setSplash({ active: true, position: weaponMesh.position });
+    setTimeout(
+      () =>
+        setSplash({
+          active: false,
+          position: new THREE.Vector3(0, 0, 0),
+        }),
+      1000
+    );
+  }
+
+  const handleHitTarget = (objectType: any, id: any, weaponMesh: any) => {
+    const destroyed = dealDamageToTarget(objectType, id)
+        handleRemove(weaponMesh)
         if (weaponType === "plasma") {
-          setSplash({ active: true, position: weaponMesh.position });
-          setTimeout(
-            () =>
-              setSplash({
-                active: false,
-                position: new THREE.Vector3(0, 0, 0),
-              }),
-            1000
-          );
+          handleSplash(weaponMesh)
         }
         if (destroyed === "Hit") {
           setTimeout(() => setAutoAttack(!autoAttack), 150);
@@ -125,27 +130,20 @@ const FrontalMountedWeapon = ({
           setWeaponMeshes([]);
           setFightDone();
         }
+  }
+
+  const updateFrontAttack = (weaponMesh: MeshType, time: number) => {
+    if (target) {
+      weaponMesh.position.z += weaponType === "laser" ? 1 : 0.31;
+      if (weaponMesh.position.z >= distance) {
+       handleHitTarget(target.objectType, target.objectLocation.id, weaponMesh)
       }
     } else if (devTarget && devFire) {
       weaponMesh.position.z += weaponType === "laser" ? 1 : 0.61;
       if (weaponMesh.position.z > 50) {
-        scene.remove(weaponMesh);
-        weaponMesh.removeFromParent();
-        setWeaponMeshes((prevMeshes) =>
-          prevMeshes.filter((m) => m !== weaponMesh)
-        );
-        setDevFire(false);
-        if (weaponType === "plasma") {
-          setSplash({ active: true, position: weaponMesh.position });
-          setTimeout(
-            () =>
-              setSplash({
-                active: false,
-                position: new THREE.Vector3(0, 0, 0),
-              }),
-            1000
-          );
-        }
+      handleRemove(weaponMesh)
+      setDevFire(false);
+      handleSplash(weaponMesh)
       }
     }
   };
