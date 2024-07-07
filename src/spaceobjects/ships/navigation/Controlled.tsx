@@ -5,7 +5,7 @@ import { SpaceShipId } from "../../../store/StoreAssets";
 import { useFrame } from "@react-three/fiber";
 import ShipSound from "../ShipSound";
 import * as THREE from "three";
-import { LaserCannon } from "../../weapons/LaserCannon";
+import { LaserCannon } from "../../weapons/Frontal/LaserCannon";
 import { Ignition } from "../../tools/Ignition";
 import { HarvestLaser } from "../../tools/HarvestLaser";
 import { ObjectType } from "../../../store/StoreState";

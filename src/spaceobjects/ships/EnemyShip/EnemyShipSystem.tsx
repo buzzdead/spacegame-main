@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
 import UseSoundEffect from "../../../hooks/SoundEffect";
-import { TheBeam } from "../../weapons/TheBeam";
+import { TheBeam } from "../../weapons/Frontal/TheBeam";
 import { ShipBeam } from "../../tools/nebula/nebulaSystem";
 import { useTexture } from "../../../hooks/Texture";
 

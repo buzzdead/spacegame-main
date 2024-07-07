@@ -1,11 +1,11 @@
 import { ElementRef, useEffect, useRef, useState } from "react"
-import UseSoundEffect from "../../hooks/SoundEffect"
+import UseSoundEffect from "../../../hooks/SoundEffect"
 import { Vector3 } from 'three'
 import { useGLTF } from "@react-three/drei";
-import { ObjectType } from "../../store/StoreState";
-import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
-import { SpaceShipId, weapons } from "../../store/StoreAssets";
-import { MissileLauncher } from "./MissileLauncher";
+import { ObjectType } from "../../../store/StoreState";
+import { ObjectLocation } from "../../../store/storeSlices/UseOriginDestination";
+import { SpaceShipId, weapons } from "../../../store/StoreAssets";
+import { MissileLauncher } from "../MissileLauncher";
 import { useThree } from '@react-three/fiber'
 import FrontalMountedWeapon from "./FrontalMountedWeapon";
 
