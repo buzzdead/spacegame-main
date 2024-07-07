@@ -1,6 +1,5 @@
 import { ElementRef, useEffect, useRef, useState } from "react"
 import UseSoundEffect from "../../hooks/SoundEffect"
-import Laser from "./Laser"
 import { Vector3 } from 'three'
 import { useGLTF } from "@react-three/drei";
 import { ObjectType } from "../../store/StoreState";
@@ -8,7 +7,6 @@ import { ObjectLocation } from "../../store/storeSlices/UseOriginDestination";
 import { SpaceShipId, weapons } from "../../store/StoreAssets";
 import { MissileLauncher } from "./MissileLauncher";
 import { useThree } from '@react-three/fiber'
-import PlasmaBall from "./PlasmaBall";
 import FrontalMountedWeapon from "./FrontalMountedWeapon";
 
 interface Props {
@@ -63,7 +61,7 @@ export const LaserCannon = ({fire, position, target, setFightDone, whatever, shi
         <FrontalMountedWeapon
         weaponType={shipType === "fighter" ? "laser" : "plasma"}
         mountPosition="left"
-          color={shipType === "fighter" ? 'red' : '#712637'}
+          color={shipType === "fighter" ? 'red' : '#ff0a0a'}
           setFightDone={setFightDone}
           sound={shipType === "fighter" ? laserSound : plasmaSound}
           fire={fire}
@@ -73,7 +71,7 @@ export const LaserCannon = ({fire, position, target, setFightDone, whatever, shi
         <FrontalMountedWeapon
         weaponType={shipType === "fighter" ? "laser" : "plasma"}
         mountPosition="right"
-          color={shipType === "fighter" ? 'red' : '#712637'}
+          color={shipType === "fighter" ? 'red' : '#ff0a0a'}
           setFightDone={setFightDone}
           sound={shipType === "fighter" ? laserSound : plasmaSound}
           fire={fire}

@@ -57,38 +57,43 @@ void main() {
     float r = length(uv);
     float theta = atan(uv.y, uv.x);
 
-    // Create electric branches
-    float branches = 26.0;
+    // Create dynamic electric branches
+    float branches = 20.0 + sin(time * 0.5) * 10.0;
     float branch = abs(mod(theta + time * 0.5, 2.0 * 3.14159 / branches) - 3.14159 / branches);
-    branch = pow(sin(branch * branches), 10.0);
+    branch = pow(sin(branch * branches), 20.0);
 
     // Add noise to the branches
-    vec2 noiseInput = uv * 3.0 + vec2(time * 0.1);
+    vec2 noiseInput = uv * 5.0 + vec2(time * 0.2);
     float noise = fbm(noiseInput) * 0.5 + 0.5;
     branch *= noise;
 
-    // Create the core
-    float core = smoothstep(0.01, 0.0, r);
+    // Create pulsating core
+    float corePulse = sin(time * 3.0) * 0.5 + 0.5;
+    float core = smoothstep(0.2 + corePulse * 0.1, 0.0, r);
 
     // Combine core and branches
     float energy = max(branch * (1.0 - r), core);
 
-    // Color the plasma
+    // Add flickering effect
+    energy *= 0.8 + sin(time * 30.0 + r * 10.0) * 0.2;
+
+    // Color the plasma with more variation
     vec3 plasmaColor = mix(color1, color2, energy);
     plasmaColor += vec3(1.0, 0.6, 0.3) * pow(energy, 3.0);
+    plasmaColor += vec3(0.2, 0.5, 1.0) * pow(1.0 - energy, 2.0);
 
-    // Add glow
-    float glow = pow(1.0 - r, 6.0);
-    plasmaColor += color2 * glow * 0.3;
+    // Enhanced glow
+    float glow = pow(1.0 - r, 4.0);
+    plasmaColor += mix(color1, color2, glow) * glow * 0.5;
 
     // Set alpha for transparency
-    float alpha = 0.05 + energy * 0.9 + glow * .5;
+    float alpha = 0.05 + energy * 0.9 + glow * 0.5;
 
     // Cut off effect at sphere edge
     if (r > 1.0) {
-        alpha = 0.035;
+        alpha = 0.05;
     }
 
-    gl_FragColor = vec4(plasmaColor * time, alpha);
+    gl_FragColor = vec4(plasmaColor, alpha);
 }
 `;

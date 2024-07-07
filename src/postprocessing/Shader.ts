@@ -1,12 +1,13 @@
 import { ShaderFileType } from './shaderNames';
-import { LaserCannon, ExplosionSmoke, Explosion, PlasmaBall } from './shaderNames'
+import { LaserCannon, ExplosionSmoke, Explosion, PlasmaBall, PlasmaSplash } from './shaderNames'
 
 type ShaderType = { name: ShaderFileType, vs: string, fs: string }
 const shaders: ShaderType[] = [
     { name: 'laser-cannon', vs: LaserCannon["vertex"], fs: LaserCannon["fragment"] },
     { name: 'explosion-smoke', vs: ExplosionSmoke["vertex"], fs: ExplosionSmoke["fragment"]},
     { name: "explosion", vs: Explosion["vertex"], fs: Explosion["fragment"]},
-    { name: "plasma-ball", vs: PlasmaBall["vertex"], fs: PlasmaBall["fragment"]}
+    { name: "plasma-ball", vs: PlasmaBall["vertex"], fs: PlasmaBall["fragment"]},
+    { name: "plasma-splash", vs: PlasmaSplash["vertex"], fs: PlasmaSplash["fragment"]}
 ]
 export const Shader = (name: ShaderFileType) => {
     const shader = shaders.find(n => n.name === name)
