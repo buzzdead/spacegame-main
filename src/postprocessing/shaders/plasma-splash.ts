@@ -9,7 +9,7 @@ export const vertex = /*glsl*/ `
   void main() {
     vUv = uv;
     vPosition = position;
-    float scale = max(0.0, 0.9 - duration);
+    float scale = max(0.0, 1.0 + duration);
     // Add some movement to the vertices
     vec3 pos = position;
     pos.x += sin(pos.y * 10.0 + time * 2.0) * 0.1;
@@ -36,7 +36,7 @@ export const fragment = /*glsl*/ `
     vec3 color = mix(color1, color2, sin(d * 10.0 - time * 5.0) * 0.5 + 0.5);
     float fadeOut = max(0.0, 1.0 - duration);
     // Add some energy ripples
-    color += vec3(0.5) * smoothstep(0.1, 0.0, abs(sin(d * 20.0 - time * 10.0)));
+    color += vec3(0.5) * smoothstep(0.2, 0.0, abs(sin(d * 20.0 - time * 10.0)));
     alpha *= fadeOut;
     
     gl_FragColor = vec4(color, alpha);

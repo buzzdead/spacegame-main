@@ -54,8 +54,11 @@ const FrontalMountedWeapon = ({
 
   const { mesh, material } = useFrontalWeapon(weaponType, mountPosition, color);
 
-  const { dealDamageToEnemy, dealDamageToConstruction } = useShallowStore(["dealDamageToConstruction", "dealDamageToEnemy"])
-  
+  const { dealDamageToEnemy, dealDamageToConstruction } = useShallowStore([
+    "dealDamageToConstruction",
+    "dealDamageToEnemy",
+  ]);
+
   const devTarget = mesh.position.clone();
   devTarget.z += 50;
 
@@ -88,23 +91,15 @@ const FrontalMountedWeapon = ({
 
   const dealDamageToTarget = (objectType: any, id: any) => {
     return objectType === "Ship"
-    ? dealDamageToEnemy(
-        id,
-        weaponType === "plasma" ? 20 : 2.5
-      )
-    : dealDamageToConstruction(
-        id,
-        weaponType === "plasma" ? 20 : 2.5
-      );
-  }
+      ? dealDamageToEnemy(id, weaponType === "plasma" ? 20 : 2.5)
+      : dealDamageToConstruction(id, weaponType === "plasma" ? 20 : 2.5);
+  };
 
   const handleRemove = (weaponMesh: any) => {
     scene.remove(weaponMesh);
-        weaponMesh.removeFromParent();
-        setWeaponMeshes((prevMeshes) =>
-          prevMeshes.filter((m) => m !== weaponMesh)
-        );
-  }
+    weaponMesh.removeFromParent();
+    setWeaponMeshes((prevMeshes) => prevMeshes.filter((m) => m !== weaponMesh));
+  };
 
   const handleSplash = (weaponMesh: any) => {
     setSplash({ active: true, position: weaponMesh.position });
@@ -116,34 +111,38 @@ const FrontalMountedWeapon = ({
         }),
       1000
     );
-  }
+  };
 
   const handleHitTarget = (objectType: any, id: any, weaponMesh: any) => {
-    const destroyed = dealDamageToTarget(objectType, id)
-        handleRemove(weaponMesh)
-        if (weaponType === "plasma") {
-          handleSplash(weaponMesh)
-        }
-        if (destroyed === "Hit") {
-          setTimeout(() => setAutoAttack(!autoAttack), 150);
-        } else {
-          setWeaponMeshes([]);
-          setFightDone();
-        }
-  }
+    const destroyed = dealDamageToTarget(objectType, id);
+    if (weaponType === "plasma") {
+      handleSplash(weaponMesh);
+    }
+    if (destroyed === "Hit") {
+      setTimeout(() => setAutoAttack(!autoAttack), 150);
+    } else {
+      setWeaponMeshes([]);
+      setFightDone();
+    }
+    handleRemove(weaponMesh);
+  };
 
   const updateFrontAttack = (weaponMesh: MeshType, time: number) => {
     if (target) {
       weaponMesh.position.z += weaponType === "laser" ? 1 : 0.31;
       if (weaponMesh.position.z >= distance) {
-       handleHitTarget(target.objectType, target.objectLocation.id, weaponMesh)
+        handleHitTarget(
+          target.objectType,
+          target.objectLocation.id,
+          weaponMesh
+        );
       }
     } else if (devTarget && devFire) {
       weaponMesh.position.z += weaponType === "laser" ? 1 : 0.61;
       if (weaponMesh.position.z > 50) {
-      handleRemove(weaponMesh)
-      setDevFire(false);
-      handleSplash(weaponMesh)
+        setDevFire(false);
+        handleSplash(weaponMesh);
+        handleRemove(weaponMesh);
       }
     }
   };
@@ -159,7 +158,13 @@ const FrontalMountedWeapon = ({
 
   return (
     <mesh ref={weaponRef}>
-      {weaponType === "plasma" && <PlasmaSplash position={splash.position} color={color} active={splash.active} />}
+      {weaponType === "plasma" && (
+        <PlasmaSplash
+          position={splash.position}
+          color={color}
+          active={splash.active}
+        />
+      )}
       {weaponMeshes.map((wm) => (
         <primitive key={wm.id} object={wm}>
           {weaponType === "plasma" && (

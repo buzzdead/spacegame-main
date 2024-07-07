@@ -37,6 +37,7 @@ const SplashParticles: React.FC<SplashParticlesProps> = ({
   const uniforms = useMemo(() => ({
     color: { value: new THREE.Color(color) },
     time: { value: 0 },
+    uTexture: { value: new THREE.TextureLoader().load('./assets/particle.png')},
   }), [color]);
 
   useEffect(() => {
@@ -51,9 +52,9 @@ const SplashParticles: React.FC<SplashParticlesProps> = ({
 
       const positions = points.current.geometry.attributes.position.array as Float32Array;
       for (let i = 0; i < positions.length; i += 3) {
-        positions[i] += (Math.random() - 0.5) * 0.35;
-        positions[i + 1] += (Math.random() - 0.5) * 0.35;
-        positions[i + 2] += (Math.random() - 0.5) * 0.35;
+        positions[i] += (Math.random() - 0.5) * 0.915;
+        positions[i + 1] += (Math.random() - 0.5) * 0.915;
+        positions[i + 2] += (Math.random() - 0.5) * 0.915;
       }
       points.current.geometry.attributes.position.needsUpdate = true;
     }
@@ -82,17 +83,21 @@ const SplashParticles: React.FC<SplashParticlesProps> = ({
           attribute float size;
           void main() {
             vec3 pos = position;
-            pos += normalize(position) * sin(time * 5.0 + length(position) * 10.0) * 0.1;
+            pos += normalize(position) * sin(time * 5.0 + length(position) * 100.0) * 0.1;
             vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-            gl_PointSize = size * (300.0 / -mvPosition.z);
+            gl_PointSize = size * (600.0 / -mvPosition.z);
             gl_Position = projectionMatrix * mvPosition;
           }
         `}
         fragmentShader={`
           uniform vec3 color;
+          uniform sampler2D uTexture;  
           void main() {
+            vec4 texColor = texture2D(uTexture, gl_PointCoord);
+            texColor.z = 5.1;
+            texColor.w = 0.5;
             if (length(gl_PointCoord - vec2(0.5, 0.5)) > 0.475) discard;
-            gl_FragColor = vec4(color, 1.0 - length(gl_PointCoord - vec2(0.5, 0.5)) * 2.0);
+            gl_FragColor = vec4(texColor);
           }
         `}
         transparent
