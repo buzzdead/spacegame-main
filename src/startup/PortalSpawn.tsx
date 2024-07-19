@@ -59,7 +59,9 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
     timer.current = 0;
     smokeDecay.current = 0;
     if (ref.current) ref.current.position.y = position.y;
-    setTimeout(() => (start.current = true), 1000);
+    setSmoke(false)
+    setLightning(false)
+    setTimeout(() => {(start.current = true);}, 5000);
   };
 
   useFrame((_state, delta) => {
@@ -85,13 +87,14 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
 
   useEffect(() => {
     if (state.h >= 490 && smoke) setSmoke(false);
-    else if (state.h < 490 && !smoke) setSmoke(true);
+    else if (state.h < 490 && !smoke && !isOpen) setSmoke(true);
 
     if (state.h >= 290 && lightning) setLightning(false);
-    else if (state.h < 290 && !lightning) setLightning(true);
+    else if (state.h < 290 && !lightning && !isOpen) setLightning(true);
   }, [state.h]);
 
   const smokeSphere = React.useMemo(() => {
+    console.log(smoke)
     return smoke ? (
       <SmokeSphere
         decay={smokeDecay.current}
@@ -207,7 +210,7 @@ const PhasedShips = ({ shouldMove, pos, resetPortal }: ShipProps) => {
   }, [shouldMove]);
 
   useEffect(() => {
-    //if(phasedShips.filter(ps => ps.stop).length === 0) resetPortal()
+    if(phasedShips.filter(ps => ps.stop).length === phasedShips.length) resetPortal()
   }, [update]);
 
   enemyShip.position.set(0, 10, 15);
