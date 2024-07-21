@@ -94,7 +94,6 @@ export const PortalScene = ({ position, forceDev = false }: Props) => {
   }, [state.h]);
 
   const smokeSphere = React.useMemo(() => {
-    console.log(smoke)
     return smoke ? (
       <SmokeSphere
         decay={smokeDecay.current}

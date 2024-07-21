@@ -7,6 +7,7 @@ import { useKeyboard } from "../../hooks/Keys";
 import { InfoBox } from "../tools/InfoBox";
 import { functions } from "../../util";
 import { FriendShipHull } from "./FrindHull";
+import { useThree } from "@react-three/fiber";
 
 interface Props {
   ship: SGS["Ship"];
@@ -25,7 +26,7 @@ const Ship: FC<Props> = ({ ship, scene }) => {
   const isSelected = useRef(false)
   const [showInfo, setShowInfo] = useState(false)
   const keyMap = useKeyboard();
-
+  const { scene: mainScene } = useThree()
 
   const isFighter = ship.assetId === "fighter";
   const isHawk = ship.assetId === "hawk";
@@ -41,6 +42,8 @@ const Ship: FC<Props> = ({ ship, scene }) => {
         setExplosions(meshRef.current?.position || position, "Medium")
         setTimeout(() => {
           removeShip(ship.id, true);
+          const projectiles = mainScene.children.filter(c => c.name === meshRef?.current?.name + ' - projectile')
+          projectiles.forEach(p => {p.removeFromParent(); mainScene.remove(p)})
           scene.removeFromParent();
         }, 150)
       }

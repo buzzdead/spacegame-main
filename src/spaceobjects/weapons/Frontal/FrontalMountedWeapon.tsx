@@ -20,6 +20,7 @@ interface Props {
   mountPosition: "left" | "right";
   fire?: boolean;
   weaponType: "laser" | "plasma";
+  whatever: any;
 }
 
 type MeshType = THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
@@ -33,6 +34,7 @@ const FrontalMountedWeapon = ({
   sound,
   setFightDone,
   weaponType,
+  whatever,
 }: Props) => {
   // just testing stuff
   const keyMap = useKeyboard();
@@ -43,14 +45,16 @@ const FrontalMountedWeapon = ({
   const { scene } = useThree();
   const [autoAttack, setAutoAttack] = useState(false);
 
-  const weaponRef = useRef<any>(scene);
+  const weaponRef = useRef<THREE.Mesh>(null);
 
   const [splash, setSplash] = useState({
     active: false,
     position: new THREE.Vector3(0, 0, 0),
   });
 
-  const [weaponMeshes, setWeaponMeshes] = useState<MeshType[]>([]);
+  const [weaponMeshes, setWeaponMeshes] = useState<
+    { mesh: MeshType; target: any; distance: number }[]
+  >([]);
 
   const { mesh, material } = useFrontalWeapon(weaponType, mountPosition, color);
 
@@ -62,20 +66,36 @@ const FrontalMountedWeapon = ({
   const devTarget = mesh.position.clone();
   devTarget.z += 50;
 
-  const distance = target
-    ? origin.distanceTo(
-        target?.objectLocation.meshRef?.position ||
-          target.objectLocation.position
-      )
-    : new THREE.Vector3(0, 0, 0);
+  const didRemove = useRef(false);
 
   const fireNewFrontAttack = () => {
+    // Keeping it here for now
+    if (!didRemove.current && weaponRef.current) {
+      didRemove.current = true;
+      weaponRef.current.removeFromParent();
+      weaponRef.current.name = whatever.current.name + ' - projectile'
+      scene.add(weaponRef.current);
+    } if (weaponRef.current) {
+      weaponRef.current.position.copy(origin);
+      weaponRef.current.quaternion.copy(whatever.current.quaternion);
+    }
+    // Keeping it here for now
+
     const newMaterial = material.clone();
     newMaterial.uniforms = THREE.UniformsUtils.clone(material.uniforms);
 
     const newMesh = mesh.clone();
     newMesh.material = newMaterial;
-    setWeaponMeshes([...weaponMeshes, newMesh]);
+    const distance = target
+      ? origin.distanceTo(
+          target?.objectLocation.meshRef?.position ||
+            target.objectLocation.position
+        )
+      : new THREE.Vector3(0, 0, 0);
+    setWeaponMeshes([
+      ...weaponMeshes,
+      { mesh: newMesh, target: target, distance: distance },
+    ]);
     sound.stop();
     sound.play();
     return newMesh;
@@ -85,7 +105,7 @@ const FrontalMountedWeapon = ({
     if (!fire && !devFire) return;
     const newMesh = fireNewFrontAttack();
     return () => {
-      scene.remove(newMesh);
+      weaponMeshes.forEach((wm) => handleRemove(wm.mesh));
     };
   }, [fire, devFire, autoAttack]);
 
@@ -97,8 +117,11 @@ const FrontalMountedWeapon = ({
 
   const handleRemove = (weaponMesh: any) => {
     scene.remove(weaponMesh);
+    if (weaponRef.current) weaponRef.current.remove(weaponMesh);
     weaponMesh.removeFromParent();
-    setWeaponMeshes((prevMeshes) => prevMeshes.filter((m) => m !== weaponMesh));
+    setWeaponMeshes((prevMeshes) =>
+      prevMeshes.filter((m) => m.mesh !== weaponMesh)
+    );
   };
 
   const handleSplash = (weaponMesh: any) => {
@@ -127,22 +150,25 @@ const FrontalMountedWeapon = ({
     handleRemove(weaponMesh);
   };
 
-  const updateFrontAttack = (weaponMesh: MeshType, time: number) => {
+  const updateFrontAttack = (
+    wm: { mesh: MeshType; target: any; distance: number },
+    time: number
+  ) => {
     if (target) {
-      weaponMesh.position.z += weaponType === "laser" ? 1 : 0.31;
-      if (weaponMesh.position.z >= distance) {
+      wm.mesh.position.z += weaponType === "laser" ? 1 : 0.31;
+      if (wm.mesh.position.z >= wm.distance) {
         handleHitTarget(
-          target.objectType,
-          target.objectLocation.id,
-          weaponMesh
+          wm.target.objectType,
+          wm.target.objectLocation.id,
+          wm.mesh
         );
       }
     } else if (devTarget && devFire) {
-      weaponMesh.position.z += weaponType === "laser" ? 1 : 0.61;
-      if (weaponMesh.position.z > 50) {
+      wm.mesh.position.z += weaponType === "laser" ? 1 : 0.61;
+      if (wm.mesh.position.z > 50) {
         setDevFire(false);
-        handleSplash(weaponMesh);
-        handleRemove(weaponMesh);
+        handleSplash(wm.mesh);
+        handleRemove(wm.mesh);
       }
     }
   };
@@ -166,7 +192,7 @@ const FrontalMountedWeapon = ({
         />
       )}
       {weaponMeshes.map((wm) => (
-        <primitive key={wm.id} object={wm}>
+        <primitive key={wm.mesh.id} object={wm.mesh}>
           {weaponType === "plasma" && (
             <Electricity2 count={2000} color="#4488ff" radius={2.36} />
           )}

@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { Vector3 } from 'three';
-import { EffectsState } from "../StoreState";
+import { EffectsState, Projectile } from "../StoreState";
 
 export type ExplosionSize = "Big" | "Medium" | "Small";
 
@@ -30,6 +30,10 @@ const useEffects: StateCreator<
 
   return {
     explosions: [],
+    projectiles: [],
+    addProjectile: (projectile: Projectile) => {
+      
+    },
     setExplosions: (pos: Vector3, size: ExplosionSize = "Medium") => {
       const explosion: Explosion = { id: nextId++, pos, size };
       set((state) => { const currentExplosions = state.explosions.filter(s => s.pos.distanceTo(pos) < 1 && s.size === size); return currentExplosions.length >= 2 ? state : {explosions: [...state.explosions, explosion]} });

@@ -16,6 +16,7 @@ export type DestinationType = "Harvest" | "Attack" | "Travel" | "Collect"
 export type ObjectType = "Ship" | "Construction" | "Planet" | "MissionItem"
 export type DamageReport = "Destroyed" | "Hit" | "Not Found"
 export type ShipShift = {shift: "left" | "right", multiplyer: number}
+export type Projectile = {id: number; pos: Vector3, direction: Vector3, target: {id: number; position: Vector3; type: "Ship" | "Construction" }, type: "Plasma" | "Laser" }
 
 export type CelestialObjectState = {
     celestialObjects: CelestialObject[];
@@ -86,6 +87,8 @@ export type CelestialObjectState = {
 
   export type EffectsState = {
     explosions: {id: number; pos: Vector3, size: ExplosionSize}[]
+    projectiles: Projectile[]
+    addProjectile: (projectile: Projectile) => void
     setExplosions: (newExplosion: Vector3, size?: ExplosionSize) => void
     removeExplosion: (id: number) => void
   }

@@ -67,6 +67,7 @@ export const LaserCannon = ({fire, position, target, setFightDone, whatever, shi
           fire={fire}
           origin={position}
           target={target}
+          whatever={whatever}
         />
         <FrontalMountedWeapon
         weaponType={shipType === "fighter" ? "laser" : "plasma"}
@@ -77,6 +78,7 @@ export const LaserCannon = ({fire, position, target, setFightDone, whatever, shi
           fire={fire}
           origin={position}
           target={target}
+          whatever={whatever}
         />
         {shipType === "fighter" && <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={3} missile={missileScene.clone()}/> }
         {shipType === "fighter" && <MissileLauncher setFightDone={setFightDone} sound={missileSound} meshRef={meshRef} fire={fire} target={target} posX={-3} missile={missileScene.clone()}/> }
